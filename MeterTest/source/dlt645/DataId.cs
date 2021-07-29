@@ -10,7 +10,15 @@ namespace MeterTest.source.dlt645
         public const int DataIdBytes = 4;
         internal int m_Id;
         internal string m_ToString;
-        internal string m_Format;
+        public string Format;
+        public int DataBytes; /* 数据长度(字节) */
+
+        public string Unit;   /* 单位 */
+
+        public bool IsWritable; /* false:只读、true: 可读可写 */
+
+        public string Name;    /* 数据相名称 */
+
         public int Id
         {
             get
@@ -21,7 +29,7 @@ namespace MeterTest.source.dlt645
             {
                 m_Id       = value;
                 m_ToString = null;
-                m_Format   = null;
+                Format   = null;
             }
         }
 
@@ -29,6 +37,16 @@ namespace MeterTest.source.dlt645
         {
 
         }
+        public DataId(int id, string format, int dataBytes, string unit, bool isWritable, string name)
+        {
+            Id = id;
+            Format = format;
+            DataBytes = dataBytes;
+            Unit = unit;
+            IsWritable = isWritable;
+            Name = name;
+        }
+
         public DataId(int id)
         {
             m_Id = id;
@@ -48,7 +66,7 @@ namespace MeterTest.source.dlt645
         public DataId(int id, string format)
         {
             m_Id = id;
-            m_Format = format;
+            Format = format;
         }
         
         public DataId(byte[] idBytes, string format)
@@ -62,8 +80,10 @@ namespace MeterTest.source.dlt645
                 m_Id = m_Id << 8;
                 m_Id += idBytes[i];
             }
-            m_Format = format;
+            Format = format;
         }
+
+       
         public byte[] GetDataIdBytes() 
         {
             byte[] bytes = new byte[DataIdBytes];
@@ -77,7 +97,7 @@ namespace MeterTest.source.dlt645
         public override bool Equals(object obj)
         {
             // obj as DataId;
-            return m_Id.Equals((DataId)obj.Id);
+            return m_Id.Equals(((DataId)obj).Id);
         }
 
         public override int GetHashCode()
@@ -94,6 +114,13 @@ namespace MeterTest.source.dlt645
                     m_ToString += ((byte)(m_Id & (0x0000000000FF << (i * 8)))).ToString("X2");
                     m_ToString += " ";
                 }
+                m_ToString += this.Format;
+                m_ToString += " ";
+                m_ToString += this.DataBytes.ToString();
+                m_ToString += " ";
+                m_ToString += this.Unit;
+                m_ToString += " ";
+                m_ToString += this.Name;
             }            
             return m_ToString;
         }

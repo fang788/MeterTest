@@ -53,7 +53,7 @@ namespace MeterTest.source.dlt645
 
             if(address.Length != MeterAddressBytes)
             {
-                throw new ArgumentException(address.Length.ToString(), "address")
+                throw new ArgumentException(address.Length.ToString(), "address");
             }
 
             m_Address = 0;
