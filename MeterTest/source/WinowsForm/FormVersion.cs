@@ -8,14 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeterTest
+namespace MeterTest.Source.WinowsForm
 {
-    public partial class MeterTestMainForm : Form
+    public partial class FormVersion : Form
     {
-        public MeterTestMainForm()
+        public FormVersion()
         {
             InitializeComponent();
         }
-
     }
 }

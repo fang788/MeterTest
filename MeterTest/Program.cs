@@ -1,3 +1,4 @@
+using MeterTest.Source.WinowsForm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MeterTest
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MeterTestMainForm());
+            Application.Run(new FormMain());
         }
     }
 }
