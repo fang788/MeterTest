@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 
@@ -7,63 +8,87 @@ namespace MeterTest.Source.Dlt645
     public class Transport
     {
         private readonly SerialPort port;
+        private readonly ConsoleLogger logger;
+        private object syncLock = new object();
         public const int ResponseFrameStartLength = 10;
 
-        public Transport(SerialPort port)
+        public Transport(SerialPort port, ConsoleLogger log)
         {
             this.port = port;
+            this.logger = log;
         }
 
         public Message UnicastMessage(Message msg)
         {
-            return null;
-        }
-
-        public byte[] Read(int count)
-        {
-            byte[] frameBytes = new byte[count];
-            int numBytesRead = 0;
-
-            while (numBytesRead != count)
+            Message responseMsg = null;
+            DateTime dateTime = DateTime.Now;;
+            try
             {
-                numBytesRead += port.Read(frameBytes, numBytesRead, count - numBytesRead);
+                lock(syncLock)
+                {
+                    byte[] request = msg.MessageFrame;
+                    logger.Log("TX: " + msg.ToString() + dateTime.ToString("yyyy-MM-DD hh:mm:ss fff"));
+                    port.Write(request, 0, request.Length);
+                    byte[] response = ReadResponse();
+                    responseMsg = CreateMessage(response);
+                }
             }
-
-            return frameBytes;
+            catch(TimeoutException e)
+            {
+                logger.Log($"{e.GetType().Name}, {e}");
+                throw;
+            }
+            int milliseconds = DateTime.Now.Millisecond - dateTime.Millisecond;
+                logger.Log("RX: " + responseMsg.ToString() + DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss fff")
+                + " 响应时间：" + milliseconds.ToString() + "ms");
+            if(responseMsg.ControlCode != (msg.ControlCode | 0x80))
+            {
+                throw new ClientException("Control code error！" + responseMsg.ControlCode.ToString("X8"));
+            }
+            return responseMsg;
         }
-        
+        private Message CreateMessage(byte[] frame)
+        {
+            byte[] addressBytes = new byte[MeterAddress.MeterAddressBytes];
+            Array.Copy(frame, 1, addressBytes, 0, MeterAddress.MeterAddressBytes);
+            MeterAddress address = new MeterAddress(addressBytes);
+            MemoryStream stream = new MemoryStream(frame.Length - 12);
+            stream.Write(frame, 10, frame.Length - 12);
+            Message Msg = new Message(address, frame[10], stream.ToArray());
+            return Msg;
+        }
+
+        private byte[] BuildMessageFrame(Message message)
+        {
+            return message.MessageFrame;
+        }
 
         private byte[] ReadResponse()
         {
-            byte[] startBytes = new byte[ResponseFrameStartLength];;
+            byte[] frame = new byte[256];
             while (true)
             {
-                if((port.Read(startBytes, 0, 1) == 1)
-                && (startBytes[0] == 0x68))
+                if(port.Read(frame, 0, 1) > 0)
                 {
-                    break;
+                    if((frame[0] == 0x68)
+                    && (port.Read(frame, 1, 9) > 0))
+                    {
+                        if((frame[7] == 0x16)
+                        && (frame[9] <= 200)
+                        && (port.Read(frame, 10, frame[9] + 2) > 0))
+                        {
+                            if((Message.CalCheckSum(frame, 0, 11 + frame[9]) == frame[frame[9] + 7])
+                            && (frame[frame[9] + 8] == 0x16))
+                            {
+                                break;
+                            }                            
+                        }
+                    }
                 }
             }
-            byte[] frameStrat = Read(ResponseFrameStartLength - 1);
-            byte[] frameEnd   = Read(frameStrat[ResponseFrameStartLength - 2] + 1);
-            byte[] frame = new byte[frameStrat.Length + frameEnd.Length + 1];
-            frame[0] = 0x68;
-            Array.Copy(frameStrat, 0, frame, 1, frameStrat.Length);
-            Array.Copy(frameEnd, 0, frame, frameStrat.Length + 1, frameEnd.Length);
-            return frame;
-        }
-        internal int ResponseBytesToRead(byte[] frameStart)
-        {
-            byte functionCode = frameStart[1];
-
-            if (frameStart.Length < Modbus.ExceptionOffset)
-            {
-                return 1;
-            }
-
-            IModbusFunctionService service = ModbusFactory.GetFunctionServiceOrThrow(functionCode);
-
-            return service.GetRtuResponseBytesToRead(frameStart);
+            MemoryStream stream = new MemoryStream(frame[9] + 12);
+            stream.Write(frame, 0, frame[9] + 12);
+            return stream.ToArray();
         }
     }
 }

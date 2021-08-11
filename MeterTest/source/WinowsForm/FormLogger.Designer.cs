@@ -51,6 +51,7 @@ namespace MeterTest.Source.WinowsForm
             this.Controls.Add(this.RichTextBoxLogger);
             this.Name = "FormLogger";
             this.Text = "日志";
+            //this.Load += new System.EventHandler(this.FormLogger_Load);
             this.ResumeLayout(false);
 
         }

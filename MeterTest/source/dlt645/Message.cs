@@ -91,10 +91,20 @@ namespace MeterTest.Source.Dlt645
                 return frame;
             }
         }
-        private byte CalCheckSum(byte[] buff, int offset)
+        public static byte CalCheckSum(byte[] buff, int offset)
         {
             byte checksum = 0;
             for (int i = offset; i < buff.Length; i++)
+            {
+                checksum += buff[i];
+            }
+            return checksum;
+        }
+
+        public static byte CalCheckSum(byte[] buff, int offset, int count)
+        {
+            byte checksum = 0;
+            for (int i = offset; i < count; i++)
             {
                 checksum += buff[i];
             }
