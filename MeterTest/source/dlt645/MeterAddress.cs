@@ -42,6 +42,7 @@ namespace MeterTest.Source.Dlt645
         public MeterAddress(long newAddress)
         {
             m_Address = newAddress;
+            m_ToString = null;
         }
 
         public MeterAddress(byte[] address)
@@ -59,8 +60,9 @@ namespace MeterTest.Source.Dlt645
             m_Address = 0;
             for (int i = 0; i < MeterAddressBytes; i++)
             {
-                m_Address += (m_Address * 256 + address[i]);
+                m_Address = ((m_Address << 8) + address[i]);
             }
+            m_ToString = null;
         }
 
         public override bool Equals(object obj)
@@ -79,11 +81,12 @@ namespace MeterTest.Source.Dlt645
             // string rst = null;
             if(m_ToString == null)
             {
-                for (int i = 0; i < MeterAddressBytes; i++)
-                {
-                    m_ToString += ((byte)(m_Address & (0x0000000000FF << (i * 8)))).ToString("X2");
-                    m_ToString += " ";
-                }
+                // for (int i = 0; i < MeterAddressBytes; i++)
+                // {
+                //     m_ToString += ((byte)(m_Address & (0x0000000000FF << (i * 8)))).ToString("X2");
+                //     m_ToString += " ";
+                // }
+                m_ToString = m_Address.ToString("X12");
             }            
             return m_ToString;
         }

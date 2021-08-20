@@ -65,11 +65,12 @@ namespace MeterTest.Source.Dlt645
             m_DataField = dataField;
         }
 
+
         public byte[] MessageFrame
         {
             get
             {
-                byte[] frame = new byte[14 + m_DataField.Length];
+                byte[] frame = new byte[15 + m_DataField.Length];
                 frame[0] = 0xFE;
                 frame[1] = 0xFE;
                 frame[2] = 0xFE;
@@ -84,7 +85,7 @@ namespace MeterTest.Source.Dlt645
                 frame[12] = (byte)this.m_DataField.Length;
                 for (int i = 0; i < this.m_DataField.Length; i++)
                 {
-                    frame[13 + i] = this.m_DataField[i];
+                    frame[13 + i] = (byte)(this.m_DataField[i] + 0x33);
                 }
                 frame[13 + this.m_DataField.Length] = CalCheckSum(frame, 3);
                 frame[14 + this.m_DataField.Length] = 0x16;
@@ -127,7 +128,7 @@ namespace MeterTest.Source.Dlt645
             {
                 foreach (var item in MessageFrame)
                 {
-                    m_String += item.ToString("X8");
+                    m_String += item.ToString("X2");
                     m_String += " ";
                 }
             }
