@@ -44,6 +44,32 @@ namespace MeterTest.Source.Dlt645
             m_Address = newAddress;
             m_ToString = null;
         }
+        public MeterAddress(string newAddress)
+        {
+            if(newAddress == null)
+            {
+                throw new ArgumentNullException("newAddress");
+            }
+
+            if(newAddress.Length > (MeterAddressBytes * 2))
+            {
+                throw new ArgumentException(newAddress.Length.ToString(), "newAddress");
+            }
+
+            byte[] byteArray = new byte[MeterAddressBytes];
+            for (int i = 0; i < newAddress.Length / 2; i++)
+            {
+                int length = (newAddress.Length - i * 2) > 2? 2 : (newAddress.Length - i * 2);
+                string s = newAddress.Substring(i * 2, length);
+                byteArray[i] = Convert.ToByte(s, 16);
+            }
+            m_Address = 0;
+            for (int i = 0; i < MeterAddressBytes; i++)
+            {
+                m_Address = ((m_Address << 8) + byteArray[i]);
+            }
+            m_ToString = null;
+        }
 
         public MeterAddress(byte[] address)
         {

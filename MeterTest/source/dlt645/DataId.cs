@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MeterTest.Source.Dlt645
 {
@@ -8,8 +9,60 @@ namespace MeterTest.Source.Dlt645
     public class DataId : IComparable
     {
         public const int DataIdBytes = 4;
+        public static readonly List<uint> SymbolList = new List<uint>
+        {
+            0x02020100, //	A相电流
+            0x02020200, //	B相电流
+            0x02020300, //	C相电流
+            0x02030000, //	瞬时总有功功率
+            0x02030100, //	瞬时A相有功功率
+            0x02030200, //	瞬时B相有功功率
+            0x02030300, //	瞬时C相有功功率
+            0x02040000, //	瞬时无功功率
+            0x02040100, //	瞬时A相无功功率
+            0x02040200, //	瞬时B相无功功率
+            0x02040300, //	瞬时C相无功功率
+            0x02050000, //	瞬时视在总功率
+            0x02050100, //	瞬时A相视在功率
+            0x02050200, //	瞬时B相视在功率
+            0x02050300, //	瞬时C相视在功率
+            0x02060000, //	总功率因数
+            0x02060100, //	A相功率因数
+            0x02060200, //	B相功率因数
+            0x02060300, //	C相功率因数
+            0x02800004, //  当前有功需量
+            0x02800005, //  当前无功需量
+            0x02800006, //  当前视在需量
+            0x02800007, //  （表箱）表内温度
+            0xA3030000, //  瞬时总有功功率
+            0xA3030100, //  瞬时A相有功功率
+            0xA3030200, //  瞬时B相有功功率
+            0xA3030300, //  瞬时C相有功功率
+            0xA303FF00, //  瞬时有功功率数据块
+            0xA3040000, //  瞬时无功功率
+            0xA3040100, //  瞬时A相无功功率
+            0xA3040200, //  瞬时B相无功功率
+            0xA3040300, //  瞬时C相无功功率
+            0xA304FF00, //  瞬时无功功率数据块
+            0xA3050000, //  瞬时视在总功率
+            0xA3050100, //  瞬时A相视在功率
+            0xA3050200, //  瞬时B相视在功率
+            0xA3050300, //  瞬时C相视在功率
+            0xA305FF00, //  瞬时视在功率数据块
+            0xA3800004, //  当前有功需量
+            0xA3800005, //  当前无功需量
+            0xA3800006, //  当前视在需量
+            0xA3900001, //  A相正向有功需量
+            0xA3900002, //  A相反向有功需量
+            0xA3900003, //  B相正向有功需量
+            0xA3900004, //  B相反向有功需量
+            0xA3900005, //  C相正向有功需量
+            0xA3900006, //  C相反向有功需量
+            0xA3900007, //  正向有功需量
+            0xA3900008, //  反向有功需量
+        };
         private string m_Name;
-        internal int m_Id;
+        internal uint m_Id;
         internal string m_ToString;
         private string m_Format;
         private int m_DataBytes;
@@ -59,7 +112,7 @@ namespace MeterTest.Source.Dlt645
             set { m_Name = value; }
         }
 
-        public int Id
+        public uint Id
         {
             get
             {
@@ -77,7 +130,7 @@ namespace MeterTest.Source.Dlt645
             set { m_GroupName = value; }
         }
         
-        public DataId(string name, int id, string format, int dataBytes, byte[] dataArray, string unit, bool isReadAble, bool isWritable)
+        public DataId(string name, uint id, string format, int dataBytes, byte[] dataArray, string unit, bool isReadAble, bool isWritable)
         {
             Name = name;
             Id = id;
@@ -95,7 +148,7 @@ namespace MeterTest.Source.Dlt645
         {
 
         }
-        public DataId(int id, string format, int dataBytes, string unit, bool isWritable, string name)
+        public DataId(uint id, string format, int dataBytes, string unit, bool isWritable, string name)
         {
             Id = id;
             Format = format;
@@ -105,7 +158,7 @@ namespace MeterTest.Source.Dlt645
             Name = name;
         }
 
-        public DataId(int id)
+        public DataId(uint id)
         {
             m_Id = id;
         }
@@ -121,7 +174,7 @@ namespace MeterTest.Source.Dlt645
                 m_Id += idBytes[i];
             }
         }
-        public DataId(int id, string format)
+        public DataId(uint id, string format)
         {
             m_Id = id;
             Format = format;

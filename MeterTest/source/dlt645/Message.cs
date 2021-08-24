@@ -48,7 +48,7 @@ namespace MeterTest.Source.Dlt645
             }
         }
 
-        private Message()
+        protected Message()
         {
         }
         

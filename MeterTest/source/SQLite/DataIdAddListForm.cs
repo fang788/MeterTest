@@ -70,7 +70,7 @@ namespace MeterTest.source.SQLite
                 {
                     IRow row = sheet.GetRow(i);
                     DataId dataId = new DataId();
-                    dataId.Id         = Convert.ToInt32(row.GetCell(0).StringCellValue, 16);
+                    dataId.Id         = Convert.ToUInt32(row.GetCell(0).StringCellValue, 16);
                     dataId.Name       = row.GetCell(1).StringCellValue;
                     dataId.Format     = row.GetCell(2) == null? null : row.GetCell(2).StringCellValue;
                     dataId.DataBytes  = Convert.ToInt32(row.GetCell(3).NumericCellValue);

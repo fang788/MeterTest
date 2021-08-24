@@ -34,8 +34,11 @@ namespace MeterTest.Source.WinowsForm
         /// <param name="text"></param>
         private void SetTextSafePost(object text)
         {
-            this.RichTextBoxLogger.Text = text.ToString();
-            this.RichTextBoxLogger.Refresh();
+            string s = text.ToString() + "\n";
+            // this.RichTextBoxLogger.Text += text.ToString();
+            // this.RichTextBoxLogger.Text += "\n";
+            this.RichTextBoxLogger.AppendText(s);
+            RichTextBoxLogger.ScrollToCaret();
         }
     }
 }

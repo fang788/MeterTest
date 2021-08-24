@@ -28,7 +28,7 @@ namespace MeterTest.Source.Dlt645
                 {
                     port.Open();
                     byte[] request = msg.MessageFrame;
-                    logger.Log("TX: " + msg.ToString() + dateTime.ToString("yyyy-MM-DD hh:mm:ss fff"));
+                    logger.Log("TX: " + msg.ToString() + dateTime.ToString("yyyy-MM-dd hh:mm:ss fff"));
                     port.Write(request, 0, request.Length);
                     byte[] response = ReadResponse();
                     responseMsg = CreateMessage(response);
@@ -40,13 +40,20 @@ namespace MeterTest.Source.Dlt645
                 port.Close();
                 throw;
             }
+            catch(Exception)
+            {
+                port.Close();
+                throw;
+            }
             port.Close();
-            int milliseconds = DateTime.Now.Millisecond - dateTime.Millisecond;
-                logger.Log("RX: " + responseMsg.ToString() + DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss fff")
-                + " 响应时间：" + milliseconds.ToString() + "ms");
+            DateTime now = DateTime.Now;
+            
+            double milliseconds = ((double)(now.Ticks - dateTime.Ticks) / 10000);
+                logger.Log("RX: " + responseMsg.ToString() + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss fff")
+                + " 响应时间：" + milliseconds.ToString("F2") + "ms");
             if(responseMsg.ControlCode != (msg.ControlCode | 0x80))
             {
-                throw new ClientException("Control code error！" + responseMsg.ControlCode.ToString("X8"));
+                throw new ClientException("Control code error！" + responseMsg.ControlCode.ToString("X2"));
             }
 
             return responseMsg;

@@ -10,6 +10,7 @@ namespace MeterTest.Source.Config
         private Parity   parity    = Parity.Even;
         private StopBits stopBits  = StopBits.One;
         private int      readTimeout = 500;
+        private string   meterAddress = "AAAAAAAAAAAA";
 
         public Options()
         {
@@ -79,6 +80,17 @@ namespace MeterTest.Source.Config
             set
             {
                 readTimeout = value;
+            }
+        }
+        public string MeterAddress
+        {
+            get
+            {
+                return meterAddress;
+            }
+            set
+            {
+                meterAddress = value;
             }
         }
     }

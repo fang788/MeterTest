@@ -64,7 +64,7 @@ namespace MeterTest.source.SQLite
         {
             try
             {
-                DataId.Id = Convert.ToInt32(textBoxId.Text, 16);
+                DataId.Id = Convert.ToUInt32(textBoxId.Text, 16);
             }
             catch(FormatException)
             {

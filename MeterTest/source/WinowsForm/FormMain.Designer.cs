@@ -46,14 +46,15 @@ namespace MeterTest.Source.WinowsForm
             this.buttonReadClyce = new System.Windows.Forms.Button();
             this.buttonReadOne = new System.Windows.Forms.Button();
             this.dataGridViewDataIdList = new System.Windows.Forms.DataGridView();
-            this.tabPageWrite = new System.Windows.Forms.TabPage();
-            this.tabPageV9203 = new System.Windows.Forms.TabPage();
-            this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.取消选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选择所有ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.取消所有选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageWrite = new System.Windows.Forms.TabPage();
+            this.tabPageV9203 = new System.Windows.Forms.TabPage();
+            this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
+            this.清除所有数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -214,14 +215,58 @@ namespace MeterTest.Source.WinowsForm
             // 
             // dataGridViewDataIdList
             // 
+            this.dataGridViewDataIdList.AllowUserToAddRows = false;
+            this.dataGridViewDataIdList.AllowUserToDeleteRows = false;
+            this.dataGridViewDataIdList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridViewDataIdList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewDataIdList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDataIdList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDataIdList.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridViewDataIdList.Location = new System.Drawing.Point(3, 9);
             this.dataGridViewDataIdList.Name = "dataGridViewDataIdList";
             this.dataGridViewDataIdList.RowTemplate.Height = 25;
+            this.dataGridViewDataIdList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewDataIdList.Size = new System.Drawing.Size(997, 395);
             this.dataGridViewDataIdList.TabIndex = 2;
-            this.dataGridViewDataIdList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewDataIdList_CellMouseDown);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.选择ToolStripMenuItem,
+            this.取消选择ToolStripMenuItem,
+            this.选择所有ToolStripMenuItem,
+            this.取消所有选择ToolStripMenuItem,
+            this.清除所有数据ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 136);
+            // 
+            // 选择ToolStripMenuItem
+            // 
+            this.选择ToolStripMenuItem.Name = "选择ToolStripMenuItem";
+            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择ToolStripMenuItem.Text = "选择";
+            this.选择ToolStripMenuItem.Click += new System.EventHandler(this.选择ToolStripMenuItem_Click);
+            // 
+            // 取消选择ToolStripMenuItem
+            // 
+            this.取消选择ToolStripMenuItem.Name = "取消选择ToolStripMenuItem";
+            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消选择ToolStripMenuItem.Text = "取消选择";
+            this.取消选择ToolStripMenuItem.Click += new System.EventHandler(this.取消选择ToolStripMenuItem_Click);
+            // 
+            // 选择所有ToolStripMenuItem
+            // 
+            this.选择所有ToolStripMenuItem.Name = "选择所有ToolStripMenuItem";
+            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择所有ToolStripMenuItem.Text = "选择所有";
+            this.选择所有ToolStripMenuItem.Click += new System.EventHandler(this.选择所有ToolStripMenuItem_Click);
+            // 
+            // 取消所有选择ToolStripMenuItem
+            // 
+            this.取消所有选择ToolStripMenuItem.Name = "取消所有选择ToolStripMenuItem";
+            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消所有选择ToolStripMenuItem.Text = "取消所有选择";
+            this.取消所有选择ToolStripMenuItem.Click += new System.EventHandler(this.取消所有选择ToolStripMenuItem_Click);
             // 
             // tabPageWrite
             // 
@@ -252,39 +297,12 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageChangeCommAddr.Text = "通讯地址";
             this.tabPageChangeCommAddr.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStrip1
+            // 清除所有数据ToolStripMenuItem
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.选择ToolStripMenuItem,
-            this.取消选择ToolStripMenuItem,
-            this.选择所有ToolStripMenuItem,
-            this.取消所有选择ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 92);
-            // 
-            // 选择ToolStripMenuItem
-            // 
-            this.选择ToolStripMenuItem.Name = "选择ToolStripMenuItem";
-            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.选择ToolStripMenuItem.Text = "选择";
-            // 
-            // 取消选择ToolStripMenuItem
-            // 
-            this.取消选择ToolStripMenuItem.Name = "取消选择ToolStripMenuItem";
-            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.取消选择ToolStripMenuItem.Text = "取消选择";
-            // 
-            // 选择所有ToolStripMenuItem
-            // 
-            this.选择所有ToolStripMenuItem.Name = "选择所有ToolStripMenuItem";
-            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.选择所有ToolStripMenuItem.Text = "选择所有";
-            // 
-            // 取消所有选择ToolStripMenuItem
-            // 
-            this.取消所有选择ToolStripMenuItem.Name = "取消所有选择ToolStripMenuItem";
-            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.取消所有选择ToolStripMenuItem.Text = "取消所有选择";
+            this.清除所有数据ToolStripMenuItem.Name = "清除所有数据ToolStripMenuItem";
+            this.清除所有数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.清除所有数据ToolStripMenuItem.Text = "清除所有数据";
+            this.清除所有数据ToolStripMenuItem.Click += new System.EventHandler(this.清除所有数据ToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -340,5 +358,6 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.ToolStripMenuItem 取消选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 选择所有ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 取消所有选择ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 清除所有数据ToolStripMenuItem;
     }
 }

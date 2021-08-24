@@ -20,7 +20,9 @@ namespace MeterTest.Source.Dlt645
         {
             Message request = new Message(address, 0x11, dataId.GetDataIdBytes());
             Message response = transport.UnicastMessage(request);
-            return response.DataField;
+            MemoryStream stream = new MemoryStream(response.DataField.Length - 4);
+            stream.Write(response.DataField, 4, response.DataField.Length - 4);
+            return stream.ToArray();
         }
 
         public void Write(MeterAddress address, DataId dataId, byte[] dataBytes)

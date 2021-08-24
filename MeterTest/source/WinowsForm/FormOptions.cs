@@ -35,7 +35,9 @@ namespace MeterTest.Source.WinowsForm
             opt.Parity = (Parity)Enum.Parse(typeof(Parity), ComboBoxCheckBit.Text);
             opt.StopBits = (StopBits)Enum.Parse(typeof(StopBits), ComboBoxStopBit.Text);
             opt.ReadTimeout = Convert.ToInt32(numericUpDownReadTimeOut.Text);
+            opt.MeterAddress = textBoxServerAddress.Text;
             File.WriteAllText(path, JsonConvert.SerializeObject(opt, Formatting.Indented));
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -64,12 +66,24 @@ namespace MeterTest.Source.WinowsForm
                 ComboBoxCheckBit.Text = opt.Parity.ToString();
                 ComboBoxStopBit.Text = opt.StopBits.ToString();
                 numericUpDownReadTimeOut.Text = opt.ReadTimeout.ToString();
+                textBoxServerAddress.Text = opt.MeterAddress;
             }
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBoxServerAddress_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(((e.KeyChar < (char)'0') || (e.KeyChar > (char)'9')) 
+            && (e.KeyChar != (char)'A')
+            && (e.KeyChar != (char)'a')
+            && (e.KeyChar != (char)Keys.Back))
+            {
+                e.Handled = true; 
+            }
         }
     }
 }
