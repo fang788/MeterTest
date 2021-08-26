@@ -152,6 +152,7 @@ namespace MeterTest.source.SQLite
             this.dataGridViewDataId.Location = new System.Drawing.Point(20, 59);
             this.dataGridViewDataId.Name = "dataGridViewDataId";
             this.dataGridViewDataId.RowTemplate.Height = 25;
+            this.dataGridViewDataId.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewDataId.Size = new System.Drawing.Size(900, 417);
             this.dataGridViewDataId.TabIndex = 8;
             // 

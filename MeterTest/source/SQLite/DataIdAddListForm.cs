@@ -135,6 +135,7 @@ namespace MeterTest.source.SQLite
                     {
                         dataIdDb.DataIds.AddAsync(dataIdArray[i]);
                         dataIdList.Add(dataIdArray[i]);
+                        DialogResult = DialogResult.OK;
                     }
                 }
                 DisplayAll();
@@ -151,6 +152,7 @@ namespace MeterTest.source.SQLite
             {
                 dataIdDb.DataIds.AddAsync(form.DataId);
                 dataIdList.Add(form.DataId);
+                DialogResult = DialogResult.OK;
                 DisplayAll();
             }
         }

@@ -218,11 +218,6 @@ namespace MeterTest.Source.Dlt645
         {
             if (m_ToString == null)
             {
-                // for (int i = 0; i < DataIdBytes; i++)
-                // {
-                //     m_ToString += ((byte)(m_Id & (0x0000000000FF << (i * 8)))).ToString("X2");
-                //     m_ToString += " ";
-                // }
                 m_ToString += m_Id.ToString("X8");
                 m_ToString += " ";
                 m_ToString += this.Format;
@@ -239,6 +234,140 @@ namespace MeterTest.Source.Dlt645
         public int CompareTo(object obj)
         {
             return this.m_Id.CompareTo((((DataId)(obj)).m_Id));
+        }
+        private string GetDataBytesString(byte[] data, bool sort)
+        {
+            string s = null;
+            if(sort)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    s += data[i].ToString("X2");
+                }
+            }
+            else
+            {
+                for (int i = data.Length - 1; i >= 0; i--)
+                {
+                    s += data[i].ToString("X2");
+                }
+            }
+            return s;
+        }
+        public String GetDataString(byte[] dataBytes)
+        {
+            String rst = null;
+            // string dataStr = null;
+
+            // for (int i = 0; i < dataBytes.Length; i++)
+            // {
+            //     dataStr += dataBytes[i].ToString("X2");
+            // }
+            if(string.IsNullOrEmpty(this.Format) == false) 
+            {
+                if(this.Format.Contains('X'))
+                {
+                    if(string.IsNullOrEmpty(this.Format.TrimEnd('X')))
+                    {
+                        rst = GetDataBytesString(dataBytes, false);
+                    }
+                    else if(this.Format.Trim('X') == ".")
+                    {
+                        int offset = this.Format.IndexOf('.');
+                        long lOffset = 10;
+                        for (int i = 1; i < this.Format.Length - offset - 1; i++)
+                        {
+                                lOffset *= 10;
+                        }
+                        uint  data = 0;
+                        double syb = 1;
+                        if(DataId.SymbolList.Contains(this.Id))
+                        {
+                            if((dataBytes[dataBytes.Length - 1] & 0x80) != 0)
+                            {
+                                dataBytes[dataBytes.Length - 1] = (Byte)(dataBytes[dataBytes.Length - 1] & 0x7F);
+                                syb = -1;
+                            }
+                        }
+                        for (int i = dataBytes.Length - 1; i >= 0; i--)
+                        {
+                            data = data * 100 + Convert.ToUInt32(dataBytes[i].ToString("X2"), 10);
+                        }
+                        double dData = syb * data / lOffset;
+                        rst = dData.ToString("F" + (this.Format.Length - offset - 1));
+                    }
+                    else if(this.Format == "HEX")
+                    {
+                        uint  data = 0;
+                        for (int i = dataBytes.Length - 1; i >= 0; i--)
+                        {
+                            data = data * 256 + Convert.ToUInt32(dataBytes[i].ToString("X2"), 16);
+                        }
+                        rst = data.ToString();
+                    }
+                    else
+                    {
+                        rst = GetDataBytesString(dataBytes, false);;
+                    }
+                }
+                if(this.Format.Contains('N'))
+                {
+                    if(string.IsNullOrEmpty(this.Format.TrimEnd('N')))
+                    {
+                        rst = GetDataBytesString(dataBytes, false);
+                    }
+                    else if(this.Format.Trim('N') == ".")
+                    {
+                        int offset = this.Format.IndexOf('.');
+                        long lOffset = 10;
+                        for (int i = 1; i < this.Format.Length - offset - 1; i++)
+                        {
+                                lOffset *= 10;
+                        }
+                        uint  data = 0;
+                        double syb = 1;
+                        if(DataId.SymbolList.Contains(this.Id))
+                        {
+                            if((dataBytes[dataBytes.Length - 1] & 0x80) != 0)
+                            {
+                                dataBytes[dataBytes.Length - 1] = (Byte)(dataBytes[dataBytes.Length - 1] & 0x7F);
+                                syb = -1;
+                            }
+                        }
+                        for (int i = dataBytes.Length - 1; i >= 0; i--)
+                        {
+                            data = data * 100 + Convert.ToUInt32(dataBytes[i].ToString("X2"), 10);
+                        }
+                        double dData = syb * data / lOffset;
+                        rst = dData.ToString("F" + (this.Format.Length - offset - 1));
+                    }
+                    else
+                    {
+                        rst = GetDataBytesString(dataBytes, false);;
+                    }
+                }
+                if(this.Format == "YYMMDDhhmm")
+                {
+                    rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":");
+                }
+                if(this.Format == "YYMMDDWW")
+                {
+                    rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ");
+                }
+                if(this.Format == "hhmmss")
+                {
+                    rst = GetDataBytesString(dataBytes, false).Insert(2, ":").Insert(5, ":");
+                }
+            }
+            else
+            {
+                rst = GetDataBytesString(dataBytes, false);
+            }
+            if(this.Unit != null)
+            {
+                rst += (" " + this.Unit);
+            }
+            return rst;
         }
     }
 }

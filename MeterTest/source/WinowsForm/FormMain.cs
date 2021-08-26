@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MeterTest.source.Config;
 using MeterTest.source.dlt645;
 using MeterTest.source.SQLite;
 using MeterTest.Source.Config;
@@ -27,6 +28,9 @@ namespace MeterTest.Source.WinowsForm
         private Client client;
         private MeterAddress meterAddress;
         private SynchronizationContext synchronizationContext = null;
+        private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
+        private String optMessage = null;
+        private bool cycleSwith = false;
         static public DataIdDbContext DataIdDb = new DataIdDbContext();
         public FormMain()
         {
@@ -35,6 +39,11 @@ namespace MeterTest.Source.WinowsForm
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            if(!RegistrationCode.LicFileChk())
+            {
+                this.Text += " 未激活软件";
+                return;
+            }
             ParaUpdate();
              //为dgv增加复选框列
             DataGridViewCheckBoxColumn checkbox = new DataGridViewCheckBoxColumn();
@@ -92,6 +101,15 @@ namespace MeterTest.Source.WinowsForm
             form.StartPosition = FormStartPosition.CenterParent;
             form.ShowDialog();
         }
+        
+        private void 激活ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormLicense form = new FormLicense();
+
+            this.AddOwnedForm(form);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog();
+        }
 
         private void 选项ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -107,11 +125,15 @@ namespace MeterTest.Source.WinowsForm
 
         private void 日志ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(formLogger.Visible)
+            if(formLogger == null)
             {
-                formLogger.Show();
+                formLogger = new FormLogger();
             }
-            else
+            else if(formLogger.IsDisposed)
+            {
+                formLogger = new FormLogger();
+            }
+            if(formLogger.Visible == false)
             {
                 formLogger.StartPosition = FormStartPosition.CenterParent;
                 formLogger.Show();
@@ -123,7 +145,10 @@ namespace MeterTest.Source.WinowsForm
             Form form = new DataIdListForm();
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
+            if(form.ShowDialog() == DialogResult.OK)
+            {
+                DataIdListDisplayAll();
+            }
         }
         private void 选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -163,6 +188,14 @@ namespace MeterTest.Source.WinowsForm
                 dataGridViewDataIdList.Rows[i].Cells[7].Value = null;
             }
         }
+        private void SetOptLock(Object value)
+        {
+            this.optLock = (bool)value;
+        }
+        private void CloseLock()
+        {
+            synchronizationContext.Post(SetOptLock, false); /* 关闭锁 */
+        }
         private void DataIdListDisplayAll()
         {
             DataId[] dataIdArray = DataIdDb.DataIds.ToArray();
@@ -177,28 +210,20 @@ namespace MeterTest.Source.WinowsForm
                     dataGridViewDataIdList.Rows[index].Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
                     dataGridViewDataIdList.Rows[index].Cells[5].Value = dataIdArray[i].DataBytes;
                     dataGridViewDataIdList.Rows[index].Cells[6].Value = dataIdArray[i].Unit;
+                    // DataGridViewRow row = new DataGridViewRow();
+                    // row.Cells.Add();
+                    // row.Cells[1].Value = i;
+                    // row.Cells[2].Value = dataIdArray[i].Id.ToString("X8");
+                    // row.Cells[3].Value = dataIdArray[i].Name;
+                    // row.Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
+                    // row.Cells[5].Value = dataIdArray[i].DataBytes;
+                    // row.Cells[6].Value = dataIdArray[i].Unit;
+                    // dataGridViewDataIdList.Rows.Add(row);
                 }
-                dataGridViewDataIdList.AutoResizeColumns();
+                //dataGridViewDataIdList.AutoResizeColumns();
             }
         }
-        private void buttonReadOne_Click(object sender, EventArgs e)
-        {
-            // List<DataId> selectList = new List<DataId>();
-            DataId dataId = null;
-            List<DataId> dataIdList = new List<DataId>();
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
-            {
-                if((dataGridViewDataIdList.Rows[i].Cells[0].Value != null) 
-                && (bool)dataGridViewDataIdList.Rows[i].Cells[0].Value == true)
-                {
-                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewDataIdList.Rows[i].Cells[1].Value)];  
-                    dataIdList.Add(dataId);
-                }
-            }
-            Thread readOnceThr = new Thread(ReadOnce);
-            readOnceThr.IsBackground = true;
-            readOnceThr.Start(dataIdList);
-        }
+        
         private void ReadOptUiUpdate(Object obj)
         {
             Dictionary<String, CommResult> dic = (Dictionary<String, CommResult>)obj;
@@ -223,9 +248,13 @@ namespace MeterTest.Source.WinowsForm
                                 break;
                             }
                         }
-
                         dataGridViewDataIdList.Rows[index].Cells[7].Value = null;
                         dataGridViewDataIdList.CurrentCell = dataGridViewDataIdList.Rows[index].Cells[7];
+                        toolStripStatusLabelStatus.Text = "正在读取数据标识：" + rst.DataId.Id.ToString("X8") + " ...";
+                    }
+                    if(dic.TryGetValue("Read Cycle", out rst))
+                    {
+                        ReadDisplay(rst);
                     }
                 }
             }
@@ -233,7 +262,6 @@ namespace MeterTest.Source.WinowsForm
         private void ReadDisplay(CommResult rst) 
         {
             string displayStr = null;
-            string dataStr = null;
             int index = 0;
             for (int j = 0; j < dataGridViewDataIdList.RowCount; j++)
             {
@@ -245,97 +273,7 @@ namespace MeterTest.Source.WinowsForm
             }
             if(rst.Result)
             {
-                for (int i = 0; i < rst.DataBytes.Length; i++)
-                {
-                    dataStr += rst.DataBytes[i].ToString("X2");
-                }
-                if(string.IsNullOrEmpty(rst.DataId.Format) == false) 
-                {
-                    if(rst.DataId.Format.Contains('X'))
-                    {
-                        if(string.IsNullOrEmpty(rst.DataId.Format.TrimEnd('X')))
-                        {
-                            displayStr = dataStr;
-                        }
-                        else if(rst.DataId.Format.Trim('X') == ".")
-                        {
-                            int offset = rst.DataId.Format.IndexOf('.');
-                            long lOffset = 10;
-                            for (int i = 1; i < rst.DataId.Format.Length - offset - 1; i++)
-                            {
-                                 lOffset *= 10;
-                            }
-                            uint  data = 0;
-                            double syb = 1;
-                            if(DataId.SymbolList.Contains(rst.DataId.Id))
-                            {
-                                if((rst.DataBytes[rst.DataBytes.Length - 1] & 0x80) != 0)
-                                {
-                                    rst.DataBytes[rst.DataBytes.Length - 1] = (Byte)(rst.DataBytes[rst.DataBytes.Length - 1] & 0x7F);
-                                    syb = -1;
-                                }
-                            }
-                            for (int i = rst.DataBytes.Length - 1; i >= 0; i--)
-                            {
-                                data = data * 100 + Convert.ToUInt32(rst.DataBytes[i].ToString("X2"), 10);
-                            }
-                            double dData = syb * data / lOffset;
-                            displayStr = dData.ToString("F" + (rst.DataId.Format.Length - offset - 1));
-                        }
-                    }
-                    if(rst.DataId.Format.Contains('N'))
-                    {
-                        if(string.IsNullOrEmpty(rst.DataId.Format.TrimEnd('N')))
-                        {
-                            displayStr = dataStr;
-                        }
-                        else if(rst.DataId.Format.Trim('N') == ".")
-                        {
-                            int offset = rst.DataId.Format.IndexOf('.');
-                            long lOffset = 10;
-                            for (int i = 1; i < rst.DataId.Format.Length - offset - 1; i++)
-                            {
-                                 lOffset *= 10;
-                            }
-                            uint  data = 0;
-                            double syb = 1;
-                            if(DataId.SymbolList.Contains(rst.DataId.Id))
-                            {
-                                if((rst.DataBytes[rst.DataBytes.Length - 1] & 0x80) != 0)
-                                {
-                                    rst.DataBytes[rst.DataBytes.Length - 1] = (Byte)(rst.DataBytes[rst.DataBytes.Length - 1] & 0x7F);
-                                    syb = -1;
-                                }
-                            }
-                            for (int i = rst.DataBytes.Length - 1; i >= 0; i--)
-                            {
-                                data = data * 100 + Convert.ToUInt32(rst.DataBytes[i].ToString("X2"), 10);
-                            }
-                            double dData = syb * data / lOffset;
-                            displayStr = dData.ToString("F" + (rst.DataId.Format.Length - offset - 1));
-                        }
-                    }
-                    if(rst.DataId.Format == "YYMMDDhhmm")
-                    {
-                        displayStr = dataStr.Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":");
-                    }
-                    if(rst.DataId.Format == "YYMMDDWW")
-                    {
-                        displayStr = dataStr.Insert(2, "-").Insert(5, "-").Insert(8, " ");
-                    }
-                    if(rst.DataId.Format == "hhmmss")
-                    {
-                        displayStr = dataStr.Insert(2, ":").Insert(5, ":");
-                    }
-                }
-                else
-                {
-                    displayStr = dataStr;
-                }
-                if(rst.DataId.Unit != null)
-                {
-                    displayStr += (" " + rst.DataId.Unit);
-                }
+                displayStr = rst.DataId.GetDataString(rst.DataBytes);
                 dataGridViewDataIdList.Rows[index].Cells[7].Style.BackColor = Color.White;
             }
             else
@@ -349,16 +287,16 @@ namespace MeterTest.Source.WinowsForm
         {
             List<DataId> dataIdList = (List<DataId>)obj;
             CommResult rst = null;
+            cycleSwith = true;
             foreach (var item in dataIdList)
             {
                 try
                 {
                     rst = new CommResult();
                     Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
-                    dic.Add("reading", rst);
-                    Thread.Sleep(500);
-                    synchronizationContext.Post(ReadOptUiUpdate, dic);
                     rst.DataId = item;
+                    dic.Add("reading", rst);
+                    synchronizationContext.Post(ReadOptUiUpdate, dic);
                     rst.DataBytes = client.Read(meterAddress, item);
                     rst.Result = true;
                 }
@@ -382,7 +320,138 @@ namespace MeterTest.Source.WinowsForm
                     synchronizationContext.Post(ReadOptUiUpdate, dic);
                     Thread.Sleep(500);
                 }
+                if(cycleSwith == false)
+                {
+                    break;
+                }
             }
+            CloseLock(); /* 关闭锁 */
+        }
+        private void ReadCycle(Object obj)
+        {
+            List<DataId> dataIdList = (List<DataId>)obj;
+            CommResult rst = null;
+            cycleSwith = true;
+            
+            int cycleReadErrorCnt = 0;
+            int cycleReadOkCnt = 0;
+            int timeOutCnt = 0;
+            // int errorCnt = 0;
+
+            while(cycleSwith)
+            {
+                // foreach (var item in dataIdList)
+                for (int i = 0; i < dataIdList.Count; i++)
+                {
+                    try
+                    {
+                        rst = new CommResult();
+                        DataId item = dataIdList[i];
+                        rst.DataId = item;
+                        Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
+                        dic.Add("reading", rst);
+                        synchronizationContext.Post(ReadOptUiUpdate, dic);
+                        rst.DataBytes = client.Read(meterAddress, item);
+                        rst.Result = true;
+                        cycleReadOkCnt++;
+                    }
+                    catch (ClientException e)
+                    {
+                        rst.Error = e.Message;
+                        cycleReadErrorCnt++;
+                    }
+                    catch (TimeoutException)
+                    {
+                        rst.Error = "响应超时";
+                        timeOutCnt++;
+                    }
+                    catch(Exception e)
+                    {
+                        MessageBox.Show("未知错误" + e.Message, "MeterTest",  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        rst.Error = "未知错误";
+
+                    }
+                    finally
+                    {
+                        Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
+                        dic.Add("Read Cycle", rst);
+                        synchronizationContext.Post(ReadOptUiUpdate, dic);
+                        Thread.Sleep(500);
+                    }
+                    if(!cycleSwith)
+                    {
+                        break;
+                    }
+                }
+            }
+            MessageBox.Show("响应超时次数: " + timeOutCnt.ToString() + "\n"
+                           + "错误响应次数: "+ cycleReadErrorCnt.ToString() + "\n"
+                           + "正常响应次数: "+ cycleReadOkCnt.ToString() + "\n", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CloseLock(); /* 关闭锁 */
+        }
+        private void buttonReadOne_Click(object sender, EventArgs e)
+        {
+            // List<DataId> selectList = new List<DataId>();
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在单次读取";
+            DataId dataId = null;
+            List<DataId> dataIdList = new List<DataId>();
+            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            {
+                if((dataGridViewDataIdList.Rows[i].Cells[0].Value != null) 
+                && (bool)dataGridViewDataIdList.Rows[i].Cells[0].Value == true)
+                {
+                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewDataIdList.Rows[i].Cells[1].Value)];  
+                    dataIdList.Add(dataId);
+                }
+            }
+            Thread readOnceThr = new Thread(ReadOnce);
+            readOnceThr.IsBackground = true;
+            readOnceThr.Start(dataIdList);
+        }
+        private void buttonReadClyce_Click(object sender, EventArgs e)
+        {
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在循环读取";
+            DataId dataId = null;
+            List<DataId> dataIdList = new List<DataId>();
+            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            {
+                if((dataGridViewDataIdList.Rows[i].Cells[0].Value != null) 
+                && (bool)dataGridViewDataIdList.Rows[i].Cells[0].Value == true)
+                {
+                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewDataIdList.Rows[i].Cells[1].Value)];  
+                    dataIdList.Add(dataId);
+                }
+            }
+            Thread readCycleThr = new Thread(ReadCycle);
+            readCycleThr.IsBackground = true;
+            readCycleThr.Start(dataIdList);
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            cycleSwith = false;
+        }
+
+        private void FormMain_SizeChanged(object sender, EventArgs e)
+        {
+            Point point1 = new Point(21, this.buttonReadOne.Location.Y);
+            this.buttonReadOne.Location = point1;
+            Point point2 = new Point(21 + this.Size.Width / 4, this.buttonReadOne.Location.Y);
+            buttonReadClyce.Location = point2;
+            Point point3 = new Point(21 + this.Size.Width / 2, this.buttonReadOne.Location.Y);
+            buttonStop.Location = point3;
         }
     }
 }

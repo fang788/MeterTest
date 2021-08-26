@@ -79,15 +79,22 @@ namespace MeterTest.Source.Dlt645
             byte[] frame = new byte[256];
             while (true)
             {
-                if(port.Read(frame, 0, 1) > 0)
+                // if( )
                 {
-                    if((frame[0] == 0x68)
-                    && (port.Read(frame, 1, 9) > 0))
+                    ReadBytes(frame, 0, 1);
+                    if(frame[0] == 0x68)
                     {
+                        ReadBytes(frame, 1, 9);
                         if((frame[7] == 0x68)
-                        && (frame[9] <= 200)
-                        && (port.Read(frame, 10, frame[9] + 2) > 0))
+                        && (frame[9] <= 200))
                         {
+                            ReadBytes(frame, 10, frame[9] + 2);
+                            string s = null;
+                            for (int i = 0; i < frame[9] + 12; i++)
+                            {
+                                s += frame[i].ToString("X2") + " ";
+                            }
+                            logger.Log(s);
                             if((Message.CalCheckSum(frame, 0, 10 + frame[9]) == frame[frame[9] + 10])
                             && (frame[frame[9] + 11] == 0x16))
                             {
@@ -104,6 +111,14 @@ namespace MeterTest.Source.Dlt645
             MemoryStream stream = new MemoryStream(frame[9] + 12);
             stream.Write(frame, 0, frame[9] + 12);
             return stream.ToArray();
+        }
+        private void ReadBytes(byte[] array, int offset, int length)
+        {
+            int readCnts = 0;
+            while (readCnts < length)
+            {
+                readCnts += port.Read(array, offset + readCnts, length);
+            }
         }
     }
 }

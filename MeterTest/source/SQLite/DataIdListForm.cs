@@ -27,8 +27,11 @@ namespace MeterTest.source.SQLite
             Form form = new DataIdAddListForm();
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
-            DisplayAll();
+            if(form.ShowDialog() == DialogResult.OK)
+            {
+                DisplayAll();
+                DialogResult = DialogResult.OK;
+            }
         }
 
         private void DataIdListForm_Load(object sender, EventArgs e)
@@ -126,6 +129,7 @@ namespace MeterTest.source.SQLite
             {
                 dataIdDb.DataIds.Remove(selectDataId);
                 dataIdDb.SaveChangesAsync();
+                DialogResult = DialogResult.OK;
             }
         }
 
@@ -152,6 +156,7 @@ namespace MeterTest.source.SQLite
                 {
                     DisplayOne();
                 }
+                DialogResult = DialogResult.OK;
             }
             // }
             // else

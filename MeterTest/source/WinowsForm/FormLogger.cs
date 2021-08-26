@@ -40,5 +40,10 @@ namespace MeterTest.Source.WinowsForm
             this.RichTextBoxLogger.AppendText(s);
             RichTextBoxLogger.ScrollToCaret();
         }
+
+        private void FormLogger_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            RichTextBoxLogger.Clear();
+        }
     }
 }

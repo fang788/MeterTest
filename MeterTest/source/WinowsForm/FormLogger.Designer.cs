@@ -6,7 +6,7 @@ namespace MeterTest.Source.WinowsForm
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        //private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -14,11 +14,12 @@ namespace MeterTest.Source.WinowsForm
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            Hide();
+            // if (disposing && (components != null))
+            // {
+            //     components.Dispose();
+            // }
+            // base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -37,21 +38,24 @@ namespace MeterTest.Source.WinowsForm
             this.RichTextBoxLogger.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RichTextBoxLogger.Location = new System.Drawing.Point(12, 12);
+            this.RichTextBoxLogger.Location = new System.Drawing.Point(9, 10);
+            this.RichTextBoxLogger.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.RichTextBoxLogger.MaxLength = 104857600;
             this.RichTextBoxLogger.Name = "RichTextBoxLogger";
-            this.RichTextBoxLogger.Size = new System.Drawing.Size(1021, 479);
+            this.RichTextBoxLogger.Size = new System.Drawing.Size(795, 408);
             this.RichTextBoxLogger.TabIndex = 0;
             this.RichTextBoxLogger.Text = "";
             // 
             // FormLogger
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 503);
+            this.ClientSize = new System.Drawing.Size(813, 428);
             this.Controls.Add(this.RichTextBoxLogger);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "FormLogger";
             this.Text = "日志";
-            //this.Load += new System.EventHandler(this.FormLogger_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormLogger_FormClosed);
             this.ResumeLayout(false);
 
         }

@@ -37,11 +37,12 @@ namespace MeterTest.Source.WinowsForm
             this.管理数据标识表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于MeterTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.激活ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageRead = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonReadClyce = new System.Windows.Forms.Button();
             this.buttonReadOne = new System.Windows.Forms.Button();
@@ -51,10 +52,10 @@ namespace MeterTest.Source.WinowsForm
             this.取消选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选择所有ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.取消所有选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清除所有数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageWrite = new System.Windows.Forms.TabPage();
             this.tabPageV9203 = new System.Windows.Forms.TabPage();
             this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
-            this.清除所有数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -111,7 +112,8 @@ namespace MeterTest.Source.WinowsForm
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.关于MeterTestToolStripMenuItem});
+            this.关于MeterTestToolStripMenuItem,
+            this.激活ToolStripMenuItem});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
             this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.帮助ToolStripMenuItem.Text = "帮助";
@@ -122,6 +124,13 @@ namespace MeterTest.Source.WinowsForm
             this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.关于MeterTestToolStripMenuItem.Text = "关于 MeterTest";
             this.关于MeterTestToolStripMenuItem.Click += new System.EventHandler(this.关于MeterTestToolStripMenuItem_Click);
+            // 
+            // 激活ToolStripMenuItem
+            // 
+            this.激活ToolStripMenuItem.Name = "激活ToolStripMenuItem";
+            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.激活ToolStripMenuItem.Text = "激活";
+            this.激活ToolStripMenuItem.Click += new System.EventHandler(this.激活ToolStripMenuItem_Click);
             // 
             // tabControl1
             // 
@@ -156,6 +165,7 @@ namespace MeterTest.Source.WinowsForm
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.statusStrip1);
             this.panel1.Controls.Add(this.buttonStop);
             this.panel1.Controls.Add(this.buttonReadClyce);
@@ -169,21 +179,22 @@ namespace MeterTest.Source.WinowsForm
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabelStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 454);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1003, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabelStatus
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(44, 17);
-            this.toolStripStatusLabel1.Text = "状态栏";
+            this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
+            this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(44, 17);
+            this.toolStripStatusLabelStatus.Text = "状态栏";
             // 
             // buttonStop
             // 
+            this.buttonStop.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonStop.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonStop.Location = new System.Drawing.Point(568, 410);
             this.buttonStop.Name = "buttonStop";
@@ -191,9 +202,11 @@ namespace MeterTest.Source.WinowsForm
             this.buttonStop.TabIndex = 4;
             this.buttonStop.Text = "停止";
             this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
             // 
             // buttonReadClyce
             // 
+            this.buttonReadClyce.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonReadClyce.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonReadClyce.Location = new System.Drawing.Point(306, 410);
             this.buttonReadClyce.Name = "buttonReadClyce";
@@ -201,9 +214,11 @@ namespace MeterTest.Source.WinowsForm
             this.buttonReadClyce.TabIndex = 5;
             this.buttonReadClyce.Text = "循环读取";
             this.buttonReadClyce.UseVisualStyleBackColor = true;
+            this.buttonReadClyce.Click += new System.EventHandler(this.buttonReadClyce_Click);
             // 
             // buttonReadOne
             // 
+            this.buttonReadOne.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonReadOne.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonReadOne.Location = new System.Drawing.Point(21, 410);
             this.buttonReadOne.Name = "buttonReadOne";
@@ -217,9 +232,10 @@ namespace MeterTest.Source.WinowsForm
             // 
             this.dataGridViewDataIdList.AllowUserToAddRows = false;
             this.dataGridViewDataIdList.AllowUserToDeleteRows = false;
-            this.dataGridViewDataIdList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridViewDataIdList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridViewDataIdList.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewDataIdList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewDataIdList.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewDataIdList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDataIdList.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridViewDataIdList.Location = new System.Drawing.Point(3, 9);
@@ -238,35 +254,42 @@ namespace MeterTest.Source.WinowsForm
             this.取消所有选择ToolStripMenuItem,
             this.清除所有数据ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 136);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 114);
             // 
             // 选择ToolStripMenuItem
             // 
             this.选择ToolStripMenuItem.Name = "选择ToolStripMenuItem";
-            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.选择ToolStripMenuItem.Text = "选择";
             this.选择ToolStripMenuItem.Click += new System.EventHandler(this.选择ToolStripMenuItem_Click);
             // 
             // 取消选择ToolStripMenuItem
             // 
             this.取消选择ToolStripMenuItem.Name = "取消选择ToolStripMenuItem";
-            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.取消选择ToolStripMenuItem.Text = "取消选择";
             this.取消选择ToolStripMenuItem.Click += new System.EventHandler(this.取消选择ToolStripMenuItem_Click);
             // 
             // 选择所有ToolStripMenuItem
             // 
             this.选择所有ToolStripMenuItem.Name = "选择所有ToolStripMenuItem";
-            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.选择所有ToolStripMenuItem.Text = "选择所有";
             this.选择所有ToolStripMenuItem.Click += new System.EventHandler(this.选择所有ToolStripMenuItem_Click);
             // 
             // 取消所有选择ToolStripMenuItem
             // 
             this.取消所有选择ToolStripMenuItem.Name = "取消所有选择ToolStripMenuItem";
-            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.取消所有选择ToolStripMenuItem.Text = "取消所有选择";
             this.取消所有选择ToolStripMenuItem.Click += new System.EventHandler(this.取消所有选择ToolStripMenuItem_Click);
+            // 
+            // 清除所有数据ToolStripMenuItem
+            // 
+            this.清除所有数据ToolStripMenuItem.Name = "清除所有数据ToolStripMenuItem";
+            this.清除所有数据ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.清除所有数据ToolStripMenuItem.Text = "清除所有数据";
+            this.清除所有数据ToolStripMenuItem.Click += new System.EventHandler(this.清除所有数据ToolStripMenuItem_Click);
             // 
             // tabPageWrite
             // 
@@ -297,13 +320,6 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageChangeCommAddr.Text = "通讯地址";
             this.tabPageChangeCommAddr.UseVisualStyleBackColor = true;
             // 
-            // 清除所有数据ToolStripMenuItem
-            // 
-            this.清除所有数据ToolStripMenuItem.Name = "清除所有数据ToolStripMenuItem";
-            this.清除所有数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.清除所有数据ToolStripMenuItem.Text = "清除所有数据";
-            this.清除所有数据ToolStripMenuItem.Click += new System.EventHandler(this.清除所有数据ToolStripMenuItem_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -312,15 +328,15 @@ namespace MeterTest.Source.WinowsForm
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "FormMain";
             this.Text = "MeterTest";
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPageRead.ResumeLayout(false);
+            this.tabPageRead.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -346,18 +362,19 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.TabPage tabPageV9203;
         private System.Windows.Forms.TabPage tabPageChangeCommAddr;
         private System.Windows.Forms.ToolStripMenuItem 管理数据标识表ToolStripMenuItem;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.Button buttonStop;
-        private System.Windows.Forms.Button buttonReadClyce;
-        private System.Windows.Forms.Button buttonReadOne;
-        private System.Windows.Forms.DataGridView dataGridViewDataIdList;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 取消选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 选择所有ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 取消所有选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清除所有数据ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 激活ToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Button buttonReadClyce;
+        private System.Windows.Forms.Button buttonReadOne;
+        private System.Windows.Forms.DataGridView dataGridViewDataIdList;
     }
 }
