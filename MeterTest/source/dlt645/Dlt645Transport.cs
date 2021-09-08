@@ -31,9 +31,10 @@ namespace MeterTest.Source.Dlt645
                 {
                     port.Open();
                     byte[] frame = BuildMessageFrame(request);
-                    logger.Log("TX: " + request.ToString() + dateTime.ToString("yyyy-MM-dd hh:mm:ss fff"));
+                    TxLogger(frame, dateTime);
                     port.Write(frame, 0, frame.Length);
                     frame = ReadResponse();
+                    RxLogger(frame, dateTime);
                     responseMsg.Initialize(frame);
                 }
                 ValidateResponse(request, responseMsg);
@@ -43,8 +44,9 @@ namespace MeterTest.Source.Dlt645
                 logger.Log($"{e.GetType().Name}, {e}");
                 throw;
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                logger.Log($"{e.GetType().Name}, {e}");
                 throw;
             }
             finally
@@ -54,9 +56,7 @@ namespace MeterTest.Source.Dlt645
                     port.Close();
                 }
             }
-            DateTime now = DateTime.Now;
-            double milliseconds = ((double)(now.Ticks - dateTime.Ticks) / 10000);
-            logger.Log("RX: " + responseMsg.ToString() + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss fff") + " 响应时间：" + milliseconds.ToString("F2") + "ms");
+            
             return responseMsg;
         }
         private Message CreateMessage(byte[] frame)
@@ -68,6 +68,26 @@ namespace MeterTest.Source.Dlt645
             stream.Write(frame, 10, frame.Length - 12);
             Message Msg = new Message(address, frame[8], stream.ToArray());
             return Msg;
+        }
+        private void TxLogger(byte[] frame, DateTime dateTime)
+        {
+            string msg = null;
+            for (int i = 0; i < frame.Length; i++)
+            {
+                msg += frame[i].ToString("X2");
+            }
+            logger.Log("TX: " + msg + dateTime.ToString("yyyy-MM-dd hh:mm:ss fff"));
+        }
+        private void RxLogger(byte[] frame, DateTime dateTime)
+        {
+            string msg = null;
+            for (int i = 0; i < frame.Length; i++)
+            {
+                msg += frame[i].ToString("X2");
+            }
+            DateTime now = DateTime.Now;
+            double milliseconds = ((double)(now.Ticks - dateTime.Ticks) / 10000);
+            logger.Log("RX: " + msg + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss fff") + " 响应时间：" + milliseconds.ToString("F2") + "ms");
         }
         public void ValidateResponse(IDlt645Message request, IDlt645Message response)
         {
