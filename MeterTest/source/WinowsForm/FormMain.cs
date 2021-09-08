@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using MeterTest.source.Config;
 using MeterTest.source.dlt645;
 using MeterTest.source.SQLite;
+using MeterTest.source.Test;
+using MeterTest.source.WinowsForm;
 using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
 using Newtonsoft.Json;
@@ -23,9 +25,9 @@ namespace MeterTest.Source.WinowsForm
     {
         private FormLogger formLogger = new FormLogger();
         private SerialPort serialPort;
-        private Transport transport;
+        private Dlt645Transport transport;
         private ConsoleLogger consoleLogger;
-        private Client client;
+        private Dlt645Client client;
         private MeterAddress meterAddress;
         private SynchronizationContext synchronizationContext = null;
         private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
@@ -58,19 +60,43 @@ namespace MeterTest.Source.WinowsForm
             //列大小不改变
             checkbox.Resizable = DataGridViewTriState.False;
             //添加的checkbox在dgv第一列
-            this.dataGridViewDataIdList.Columns.Insert(0, checkbox);
-            dataGridViewDataIdList.Columns.Add("No", "编号");
+            this.dataGridViewReadList.Columns.Insert(0, checkbox);
+            dataGridViewReadList.Columns.Add("No", "编号");
             // dataGridViewDataIdList.Columns[0].Width = 80;
-            dataGridViewDataIdList.Columns.Add("Id", "数据标识");
-            dataGridViewDataIdList.Columns.Add("Name", "数据项名称");
-            dataGridViewDataIdList.Columns.Add("Format", "数据格式");
-            dataGridViewDataIdList.Columns.Add("DataBytes", "数据长度（字节）");
-            dataGridViewDataIdList.Columns.Add("Unit", "单位");
-            dataGridViewDataIdList.Columns.Add("Rst", "结果");
+            dataGridViewReadList.Columns.Add("Id", "数据标识");
+            dataGridViewReadList.Columns.Add("Name", "数据项名称");
+            dataGridViewReadList.Columns.Add("Format", "数据格式");
+            dataGridViewReadList.Columns.Add("DataBytes", "数据长度（字节）");
+            dataGridViewReadList.Columns.Add("Unit", "单位");
+            dataGridViewReadList.Columns.Add("Rst", "结果");
             
-            dataGridViewDataIdList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            // dataGridViewDataIdList.AutoResizeColumns();
+            dataGridViewReadList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            //列显示名称
+            checkbox.HeaderText = "选择";
+            checkbox.Name = "IsChecked";
+            checkbox.TrueValue = true;
+            checkbox.FalseValue = false;
+            checkbox.DataPropertyName = "IsChecked";
+            //列宽
+            checkbox.Width = 50;
+            //列大小不改变
+            checkbox.Resizable = DataGridViewTriState.False;
+            dataGridViewWrite.Columns.Insert(0, checkbox);
+            dataGridViewWrite.Columns.Add("No", "编号");
+            // dataGridViewDataIdList.Columns[0].Width = 80;
+            dataGridViewWrite.Columns.Add("Id", "数据标识");
+            dataGridViewWrite.Columns.Add("Name", "数据项名称");
+            dataGridViewWrite.Columns.Add("Format", "数据格式");
+            dataGridViewWrite.Columns.Add("DataBytes", "数据长度（字节）");
+            dataGridViewWrite.Columns.Add("Unit", "单位");
+            dataGridViewWrite.Columns.Add("WriteData", "写入数据");
+            dataGridViewWrite.Columns.Add("Rst", "结果");
+            
+            dataGridViewWrite.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DataIdListDisplayAll();
+            DataGridViewWriteDisplayUpdate();
             synchronizationContext = SynchronizationContext.Current;
         }
 
@@ -88,8 +114,8 @@ namespace MeterTest.Source.WinowsForm
             serialPort = new SerialPort(opt.PortName, opt.BaudRate, opt.Parity, opt.DataBits, opt.StopBits);
             serialPort.ReadTimeout = opt.ReadTimeout;
             consoleLogger = new ConsoleLogger(formLogger);
-            transport = new Transport(serialPort, consoleLogger);
-            client = new Client(transport);
+            transport = new Dlt645Transport(serialPort, consoleLogger);
+            client = new Dlt645Client(transport);
             meterAddress = new MeterAddress(opt.MeterAddress);
         }
 
@@ -142,50 +168,51 @@ namespace MeterTest.Source.WinowsForm
 
         private void 管理数据标识表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form form = new DataIdListForm();
+            DataIdListForm form = new DataIdListForm();
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;
-            if(form.ShowDialog() == DialogResult.OK)
+            form.ShowDialog();
+            if(form.IsChg)
             {
                 DataIdListDisplayAll();
             }
         }
         private void 选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataIdList.SelectedRows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.SelectedRows.Count; i++)
             {
-                dataGridViewDataIdList.Rows[dataGridViewDataIdList.SelectedRows[i].Index].Cells[0].Value = true;
+                dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0].Value = true;
             }
         }
 
         private void 取消选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataIdList.SelectedRows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.SelectedRows.Count; i++)
             {
-                dataGridViewDataIdList.Rows[dataGridViewDataIdList.SelectedRows[i].Index].Cells[0].Value = false;
+                dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0].Value = false;
             }
         }
 
         private void 选择所有ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                dataGridViewDataIdList.Rows[i].Cells[0].Value = true;
+                dataGridViewReadList.Rows[i].Cells[0].Value = true;
             }
         }
 
         private void 取消所有选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                dataGridViewDataIdList.Rows[i].Cells[0].Value = false;
+                dataGridViewReadList.Rows[i].Cells[0].Value = false;
             }
         }
         private void 清除所有数据ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                dataGridViewDataIdList.Rows[i].Cells[7].Value = null;
+                dataGridViewReadList.Rows[i].Cells[7].Value = null;
             }
         }
         private void SetOptLock(Object value)
@@ -198,29 +225,20 @@ namespace MeterTest.Source.WinowsForm
         }
         private void DataIdListDisplayAll()
         {
+            dataGridViewReadList.Rows.Clear();
             DataId[] dataIdArray = DataIdDb.DataIds.ToArray();
             for (int i = 0; i < dataIdArray.Length; i++)
             {
                 if(dataIdArray[i].IsReadable)
                 {
-                    int index = dataGridViewDataIdList.Rows.Add();
-                    dataGridViewDataIdList.Rows[index].Cells[1].Value = i;
-                    dataGridViewDataIdList.Rows[index].Cells[2].Value = dataIdArray[i].Id.ToString("X8");
-                    dataGridViewDataIdList.Rows[index].Cells[3].Value = dataIdArray[i].Name;
-                    dataGridViewDataIdList.Rows[index].Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
-                    dataGridViewDataIdList.Rows[index].Cells[5].Value = dataIdArray[i].DataBytes;
-                    dataGridViewDataIdList.Rows[index].Cells[6].Value = dataIdArray[i].Unit;
-                    // DataGridViewRow row = new DataGridViewRow();
-                    // row.Cells.Add();
-                    // row.Cells[1].Value = i;
-                    // row.Cells[2].Value = dataIdArray[i].Id.ToString("X8");
-                    // row.Cells[3].Value = dataIdArray[i].Name;
-                    // row.Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
-                    // row.Cells[5].Value = dataIdArray[i].DataBytes;
-                    // row.Cells[6].Value = dataIdArray[i].Unit;
-                    // dataGridViewDataIdList.Rows.Add(row);
+                    int index = dataGridViewReadList.Rows.Add();
+                    dataGridViewReadList.Rows[index].Cells[1].Value = i;
+                    dataGridViewReadList.Rows[index].Cells[2].Value = dataIdArray[i].Id.ToString("X8");
+                    dataGridViewReadList.Rows[index].Cells[3].Value = dataIdArray[i].Name;
+                    dataGridViewReadList.Rows[index].Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
+                    dataGridViewReadList.Rows[index].Cells[5].Value = dataIdArray[i].DataBytes;
+                    dataGridViewReadList.Rows[index].Cells[6].Value = dataIdArray[i].Unit;
                 }
-                //dataGridViewDataIdList.AutoResizeColumns();
             }
         }
         
@@ -240,16 +258,16 @@ namespace MeterTest.Source.WinowsForm
                     if(dic.TryGetValue("reading", out rst))
                     {
                         int index = 0;
-                        for (int j = 0; j < dataGridViewDataIdList.RowCount; j++)
+                        for (int j = 0; j < dataGridViewReadList.RowCount; j++)
                         {
-                            if(dataGridViewDataIdList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
+                            if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
                             {
                                 index = j;
                                 break;
                             }
                         }
-                        dataGridViewDataIdList.Rows[index].Cells[7].Value = null;
-                        dataGridViewDataIdList.CurrentCell = dataGridViewDataIdList.Rows[index].Cells[7];
+                        dataGridViewReadList.Rows[index].Cells[7].Value = null;
+                        dataGridViewReadList.CurrentCell = dataGridViewReadList.Rows[index].Cells[7];
                         toolStripStatusLabelStatus.Text = "正在读取数据标识：" + rst.DataId.Id.ToString("X8") + " ...";
                     }
                     if(dic.TryGetValue("Read Cycle", out rst))
@@ -263,9 +281,9 @@ namespace MeterTest.Source.WinowsForm
         {
             string displayStr = null;
             int index = 0;
-            for (int j = 0; j < dataGridViewDataIdList.RowCount; j++)
+            for (int j = 0; j < dataGridViewReadList.RowCount; j++)
             {
-                if(dataGridViewDataIdList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
+                if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
                 {
                     index = j;
                     break;
@@ -274,14 +292,14 @@ namespace MeterTest.Source.WinowsForm
             if(rst.Result)
             {
                 displayStr = rst.DataId.GetDataString(rst.DataBytes);
-                dataGridViewDataIdList.Rows[index].Cells[7].Style.BackColor = Color.White;
+                dataGridViewReadList.Rows[index].Cells[7].Style.BackColor = Color.White;
             }
             else
             {
                 displayStr = rst.Error.ToString();
-                dataGridViewDataIdList.Rows[index].Cells[7].Style.BackColor = Color.Red;
+                dataGridViewReadList.Rows[index].Cells[7].Style.BackColor = Color.Red;
             }
-            dataGridViewDataIdList.Rows[index].Cells[7].Value = displayStr;
+            dataGridViewReadList.Rows[index].Cells[7].Value = displayStr;
         }
         private void ReadOnce(Object obj)
         {
@@ -401,12 +419,12 @@ namespace MeterTest.Source.WinowsForm
             optMessage = "正在单次读取";
             DataId dataId = null;
             List<DataId> dataIdList = new List<DataId>();
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                if((dataGridViewDataIdList.Rows[i].Cells[0].Value != null) 
-                && (bool)dataGridViewDataIdList.Rows[i].Cells[0].Value == true)
+                if((dataGridViewReadList.Rows[i].Cells[0].Value != null) 
+                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
                 {
-                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewDataIdList.Rows[i].Cells[1].Value)];  
+                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
                     dataIdList.Add(dataId);
                 }
             }
@@ -425,12 +443,12 @@ namespace MeterTest.Source.WinowsForm
             optMessage = "正在循环读取";
             DataId dataId = null;
             List<DataId> dataIdList = new List<DataId>();
-            for (int i = 0; i < dataGridViewDataIdList.Rows.Count; i++)
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                if((dataGridViewDataIdList.Rows[i].Cells[0].Value != null) 
-                && (bool)dataGridViewDataIdList.Rows[i].Cells[0].Value == true)
+                if((dataGridViewReadList.Rows[i].Cells[0].Value != null) 
+                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
                 {
-                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewDataIdList.Rows[i].Cells[1].Value)];  
+                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
                     dataIdList.Add(dataId);
                 }
             }
@@ -452,6 +470,104 @@ namespace MeterTest.Source.WinowsForm
             buttonReadClyce.Location = point2;
             Point point3 = new Point(21 + this.Size.Width / 2, this.buttonReadOne.Location.Y);
             buttonStop.Location = point3;
+        }
+        private void DataGridViewWriteDisplayUpdate()
+        {
+            DataId[] dataIdArray = DataIdDb.DataIds.ToArray();
+            for (int i = 0; i < dataIdArray.Length; i++)
+            {
+                if(dataIdArray[i].IsWritable)
+                {
+                    int index = dataGridViewWrite.Rows.Add();
+                    dataGridViewWrite.Rows[index].Cells[1].Value = i;
+                    dataGridViewWrite.Rows[index].Cells[2].Value = dataIdArray[i].Id.ToString("X8");
+                    dataGridViewWrite.Rows[index].Cells[3].Value = dataIdArray[i].Name;
+                    dataGridViewWrite.Rows[index].Cells[4].Value = dataIdArray[i].Format;// == null? null : (dataIdArray[i].Format.ToString());
+                    dataGridViewWrite.Rows[index].Cells[5].Value = dataIdArray[i].DataBytes;
+                    dataGridViewWrite.Rows[index].Cells[6].Value = dataIdArray[i].Unit;
+                }
+            }
+        }
+
+        private void dataGridViewWrite_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataId dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewWrite.Rows[dataGridViewWrite.CurrentCell.RowIndex].Cells[1].Value)];
+            FormWrite form = new FormWrite(dataId);
+            form.StartPosition = FormStartPosition.CenterParent;
+            if(form.ShowDialog() == DialogResult.OK)
+            {
+                dataGridViewWrite.Rows[dataGridViewWrite.CurrentCell.RowIndex].Cells[7].Value = form.DataString;
+            }
+        }
+
+        private void buttonReadFreezeData_Click(object sender, EventArgs e)
+        {
+            // Thread th = new Thread(ReadFreezeData);
+            Thread th = new Thread(ReadFreezeBlockData);
+            th.IsBackground = true;
+            th.Start();
+        }
+        private void ReadFreezeData()
+        {
+            FreezeDataTest freezeDataTest = new FreezeDataTest(this.client);
+            List<FreezeData> freezeDataList = new List<FreezeData>();
+            for (int i = 1; i < 672; i++)
+            {
+                List<byte[]> rst = freezeDataTest.ReadOnce(i);
+                FreezeData data = freezeDataTest.FreezeDataConvert(rst);
+                freezeDataList.Add(data);
+                synchronizationContext.Post(ReadFreezeDataProgramBar, i);
+            }
+            freezeDataList.Sort();
+            freezeDataTest.SaveFreezeData("冻结数据.xlsx", freezeDataList);
+        }
+
+        private void ReadFreezeBlockData()
+        {
+            FreezeDataTest freezeDataTest = new FreezeDataTest(this.client);
+            List<FreezeData> freezeDataList = new List<FreezeData>();
+            try
+            {
+                int cnt = freezeDataTest.GetFreezeCnt();
+                cnt = cnt > FreezeDataTest.MAX_FREEZE_CNT? FreezeDataTest.MAX_FREEZE_CNT : cnt;
+                synchronizationContext.Post(ReadFreezeDataProgramBarStart, cnt);
+                for (int i = 1; i <= cnt; i++)
+                {
+                    byte[] rst = null;
+                    try
+                    {
+                        rst = freezeDataTest.ReadBlock(i);
+                    }
+                    catch (System.Exception e)
+                    {
+                        MessageBox.Show(e.ToString());
+                        // throw;
+                    }
+                    if(rst != null)
+                    {
+                        FreezeData data = freezeDataTest.FreezeDataConvert(rst);
+                        freezeDataList.Add(data);
+                        synchronizationContext.Post(ReadFreezeDataProgramBar, i);
+                    }
+                }
+                freezeDataList.Sort();
+                freezeDataTest.SaveFreezeData(".\\source\\Test\\冻结数据.xlsx", freezeDataList);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                // throw;
+            }
+        }
+        private void ReadFreezeDataProgramBar(Object obj)
+        {
+            int per = (int)obj;
+            progressBar1.Value = per;
+        }
+        private void ReadFreezeDataProgramBarStart(Object obj)
+        {
+            int per = (int)obj;
+            progressBar1.Maximum = per;
         }
     }
 }

@@ -124,13 +124,14 @@ namespace MeterTest.source.SQLite
             // 
             // textBoxDataId
             // 
+            this.textBoxDataId.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textBoxDataId.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxDataId.Location = new System.Drawing.Point(93, 17);
-            this.textBoxDataId.MaxLength = 16;
+            this.textBoxDataId.MaxLength = 8;
             this.textBoxDataId.Name = "textBoxDataId";
             this.textBoxDataId.Size = new System.Drawing.Size(119, 21);
             this.textBoxDataId.TabIndex = 10;
-            this.textBoxDataId.TextChanged += new System.EventHandler(this.textBoxDataId_TextChanged);
+            this.textBoxDataId.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDataId_KeyPress);
             // 
             // labelDataId
             // 

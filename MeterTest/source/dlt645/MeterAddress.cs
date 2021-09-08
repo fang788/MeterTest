@@ -90,6 +90,26 @@ namespace MeterTest.Source.Dlt645
             }
             m_ToString = null;
         }
+        public MeterAddress(byte[] address, int offset)
+        {
+            if(address == null)
+            {
+                throw new ArgumentNullException("address");
+            }
+
+            if(address.Length < (MeterAddressBytes + offset))
+            {
+                throw new ArgumentException(address.Length.ToString(), "address");
+            }
+
+            m_Address = 0;
+            for (int i = 0; i < MeterAddressBytes; i++)
+            {
+                m_Address = ((m_Address << 8) + address[i + offset]);
+            }
+            m_ToString = null;
+        }
+
 
         public override bool Equals(object obj)
         {

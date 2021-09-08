@@ -20,6 +20,8 @@ namespace MeterTest.source.SQLite
     {
         DataIdDbContext dataIdDb = FormMain.DataIdDb;
 
+        public bool IsChg = false;
+
         List<DataId> dataIdList = new List<DataId>();
         public DataIdAddListForm()
         {
@@ -66,7 +68,7 @@ namespace MeterTest.source.SQLite
                 }
                 ISheet sheet = workbook.GetSheetAt(0);
                 int i = 1;
-                for (; i < sheet.LastRowNum; i++)
+                for (; i < sheet.LastRowNum + 1; i++)
                 {
                     IRow row = sheet.GetRow(i);
                     DataId dataId = new DataId();
@@ -135,7 +137,7 @@ namespace MeterTest.source.SQLite
                     {
                         dataIdDb.DataIds.AddAsync(dataIdArray[i]);
                         dataIdList.Add(dataIdArray[i]);
-                        DialogResult = DialogResult.OK;
+                        IsChg = true;
                     }
                 }
                 DisplayAll();
@@ -152,8 +154,8 @@ namespace MeterTest.source.SQLite
             {
                 dataIdDb.DataIds.AddAsync(form.DataId);
                 dataIdList.Add(form.DataId);
-                DialogResult = DialogResult.OK;
                 DisplayAll();
+                IsChg = true;
             }
         }
     }

@@ -17,6 +17,7 @@ namespace MeterTest.source.SQLite
     public partial class DataIdListForm : Form
     {
         DataIdDbContext dataIdDb = FormMain.DataIdDb;
+        public bool IsChg = false;
         public DataIdListForm()
         {
             InitializeComponent();
@@ -24,13 +25,14 @@ namespace MeterTest.source.SQLite
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            Form form = new DataIdAddListForm();
+            DataIdAddListForm form = new DataIdAddListForm();
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;
-            if(form.ShowDialog() == DialogResult.OK)
+            form.ShowDialog();
+            if(form.IsChg)
             {
                 DisplayAll();
-                DialogResult = DialogResult.OK;
+                IsChg = true;
             }
         }
 
@@ -110,32 +112,80 @@ namespace MeterTest.source.SQLite
 
         private void buttonDel_Click(object sender, EventArgs e)
         {
-            // foreach (var item in dataIdDb.DataIds)
-            // {
-            //     dataIdDb.DataIds.Remove(item);
-            // }
-            // dataIdDb.SaveChangesAsync();
             int index;
-            try
+            List<DataId> list = new List<DataId>();
+            foreach (var item in dataGridViewDataId.SelectedRows)
+            for (int i = 0; i < dataGridViewDataId.SelectedRows.Count; i++)
             {
-                index = Convert.ToInt32(dataGridViewDataId.Rows[dataGridViewDataId.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                try
+                {
+                    index = Convert.ToInt32(dataGridViewDataId.SelectedRows[i].Cells[0].Value.ToString());
+                    DataId selectDataId = dataIdDb.DataIds.ToList().ToArray<DataId>()[index];
+                    list.Add(selectDataId);
+                }
+                catch (System.Exception)
+                {
+                    throw;
+                }
             }
-            catch (System.Exception)
+            string s = "数据标识: ";
+            s += (list.ToArray()[0].Id.ToString("X8") + "\n");
+            if(list.Count > 1)
             {
-                throw;
+                s += "...";
             }
-            DataId selectDataId = dataIdDb.DataIds.ToList().ToArray<DataId>()[index];
-            if (MessageBox.Show("数据标识 (" + selectDataId.ToString() + ") 将被永久删除", "MeterTest",  MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.OK)
+            // for (int i = 0; i < 2; i++)
+            // {
+            //     s += (list.ToArray()[0].Id.ToString("X8") + "\n");
+            // }
+            s += "将被永久删除";
+            if (MessageBox.Show(s, "MeterTest",  MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                dataIdDb.DataIds.Remove(selectDataId);
+                foreach (var item in list)
+                {
+                    dataIdDb.DataIds.Remove(item);
+                }
                 dataIdDb.SaveChangesAsync();
-                DialogResult = DialogResult.OK;
+                DisplayAll();
+                IsChg = true;
             }
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            
+            int i;
+            uint id;
+            if((String.IsNullOrEmpty(textBoxDataId.Text))
+            || (String.IsNullOrWhiteSpace(textBoxDataId.Text)))
+            {
+                toolStripStatusLabelOpt.Text = "请输入需要查找的数据标识";
+                return;
+            } 
+            try 
+            {
+                id = Convert.ToUInt32(textBoxDataId.Text, 16);
+            }
+            catch(FormatException)
+            {
+                toolStripStatusLabelOpt.Text = "数据标识格式不正确";
+                return;
+            }
+            for (i = 0; i < dataGridViewDataId.RowCount - 1; i++)
+            {
+                if(Convert.ToUInt32(dataGridViewDataId.Rows[i].Cells[1].Value.ToString(), 16) == id)
+                {
+                    dataGridViewDataId.CurrentCell = dataGridViewDataId.Rows[i].Cells[1];
+                    break;
+                }
+            }
+            if(i < dataGridViewDataId.RowCount - 1)
+            {
+                toolStripStatusLabelOpt.Text = "已找到数据标识：" + id.ToString("X8");
+            }
+            else
+            {
+                toolStripStatusLabelOpt.Text = "未找到数据标识：" + id.ToString("X8");
+            }
         }
 
         private void buttonChg_Click(object sender, EventArgs e)
@@ -165,11 +215,24 @@ namespace MeterTest.source.SQLite
             // }
         }
 
-        private void textBoxDataId_TextChanged(object sender, EventArgs e)
+        private void textBoxDataId_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(textBoxDataId.Text == "")
+            if(((e.KeyChar < (char)'0') || (e.KeyChar > (char)'9')) 
+            && (e.KeyChar != (char)'A')
+            && (e.KeyChar != (char)'a')
+            && (e.KeyChar != (char)'B')
+            && (e.KeyChar != (char)'b')
+            && (e.KeyChar != (char)'C')
+            && (e.KeyChar != (char)'c')
+            && (e.KeyChar != (char)'D')
+            && (e.KeyChar != (char)'d')
+            && (e.KeyChar != (char)'E')
+            && (e.KeyChar != (char)'e')
+            && (e.KeyChar != (char)'F')
+            && (e.KeyChar != (char)'f')
+            && (e.KeyChar != (char)Keys.Back))
             {
-                DisplayAll();
+                e.Handled = true; 
             }
         }
     }
