@@ -44,20 +44,31 @@ namespace MeterTest.Source.WinowsForm
             this.ComboBoxPort = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.comboBoxAuthority = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.textBoxOperatorCode = new System.Windows.Forms.TextBox();
             this.textBoxServerAddress = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.comboBoxTTPort = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.ButtonConfirm = new System.Windows.Forms.Button();
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownReadTimeOut)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(9, 10);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControl1.Name = "tabControl1";
@@ -234,6 +245,12 @@ namespace MeterTest.Source.WinowsForm
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.comboBoxAuthority);
+            this.tabPage2.Controls.Add(this.label10);
+            this.tabPage2.Controls.Add(this.label9);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.textBoxPassword);
+            this.tabPage2.Controls.Add(this.textBoxOperatorCode);
             this.tabPage2.Controls.Add(this.textBoxServerAddress);
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
@@ -243,10 +260,70 @@ namespace MeterTest.Source.WinowsForm
             this.tabPage2.Text = "DLT645";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // comboBoxAuthority
+            // 
+            this.comboBoxAuthority.FormattingEnabled = true;
+            this.comboBoxAuthority.Items.AddRange(new object[] {
+            "01",
+            "02",
+            "04",
+            "98"});
+            this.comboBoxAuthority.Location = new System.Drawing.Point(108, 63);
+            this.comboBoxAuthority.Name = "comboBoxAuthority";
+            this.comboBoxAuthority.Size = new System.Drawing.Size(131, 25);
+            this.comboBoxAuthority.TabIndex = 5;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(22, 141);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(80, 17);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "操作者代码：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(22, 104);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(44, 17);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "密码：";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(22, 67);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(68, 17);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "密码权限：";
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textBoxPassword.Location = new System.Drawing.Point(108, 101);
+            this.textBoxPassword.MaxLength = 6;
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.Size = new System.Drawing.Size(131, 23);
+            this.textBoxPassword.TabIndex = 2;
+            this.textBoxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxServerAddress_KeyPress);
+            // 
+            // textBoxOperatorCode
+            // 
+            this.textBoxOperatorCode.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textBoxOperatorCode.Location = new System.Drawing.Point(108, 137);
+            this.textBoxOperatorCode.MaxLength = 8;
+            this.textBoxOperatorCode.Name = "textBoxOperatorCode";
+            this.textBoxOperatorCode.Size = new System.Drawing.Size(131, 23);
+            this.textBoxOperatorCode.TabIndex = 2;
+            this.textBoxOperatorCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxServerAddress_KeyPress);
+            // 
             // textBoxServerAddress
             // 
             this.textBoxServerAddress.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textBoxServerAddress.Location = new System.Drawing.Point(97, 27);
+            this.textBoxServerAddress.Location = new System.Drawing.Point(108, 27);
             this.textBoxServerAddress.MaxLength = 12;
             this.textBoxServerAddress.Name = "textBoxServerAddress";
             this.textBoxServerAddress.Size = new System.Drawing.Size(131, 23);
@@ -262,6 +339,37 @@ namespace MeterTest.Source.WinowsForm
             this.label7.Size = new System.Drawing.Size(80, 17);
             this.label7.TabIndex = 1;
             this.label7.Text = "服务器地址：";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.comboBoxTTPort);
+            this.tabPage3.Controls.Add(this.label11);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(418, 294);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "台体";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxTTPort
+            // 
+            this.comboBoxTTPort.FormattingEnabled = true;
+            this.comboBoxTTPort.Location = new System.Drawing.Point(96, 21);
+            this.comboBoxTTPort.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.comboBoxTTPort.Name = "comboBoxTTPort";
+            this.comboBoxTTPort.Size = new System.Drawing.Size(118, 25);
+            this.comboBoxTTPort.TabIndex = 3;
+            this.comboBoxTTPort.DropDown += new System.EventHandler(this.comboBoxTTPort_DropDown);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(20, 24);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(62, 17);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "端口号(P):";
             // 
             // ButtonConfirm
             // 
@@ -305,6 +413,8 @@ namespace MeterTest.Source.WinowsForm
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownReadTimeOut)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -330,5 +440,14 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox textBoxServerAddress;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox comboBoxAuthority;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.TextBox textBoxOperatorCode;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.ComboBox comboBoxTTPort;
+        private System.Windows.Forms.Label label11;
     }
 }

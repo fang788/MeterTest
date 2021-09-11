@@ -11,6 +11,10 @@ namespace MeterTest.Source.Config
         private StopBits stopBits  = StopBits.One;
         private int      readTimeout = 500;
         private string   meterAddress = "AAAAAAAAAAAA";
+        private byte     authority = 0x02;
+        private string   password = "000000";
+        private string   operatorCode = "00000000";
+        private string   kpTableBodyPortName = "COM2";
 
         public Options()
         {
@@ -92,6 +96,26 @@ namespace MeterTest.Source.Config
             {
                 meterAddress = value;
             }
+        }
+        public byte Authority
+        {
+            get { return authority;}
+            set { authority = value; }
+        }
+        public string Password
+        {
+            get { return password;}
+            set { password = value; }
+        }
+        public string OperatorCode
+        {
+            get { return operatorCode;}
+            set { operatorCode = value; }
+        }
+        public string KpTableBodyPortName 
+        {
+            get { return kpTableBodyPortName;}
+            set { kpTableBodyPortName = value; }
         }
     }
 }

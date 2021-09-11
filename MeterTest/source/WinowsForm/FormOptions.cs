@@ -36,6 +36,10 @@ namespace MeterTest.Source.WinowsForm
             opt.StopBits = (StopBits)Enum.Parse(typeof(StopBits), ComboBoxStopBit.Text);
             opt.ReadTimeout = Convert.ToInt32(numericUpDownReadTimeOut.Text);
             opt.MeterAddress = textBoxServerAddress.Text;
+            opt.Authority = Convert.ToByte(comboBoxAuthority.Text, 10); 
+            opt.Password = textBoxPassword.Text;
+            opt.OperatorCode = textBoxOperatorCode.Text;
+            opt.KpTableBodyPortName = comboBoxTTPort.Text;
             File.WriteAllText(path, JsonConvert.SerializeObject(opt, Formatting.Indented));
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -66,7 +70,11 @@ namespace MeterTest.Source.WinowsForm
                 ComboBoxCheckBit.Text = opt.Parity.ToString();
                 ComboBoxStopBit.Text = opt.StopBits.ToString();
                 numericUpDownReadTimeOut.Text = opt.ReadTimeout.ToString();
+                comboBoxAuthority.Text = opt.Authority.ToString("X2"); 
+                textBoxPassword.Text = opt.Password;
+                textBoxOperatorCode.Text = opt.OperatorCode;
                 textBoxServerAddress.Text = opt.MeterAddress;
+                comboBoxTTPort.Text = opt.KpTableBodyPortName;
             }
         }
 
@@ -83,6 +91,15 @@ namespace MeterTest.Source.WinowsForm
             && (e.KeyChar != (char)Keys.Back))
             {
                 e.Handled = true; 
+            }
+        }
+
+        private void comboBoxTTPort_DropDown(object sender, EventArgs e)
+        {
+            ComboBoxPort.Items.Clear();
+            foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
+            {
+                comboBoxTTPort.Items.Add(s);
             }
         }
     }

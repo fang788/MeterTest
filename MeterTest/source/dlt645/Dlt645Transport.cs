@@ -75,6 +75,7 @@ namespace MeterTest.Source.Dlt645
             for (int i = 0; i < frame.Length; i++)
             {
                 msg += frame[i].ToString("X2");
+                msg += " ";
             }
             logger.Log("TX: " + msg + dateTime.ToString("yyyy-MM-dd hh:mm:ss fff"));
         }
@@ -84,6 +85,7 @@ namespace MeterTest.Source.Dlt645
             for (int i = 0; i < frame.Length; i++)
             {
                 msg += frame[i].ToString("X2");
+                msg += " ";
             }
             DateTime now = DateTime.Now;
             double milliseconds = ((double)(now.Ticks - dateTime.Ticks) / 10000);
@@ -92,9 +94,9 @@ namespace MeterTest.Source.Dlt645
         public void ValidateResponse(IDlt645Message request, IDlt645Message response)
         {
             // always check the function code and slave address, regardless of transport protocol
-            if (request.ControlCode != (response.ControlCode | 0x80))
+            if (response.ControlCode != (request.ControlCode | 0x80))
             {
-                string msg = $"Received response with unexpected Function Code. Expected {request.ControlCode}, received {response.ControlCode}.";
+                string msg = $"Error: {request.ControlCode.ToString("X2")}, received {response.ControlCode.ToString("X2")}.";
                 throw new ClientException(msg);
             }
 
@@ -148,12 +150,12 @@ namespace MeterTest.Source.Dlt645
                     && (frame[9] <= 200))
                     {
                         ReadBytes(frame, 10, frame[9] + 2);
-                        string s = null;
-                        for (int i = 0; i < frame[9] + 12; i++)
-                        {
-                            s += frame[i].ToString("X2") + " ";
-                        }
-                        logger.Log(s);
+                        // string s = null;
+                        // for (int i = 0; i < frame[9] + 12; i++)
+                        // {
+                        //     s += frame[i].ToString("X2") + " ";
+                        // }
+                        // logger.Log(s);
                         if((Message.CalCheckSum(frame, 0, 10 + frame[9]) == frame[frame[9] + 10])
                         && (frame[frame[9] + 11] == 0x16))
                         {

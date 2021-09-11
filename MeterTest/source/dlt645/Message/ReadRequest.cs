@@ -22,6 +22,7 @@ namespace MeterTest.source.dlt645.Message
             ControlCode  = controlCode;
             DataFieldLen = dataFieldLen;
             DataId       = dataId;
+            dataField = dataId.GetDataIdBytes();
         }
 
         public MeterAddress Address 
@@ -107,7 +108,10 @@ namespace MeterTest.source.dlt645.Message
                     this.dataField[i] = frame[10 + i];
                 }
             }
-            this.dataId = new DataId(frame, 10);
+            if((this.controlCode & 0x20) == 0)
+            {
+                this.dataId = new DataId(frame, 10);
+            }
         }
 
         public void ValidateResponse(IDlt645Message response)
@@ -117,7 +121,7 @@ namespace MeterTest.source.dlt645.Message
             {
                 throw new ClientException($"Message frame length must over {DataId.DataIdBytes}");
             }
-            if(typedResponse.DataId != this.DataId)
+            if(typedResponse.DataId.Id != this.DataId.Id)
             {
                 throw new ClientException($"Message frame DataId {typedResponse.DataId} not Equals {DataId.DataIdBytes}");
             }

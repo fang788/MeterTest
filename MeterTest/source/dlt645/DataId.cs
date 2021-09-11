@@ -143,7 +143,17 @@ namespace MeterTest.Source.Dlt645
             IsReadable = isReadAble;
             IsWritable = isWritable;
         }
-
+        public DataId(string name, uint id, int data)
+        {
+            Name = name;
+            Id = id;
+            DataBytes = 4;
+            DataArray = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                DataArray[i] = (byte)(data >> (8 * i));
+            }
+        }
 
         public DataId()
         {
@@ -165,11 +175,11 @@ namespace MeterTest.Source.Dlt645
         }
         public DataId(byte[] idBytes)
         {
-            if (idBytes.Length > DataIdBytes)
+            if (idBytes.Length < DataIdBytes)
             {
                 throw new ArgumentException("idBytes over DataIdBytes!");
             }
-            for (int i = 0; i < idBytes.Length; i++)
+            for (int i = 0; i < DataIdBytes; i++)
             {
                 m_Id = m_Id << 8;
                 m_Id += idBytes[i];
@@ -177,12 +187,12 @@ namespace MeterTest.Source.Dlt645
         }
         public DataId(byte[] idBytes, int offset)
         {
-            if (idBytes.Length > DataIdBytes)
+            if (idBytes.Length < (DataIdBytes + offset))
             {
                 throw new ArgumentException("idBytes over DataIdBytes!");
             }
             m_Id = 0;
-            for (int i = 0; i < idBytes.Length; i++)
+            for (int i = (DataIdBytes - 1); i >= 0; i--)
             {
                 m_Id = m_Id << 8;
                 m_Id += idBytes[i + offset];

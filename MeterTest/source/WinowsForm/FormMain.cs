@@ -14,6 +14,7 @@ using MeterTest.source.Config;
 using MeterTest.source.dlt645;
 using MeterTest.source.SQLite;
 using MeterTest.source.Test;
+using MeterTest.source.V9203;
 using MeterTest.source.WinowsForm;
 using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
@@ -21,7 +22,7 @@ using Newtonsoft.Json;
 
 namespace MeterTest.Source.WinowsForm
 {
-    public partial class FormMain : Form
+    public partial class FormMain : Form, IAdjMeterLogger
     {
         private FormLogger formLogger = new FormLogger();
         private SerialPort serialPort;
@@ -33,6 +34,8 @@ namespace MeterTest.Source.WinowsForm
         private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
         private String optMessage = null;
         private bool cycleSwith = false;
+        private Dlt645Password password = null;
+        private Dlt645OperatorCode operatorCode = null;
         static public DataIdDbContext DataIdDb = new DataIdDbContext();
         public FormMain()
         {
@@ -117,6 +120,8 @@ namespace MeterTest.Source.WinowsForm
             transport = new Dlt645Transport(serialPort, consoleLogger);
             client = new Dlt645Client(transport);
             meterAddress = new MeterAddress(opt.MeterAddress);
+            password = new Dlt645Password(opt.Authority, Convert.ToInt32(opt.Password, 16));
+            operatorCode = new Dlt645OperatorCode(opt.OperatorCode);
         }
 
         private void 关于MeterTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -568,6 +573,42 @@ namespace MeterTest.Source.WinowsForm
         {
             int per = (int)obj;
             progressBar1.Maximum = per;
+        }
+
+        private void buttonStartAdjMeter_Click(object sender, EventArgs e)
+        {
+            V9203 v9203 = new V9203(this.client, this);
+            Thread th = new Thread(v9203.AdjMeter);
+            th.IsBackground = true;
+            th.Start();
+        }
+        private void UpdateAdjMeterStatus(object status)
+        {
+            string s = status.ToString() + "\n";
+            richTextBoxAdjMeterStatus.AppendText(s);
+            richTextBoxAdjMeterStatus.ScrollToCaret();
+        }
+
+        public void IAdjMeterLog(string message)
+        {
+            synchronizationContext.Post(UpdateAdjMeterStatus, message);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                V9203 v9203 = new V9203(this.client, this);
+                MeterAddress address = v9203.ReadMeterAddress();
+                v9203.FactoryIn(address);
+                v9203.FactoryOut(address);
+                v9203.AdjMeter();
+            }
+            catch (System.Exception)
+            {
+                
+            }
+            // v9203.FactoryOut(address);
         }
     }
 }

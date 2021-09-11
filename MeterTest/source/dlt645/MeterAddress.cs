@@ -84,7 +84,7 @@ namespace MeterTest.Source.Dlt645
             }
 
             m_Address = 0;
-            for (int i = 0; i < MeterAddressBytes; i++)
+            for (int i = MeterAddressBytes - 1; i >= 0; i--)
             {
                 m_Address = ((m_Address << 8) + address[i]);
             }

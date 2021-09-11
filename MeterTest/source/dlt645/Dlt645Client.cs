@@ -20,21 +20,22 @@ namespace MeterTest.Source.Dlt645
 
         public byte[] Read(MeterAddress address, DataId dataId)
         {
-            ReadRequest request = new ReadRequest(address, Dlt645ControlCodes.Read, (byte)dataId.DataBytes, dataId);
-            ReadRequest response = transport.UnicastMessage<ReadRequest>(request);
+            ReadRequest request = new ReadRequest(address, Dlt645ControlCodes.Read, (byte)4, dataId);
+            ReadResponse response = transport.UnicastMessage<ReadResponse>(request);
             MemoryStream stream = new MemoryStream(response.DataField.Length - 4);
             stream.Write(response.DataField, 4, response.DataField.Length - 4);
             return stream.ToArray();
         }
 
-        // public void Write(MeterAddress address, DataId dataId, byte[] dataBytes)
-        // {
-        //     MemoryStream stream = new MemoryStream(dataBytes.Length + dataId.GetDataIdBytes().Length);
-            
-        //     stream.Write(dataId.GetDataIdBytes(), 0, dataId.GetDataIdBytes().Length);
-        //     stream.Write(dataBytes, dataId.GetDataIdBytes().Length, dataBytes.Length);
-        //     Message request = new Message(address, 0x14, stream.ToArray());
-        //     Message response = transport.UnicastMessage(request);
-        // }
+        public void Write(MeterAddress address, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
+        {
+            WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, password, operatorCode);
+            WriteResponse response = transport.UnicastMessage<WriteResponse>(requset);
+        }
+        public void Write(MeterAddress address, DataId dataId)
+        {
+            WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, new Dlt645Password(), new Dlt645OperatorCode());
+            WriteResponse response = transport.UnicastMessage<WriteResponse>(requset);
+        }
     }
 }

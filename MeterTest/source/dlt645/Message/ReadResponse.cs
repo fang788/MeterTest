@@ -105,7 +105,10 @@ namespace MeterTest.source.dlt645.Message
                     this.dataField[i] = frame[10 + i];
                 }
             }
-            this.dataId = new DataId(frame, 10);
+            if((this.controlCode & 0x40) == 0)
+            {
+                this.dataId = new DataId(frame, 10);
+            }
         }
     }
 }
