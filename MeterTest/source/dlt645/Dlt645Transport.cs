@@ -51,7 +51,7 @@ namespace MeterTest.Source.Dlt645
             }
             finally
             {
-                if(port.IsOpen)
+                if(port != null)
                 {
                     port.Close();
                 }

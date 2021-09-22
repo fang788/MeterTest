@@ -89,8 +89,8 @@ namespace MeterTest.source.V9203
             ANGLE_B,
             ANGLE_C,
         };
-        public readonly DataId dataIdClrReg = new DataId("校表数据清零", 0xA0020000, "HEX", 1, new byte[]{0x00}, "", false, true);
-
+        public readonly DataId dataIdClrReg = new DataId("校表数据清零", 0xA0020001, "HEX", 1, new byte[]{0x00}, "", false, true);
+        public readonly DataId dataIdReset = new DataId("复位", 0xA0020000, "HEX", 1, new byte[]{0x00}, "", false, true);
         private Dlt645Client client;
         private IAdjMeterLogger logger;
         private MeterAddress address;
@@ -129,6 +129,11 @@ namespace MeterTest.source.V9203
         public void RegDataClr()
         {
             client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
+        }
+        public void Reset()
+        {
+            client.Write(address, dataIdReset, new Dlt645Password(), new Dlt645OperatorCode());
+            // Thread.Sleep(2000);
         }
         public void RegDataInit()
         {
@@ -201,11 +206,11 @@ namespace MeterTest.source.V9203
                     error +=  zdPA;
                 }
                 error /= 5;
-                logger.IAdjMeterLog(type.ToString() + "误差：" + (error * 100).ToString("F2") + "%");
+                // logger.IAdjMeterLog(type.ToString() + "误差：" + (error * 100).ToString("F2") + "%");
                 //Thread.Sleep(5000);
                 if ((error > 0.1) || (error < -0.1))
                 {
-                    throw new InvalidOperationException("当前误差超过±10%，当前误差为" + (error * 100).ToString("F2") + "%");
+                    throw new InvalidOperationException(type.ToString() + "-误差为" + (error * 100).ToString("F2") + "%，已超过10% ");
                 } 
             }
             catch (System.Exception e)
@@ -305,13 +310,13 @@ namespace MeterTest.source.V9203
             tableBody.IABC = "A";
             tableBody.CosP = "1.0";
             tableBody.PowerOn();
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PA);
 
             tableBody.IABC = "A";
             tableBody.CosP = "0.5L";
             tableBody.PowerOn();
-            Thread.Sleep(7000);
+            Thread.Sleep(5000);
             // V9203VariableType[] array = new V9203VariableType[]
             // {
             //     V9203VariableType.PA, 
@@ -341,13 +346,13 @@ namespace MeterTest.source.V9203
             tableBody.IABC = "B";
             tableBody.CosP = "1.0";
             tableBody.PowerOn();
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PB);
 
             tableBody.IABC = "B";
             tableBody.CosP = "0.5L";
             tableBody.PowerOn();
-            Thread.Sleep(7000);
+            Thread.Sleep(5000);
             // V9203VariableType[] array = new V9203VariableType[]
             // {
             //     V9203VariableType.PB, 
@@ -377,7 +382,7 @@ namespace MeterTest.source.V9203
             tableBody.IABC = "C";
             tableBody.CosP = "1.0";
             tableBody.PowerOn();
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PC);
 
             tableBody.IABC = "C";
@@ -409,7 +414,6 @@ namespace MeterTest.source.V9203
         }
         public void AdjMeter()
         {
-            bool rst = false;
             try
             {
                 logger.IAdjMeterLog("1.正在升源。。。");
@@ -422,6 +426,7 @@ namespace MeterTest.source.V9203
                 RegDataClr();
                 logger.IAdjMeterLog("4.校表数据清零完成");
                 RegDataInit();
+                Reset();
                 logger.IAdjMeterLog("5.校表数据初始化完成");
                 AdjMeterA();
                 logger.IAdjMeterLog("6.A相校准完成");
@@ -429,26 +434,20 @@ namespace MeterTest.source.V9203
                 logger.IAdjMeterLog("7.B相校准完成");
                 AdjMeterC();
                 logger.IAdjMeterLog("8.C相校准完成");
+                Reset();
                 // Thread.Sleep(1000);
                 FactoryOut();
                 logger.IAdjMeterLog("9.已切换至厂外状态");
-                rst = true;
+                logger.IAdjMeterLog("校表完成。");
             }
             catch (System.Exception e)
             {
                 logger.IAdjMeterLog(e.Message);
+                logger.IAdjMeterLog("校表失败！");
             }
             finally
             {
                 tableBody.PowerOff();
-                if(rst)
-                {
-                    logger.IAdjMeterLog("校表完成。");
-                }
-                else
-                {
-                    logger.IAdjMeterLog("校表失败！");
-                }
             }
         }
     }

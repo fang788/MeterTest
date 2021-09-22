@@ -596,19 +596,33 @@ namespace MeterTest.Source.WinowsForm
 
         private void button4_Click(object sender, EventArgs e)
         {
-            try
+            if(!endTest)
             {
-                V9203 v9203 = new V9203(this.client, this);
-                MeterAddress address = v9203.ReadMeterAddress();
-                v9203.FactoryIn(address);
-                v9203.FactoryOut(address);
+                endTest = true;
+                Thread th = new Thread(V9203AdjTest);
+                th.IsBackground = true;
+                th.Start();
+                button4.Text = "结束测试";
+            }
+            else
+            {
+                endTest = false;
+                button4.Text = "开始测试";
+            }
+        }
+        bool endTest = false;
+        private void V9203AdjTest()
+        {
+            V9203 v9203 = new V9203(this.client, this);
+            int cnt = 0;
+            while(endTest)
+            {
+                cnt ++;
+                IAdjMeterLog("第" + cnt + "次测试开始");
                 v9203.AdjMeter();
+                IAdjMeterLog("第" + cnt + "次测试结束");
+                IAdjMeterLog("");
             }
-            catch (System.Exception)
-            {
-                
-            }
-            // v9203.FactoryOut(address);
         }
     }
 }

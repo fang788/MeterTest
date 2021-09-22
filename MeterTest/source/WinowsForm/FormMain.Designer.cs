@@ -62,6 +62,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageV9203 = new System.Windows.Forms.TabPage();
             this.richTextBoxAdjMeterStatus = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             this.buttonStartAdjMeter = new System.Windows.Forms.Button();
             this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -70,7 +71,6 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
             this.buttonReadFreezeData = new System.Windows.Forms.Button();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button4 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -92,7 +92,7 @@ namespace MeterTest.Source.WinowsForm
             this.帮助ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1328, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1328, 27);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -103,27 +103,27 @@ namespace MeterTest.Source.WinowsForm
             this.日志ToolStripMenuItem,
             this.管理数据标识表ToolStripMenuItem});
             this.工具ToolStripMenuItem.Name = "工具ToolStripMenuItem";
-            this.工具ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.工具ToolStripMenuItem.Size = new System.Drawing.Size(49, 23);
             this.工具ToolStripMenuItem.Text = "工具";
             // 
             // 选项ToolStripMenuItem
             // 
             this.选项ToolStripMenuItem.Name = "选项ToolStripMenuItem";
-            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.选项ToolStripMenuItem.Text = "选项";
             this.选项ToolStripMenuItem.Click += new System.EventHandler(this.选项ToolStripMenuItem_Click);
             // 
             // 日志ToolStripMenuItem
             // 
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
-            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.日志ToolStripMenuItem.Text = "日志";
             this.日志ToolStripMenuItem.Click += new System.EventHandler(this.日志ToolStripMenuItem_Click);
             // 
             // 管理数据标识表ToolStripMenuItem
             // 
             this.管理数据标识表ToolStripMenuItem.Name = "管理数据标识表ToolStripMenuItem";
-            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.管理数据标识表ToolStripMenuItem.Text = "管理数据标识表";
             this.管理数据标识表ToolStripMenuItem.Click += new System.EventHandler(this.管理数据标识表ToolStripMenuItem_Click);
             // 
@@ -133,20 +133,20 @@ namespace MeterTest.Source.WinowsForm
             this.关于MeterTestToolStripMenuItem,
             this.激活ToolStripMenuItem});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(49, 23);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // 关于MeterTestToolStripMenuItem
             // 
             this.关于MeterTestToolStripMenuItem.Name = "关于MeterTestToolStripMenuItem";
-            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.关于MeterTestToolStripMenuItem.Text = "关于 MeterTest";
             this.关于MeterTestToolStripMenuItem.Click += new System.EventHandler(this.关于MeterTestToolStripMenuItem_Click);
             // 
             // 激活ToolStripMenuItem
             // 
             this.激活ToolStripMenuItem.Name = "激活ToolStripMenuItem";
-            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.激活ToolStripMenuItem.Text = "激活";
             this.激活ToolStripMenuItem.Click += new System.EventHandler(this.激活ToolStripMenuItem_Click);
             // 
@@ -191,7 +191,7 @@ namespace MeterTest.Source.WinowsForm
             this.panel1.Controls.Add(this.buttonReadOne);
             this.panel1.Controls.Add(this.dataGridViewReadList);
             this.panel1.Location = new System.Drawing.Point(6, 7);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1290, 560);
             this.panel1.TabIndex = 0;
@@ -201,17 +201,17 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 534);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 535);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 18, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1290, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(1290, 25);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabelStatus
             // 
             this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
-            this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(54, 20);
+            this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(48, 19);
             this.toolStripStatusLabelStatus.Text = "状态栏";
             // 
             // buttonStop
@@ -219,7 +219,7 @@ namespace MeterTest.Source.WinowsForm
             this.buttonStop.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonStop.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonStop.Location = new System.Drawing.Point(730, 482);
-            this.buttonStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonStop.Margin = new System.Windows.Forms.Padding(4);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(113, 38);
             this.buttonStop.TabIndex = 4;
@@ -232,7 +232,7 @@ namespace MeterTest.Source.WinowsForm
             this.buttonReadClyce.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonReadClyce.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonReadClyce.Location = new System.Drawing.Point(393, 482);
-            this.buttonReadClyce.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonReadClyce.Margin = new System.Windows.Forms.Padding(4);
             this.buttonReadClyce.Name = "buttonReadClyce";
             this.buttonReadClyce.Size = new System.Drawing.Size(113, 38);
             this.buttonReadClyce.TabIndex = 5;
@@ -245,7 +245,7 @@ namespace MeterTest.Source.WinowsForm
             this.buttonReadOne.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonReadOne.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonReadOne.Location = new System.Drawing.Point(27, 482);
-            this.buttonReadOne.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonReadOne.Margin = new System.Windows.Forms.Padding(4);
             this.buttonReadOne.Name = "buttonReadOne";
             this.buttonReadOne.Size = new System.Drawing.Size(113, 38);
             this.buttonReadOne.TabIndex = 6;
@@ -263,7 +263,7 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewReadList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewReadList.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridViewReadList.Location = new System.Drawing.Point(4, 11);
-            this.dataGridViewReadList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewReadList.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewReadList.Name = "dataGridViewReadList";
             this.dataGridViewReadList.RowHeadersWidth = 51;
             this.dataGridViewReadList.RowTemplate.Height = 25;
@@ -346,7 +346,7 @@ namespace MeterTest.Source.WinowsForm
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button3.Location = new System.Drawing.Point(577, 500);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(113, 38);
             this.button3.TabIndex = 6;
@@ -358,7 +358,7 @@ namespace MeterTest.Source.WinowsForm
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button2.Location = new System.Drawing.Point(352, 500);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 38);
             this.button2.TabIndex = 6;
@@ -370,7 +370,7 @@ namespace MeterTest.Source.WinowsForm
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button1.Location = new System.Drawing.Point(127, 500);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 38);
             this.button1.TabIndex = 6;
@@ -387,7 +387,7 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewWrite.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewWrite.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewWrite.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewWrite.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewWrite.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewWrite.Name = "dataGridViewWrite";
             this.dataGridViewWrite.RowHeadersWidth = 51;
             this.dataGridViewWrite.RowTemplate.Height = 25;
@@ -413,9 +413,9 @@ namespace MeterTest.Source.WinowsForm
             // richTextBoxAdjMeterStatus
             // 
             this.richTextBoxAdjMeterStatus.Location = new System.Drawing.Point(58, 149);
-            this.richTextBoxAdjMeterStatus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.richTextBoxAdjMeterStatus.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBoxAdjMeterStatus.Name = "richTextBoxAdjMeterStatus";
-            this.richTextBoxAdjMeterStatus.Size = new System.Drawing.Size(473, 202);
+            this.richTextBoxAdjMeterStatus.Size = new System.Drawing.Size(473, 379);
             this.richTextBoxAdjMeterStatus.TabIndex = 2;
             this.richTextBoxAdjMeterStatus.Text = "";
             // 
@@ -429,10 +429,21 @@ namespace MeterTest.Source.WinowsForm
             this.label2.TabIndex = 1;
             this.label2.Text = "校表状态";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(386, 49);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(102, 33);
+            this.button4.TabIndex = 0;
+            this.button4.Text = "开始测试";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // buttonStartAdjMeter
             // 
             this.buttonStartAdjMeter.Location = new System.Drawing.Point(58, 49);
-            this.buttonStartAdjMeter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonStartAdjMeter.Margin = new System.Windows.Forms.Padding(4);
             this.buttonStartAdjMeter.Name = "buttonStartAdjMeter";
             this.buttonStartAdjMeter.Size = new System.Drawing.Size(102, 33);
             this.buttonStartAdjMeter.TabIndex = 0;
@@ -457,7 +468,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPage1.Controls.Add(this.statusStrip3);
             this.tabPage1.Controls.Add(this.buttonReadFreezeData);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(1307, 576);
             this.tabPage1.TabIndex = 4;
@@ -477,7 +488,7 @@ namespace MeterTest.Source.WinowsForm
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(346, 285);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Maximum = 672;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(198, 20);
@@ -496,7 +507,7 @@ namespace MeterTest.Source.WinowsForm
             // buttonReadFreezeData
             // 
             this.buttonReadFreezeData.Location = new System.Drawing.Point(415, 220);
-            this.buttonReadFreezeData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonReadFreezeData.Margin = new System.Windows.Forms.Padding(4);
             this.buttonReadFreezeData.Name = "buttonReadFreezeData";
             this.buttonReadFreezeData.Size = new System.Drawing.Size(129, 39);
             this.buttonReadFreezeData.TabIndex = 0;
@@ -510,17 +521,6 @@ namespace MeterTest.Source.WinowsForm
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "写数据状态";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(217, 49);
-            this.button4.Margin = new System.Windows.Forms.Padding(4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(102, 33);
-            this.button4.TabIndex = 0;
-            this.button4.Text = "测试";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // FormMain
             // 
