@@ -469,12 +469,30 @@ namespace MeterTest.Source.WinowsForm
 
         private void FormMain_SizeChanged(object sender, EventArgs e)
         {
-            Point point1 = new Point(21, this.buttonReadOne.Location.Y);
-            this.buttonReadOne.Location = point1;
-            Point point2 = new Point(21 + this.Size.Width / 4, this.buttonReadOne.Location.Y);
-            buttonReadClyce.Location = point2;
-            Point point3 = new Point(21 + this.Size.Width / 2, this.buttonReadOne.Location.Y);
-            buttonStop.Location = point3;
+            dataGridViewReadList.Left = tabControlMainForm.Left;
+            dataGridViewReadList.Top = tabControlMainForm.Top;
+            dataGridViewReadList.Width = tabControlMainForm.Width;
+            buttonReadOne.Left = tabControlMainForm.Left + 10;
+            buttonReadClyce.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
+            buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
+            if(tabControlMainForm.Height > 150)
+            {
+                dataGridViewReadList.Height = tabControlMainForm.Height - 150;
+                buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+                buttonReadClyce.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+                buttonStop.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+            }
+            else
+            {
+                dataGridViewReadList.Height = 10;
+            }
+            // size.Height = (int)(tabControlMainForm.Size.Height * 0.9);
+            // Point point1 = new Point(21, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
+            // this.buttonReadOne.Location = point1;
+            // Point point2 = new Point(21 + this.Size.Width / 4, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
+            // buttonReadClyce.Location = point2;
+            // Point point3 = new Point(21 + this.Size.Width / 2, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
+            // buttonStop.Location = point3;
         }
         private void DataGridViewWriteDisplayUpdate()
         {
