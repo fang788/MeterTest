@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using MeterTest.Source.Dlt645;
 
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     public class CustomizationTable
     {

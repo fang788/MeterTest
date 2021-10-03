@@ -1,7 +1,7 @@
 using MeterTest.Source.Dlt645;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     public class CustomizationTableDbContext : DbContext
     {

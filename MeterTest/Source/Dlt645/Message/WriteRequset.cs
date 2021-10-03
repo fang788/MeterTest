@@ -1,7 +1,7 @@
 using MeterTest.Source.Dlt645;
 using System;
 
-namespace MeterTest.source.dlt645.Message
+namespace MeterTest.Source.Dlt645.Message
 {
     public class WriteRequset : IDlt645Message
     {

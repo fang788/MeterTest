@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace MeterTest.source.V9203
+namespace MeterTest.Source.Emu
 {
     public class KpTableBody
     {

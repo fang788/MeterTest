@@ -1,6 +1,6 @@
 namespace MeterTest.Source.Dlt645
 {
-    public class Message
+    public class Dlt645Message
     {
         // private const byte startCharacter = 0x68;
         // private const byte endCharacter = 0x16;
@@ -48,17 +48,17 @@ namespace MeterTest.Source.Dlt645
             }
         }
 
-        protected Message()
+        protected Dlt645Message()
         {
         }
         
-        public Message(MeterAddress address, byte controlCode)
+        public Dlt645Message(MeterAddress address, byte controlCode)
         {
             m_ControlCode = controlCode;
             m_Address = address;
         }
 
-        public Message(MeterAddress address, byte controlCode, byte[] dataField)
+        public Dlt645Message(MeterAddress address, byte controlCode, byte[] dataField)
         {
             m_Address = address;
             m_ControlCode = controlCode;

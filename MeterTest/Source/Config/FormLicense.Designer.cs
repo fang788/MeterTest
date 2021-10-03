@@ -1,5 +1,5 @@
 ﻿
-namespace MeterTest.source.Config
+namespace MeterTest.Source.Config
 {
     partial class FormLicense
     {

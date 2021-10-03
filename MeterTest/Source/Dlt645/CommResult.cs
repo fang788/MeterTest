@@ -1,6 +1,6 @@
 using MeterTest.Source.Dlt645;
 
-namespace MeterTest.source.dlt645
+namespace MeterTest.Source.Dlt645
 {
     public class CommResult
     {

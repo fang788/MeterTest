@@ -1,4 +1,4 @@
-namespace MeterTest.source.dlt645
+namespace MeterTest.Source.Dlt645
 {
     public static class Dlt645ControlCodes
     {

@@ -2,7 +2,7 @@ using System.IO;
 using System.Management;
 using System.Windows.Forms;
 
-namespace MeterTest.source.Config
+namespace MeterTest.Source.Config
 {
     public class RegistrationCode
     {

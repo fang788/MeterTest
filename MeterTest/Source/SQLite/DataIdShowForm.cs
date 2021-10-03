@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     public partial class DataIdShowForm : Form
     {

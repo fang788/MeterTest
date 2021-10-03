@@ -1,6 +1,6 @@
 using System;
 
-namespace MeterTest.source.Test
+namespace MeterTest.Source.Test
 {
     public class FreezeData:IComparable
     {

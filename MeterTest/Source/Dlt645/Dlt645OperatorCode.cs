@@ -1,6 +1,6 @@
 using System;
 
-namespace MeterTest.source.dlt645
+namespace MeterTest.Source.Dlt645
 {
     public class Dlt645OperatorCode
     {

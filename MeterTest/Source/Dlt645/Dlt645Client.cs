@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Ports;
-using MeterTest.source.dlt645;
-using MeterTest.source.dlt645.Message;
+using MeterTest.Source.Dlt645;
+using MeterTest.Source.Dlt645.Message;
 
 namespace MeterTest.Source.Dlt645
 {

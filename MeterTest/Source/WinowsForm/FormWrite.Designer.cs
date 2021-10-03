@@ -1,5 +1,5 @@
 ﻿
-namespace MeterTest.source.WinowsForm
+namespace MeterTest.Source.WinowsForm
 {
     partial class FormWrite
     {

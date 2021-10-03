@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using MeterTest.source.SQLite;
+using MeterTest.Source.SQLite;
 using MeterTest.Source.Dlt645;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
-namespace MeterTest.source.Test
+namespace MeterTest.Source.Test
 {
     public class FreezeDataTest
     {

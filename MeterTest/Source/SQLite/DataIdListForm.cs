@@ -12,7 +12,7 @@ using MeterTest.Source.Dlt645;
 using MeterTest.Source.WinowsForm;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     public partial class DataIdListForm : Form
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
 
-namespace MeterTest.source.WinowsForm
+namespace MeterTest.Source.WinowsForm
 {
     public partial class FormWrite : Form
     {

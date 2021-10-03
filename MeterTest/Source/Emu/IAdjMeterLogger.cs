@@ -1,4 +1,4 @@
-namespace MeterTest.source.V9203
+namespace MeterTest.Source.Emu
 {
     public interface IAdjMeterLogger
     {

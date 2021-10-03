@@ -1,4 +1,4 @@
-namespace MeterTest.source.dlt645.Message
+namespace MeterTest.Source.Dlt645.Message
 {
     public interface IDlt645Request : IDlt645Message
     {

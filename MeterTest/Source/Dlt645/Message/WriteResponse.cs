@@ -1,6 +1,6 @@
 using MeterTest.Source.Dlt645;
 
-namespace MeterTest.source.dlt645.Message
+namespace MeterTest.Source.Dlt645.Message
 {
     public class WriteResponse : IDlt645Message
     {

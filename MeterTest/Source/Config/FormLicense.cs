@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeterTest.source.Config
+namespace MeterTest.Source.Config
 {
     public partial class FormLicense : Form
     {

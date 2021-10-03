@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using MeterTest.source.dlt645;
-using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
+using MeterTest.Source.Config;
 using Newtonsoft.Json;
 
-namespace MeterTest.source.V9203
+namespace MeterTest.Source.Emu
 {
     public class V9203
     {

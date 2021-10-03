@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
-using MeterTest.source.dlt645.Message;
+using MeterTest.Source.Dlt645.Message;
 
 namespace MeterTest.Source.Dlt645
 {
@@ -59,14 +59,14 @@ namespace MeterTest.Source.Dlt645
             
             return responseMsg;
         }
-        private Message CreateMessage(byte[] frame)
+        private Dlt645Message CreateMessage(byte[] frame)
         {
             byte[] addressBytes = new byte[MeterAddress.MeterAddressBytes];
             Array.Copy(frame, 1, addressBytes, 0, MeterAddress.MeterAddressBytes);
             MeterAddress address = new MeterAddress(addressBytes);
             MemoryStream stream = new MemoryStream(frame.Length - 12);
             stream.Write(frame, 10, frame.Length - 12);
-            Message Msg = new Message(address, frame[8], stream.ToArray());
+            Dlt645Message Msg = new Dlt645Message(address, frame[8], stream.ToArray());
             return Msg;
         }
         private void TxLogger(byte[] frame, DateTime dateTime)
@@ -150,13 +150,7 @@ namespace MeterTest.Source.Dlt645
                     && (frame[9] <= 200))
                     {
                         ReadBytes(frame, 10, frame[9] + 2);
-                        // string s = null;
-                        // for (int i = 0; i < frame[9] + 12; i++)
-                        // {
-                        //     s += frame[i].ToString("X2") + " ";
-                        // }
-                        // logger.Log(s);
-                        if((Message.CalCheckSum(frame, 0, 10 + frame[9]) == frame[frame[9] + 10])
+                        if((Dlt645Message.CalCheckSum(frame, 0, 10 + frame[9]) == frame[frame[9] + 10])
                         && (frame[frame[9] + 11] == 0x16))
                         {
                             for (int i = 0; i < frame[9]; i++)

@@ -1,5 +1,5 @@
 ﻿
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     partial class DataIdAddListForm
     {

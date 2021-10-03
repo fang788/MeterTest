@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MeterTest.source.SQLite
+namespace MeterTest.Source.SQLite
 {
     public class DataIdDbContext : DbContext
     {
