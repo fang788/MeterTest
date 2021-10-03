@@ -640,5 +640,12 @@ namespace MeterTest.Source.WinowsForm
                 IAdjMeterLog("");
             }
         }
+
+        private void hT7036ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new Ht7036Convert();
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.Show();
+        }
     }
 }
