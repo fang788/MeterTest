@@ -647,5 +647,6 @@ namespace MeterTest.Source.WinowsForm
             form.StartPosition = FormStartPosition.CenterParent;
             form.Show();
         }
+
     }
 }
