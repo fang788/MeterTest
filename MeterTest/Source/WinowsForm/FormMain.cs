@@ -31,7 +31,7 @@ namespace MeterTest.Source.WinowsForm
         private SynchronizationContext synchronizationContext = null;
         private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
         private String optMessage = null;
-        private bool cycleSwith = false;
+        private int cycleSwith = 0;
         private Dlt645Password password = null;
         private Dlt645OperatorCode operatorCode = null;
         static public DataIdDbContext DataIdDb = new DataIdDbContext();
@@ -308,7 +308,7 @@ namespace MeterTest.Source.WinowsForm
         {
             List<DataId> dataIdList = (List<DataId>)obj;
             CommResult rst = null;
-            cycleSwith = true;
+            Interlocked.Exchange(ref cycleSwith, 10);
             foreach (var item in dataIdList)
             {
                 try
@@ -328,11 +328,13 @@ namespace MeterTest.Source.WinowsForm
                 catch (TimeoutException)
                 {
                     rst.Error = "响应超时";
+                    break;
                 }
                 catch(Exception e)
                 {
                     MessageBox.Show("未知错误" + e.Message, "MeterTest",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                     rst.Error = "未知错误";
+                    break;
                 }
                 finally
                 {
@@ -341,7 +343,7 @@ namespace MeterTest.Source.WinowsForm
                     synchronizationContext.Post(ReadOptUiUpdate, dic);
                     Thread.Sleep(500);
                 }
-                if(cycleSwith == false)
+                if(cycleSwith == 0)
                 {
                     break;
                 }
@@ -352,16 +354,14 @@ namespace MeterTest.Source.WinowsForm
         {
             List<DataId> dataIdList = (List<DataId>)obj;
             CommResult rst = null;
-            cycleSwith = true;
-            
+            // Interlocked.Increment(ref cycleSwith);
+            Interlocked.Exchange(ref cycleSwith, 10);
+            // cycleSwith = true;
             int cycleReadErrorCnt = 0;
             int cycleReadOkCnt = 0;
             int timeOutCnt = 0;
-            // int errorCnt = 0;
-
-            while(cycleSwith)
+            while(cycleSwith != 0)
             {
-                // foreach (var item in dataIdList)
                 for (int i = 0; i < dataIdList.Count; i++)
                 {
                     try
@@ -385,12 +385,15 @@ namespace MeterTest.Source.WinowsForm
                     {
                         rst.Error = "响应超时";
                         timeOutCnt++;
+                        Interlocked.Exchange(ref cycleSwith, 0);
+                        break;
                     }
                     catch(Exception e)
                     {
                         MessageBox.Show("未知错误" + e.Message, "MeterTest",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                         rst.Error = "未知错误";
-
+                        Interlocked.Exchange(ref cycleSwith, 0);
+                        break;
                     }
                     finally
                     {
@@ -399,7 +402,7 @@ namespace MeterTest.Source.WinowsForm
                         synchronizationContext.Post(ReadOptUiUpdate, dic);
                         Thread.Sleep(500);
                     }
-                    if(!cycleSwith)
+                    if(cycleSwith == 0)
                     {
                         break;
                     }
@@ -462,7 +465,7 @@ namespace MeterTest.Source.WinowsForm
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            cycleSwith = false;
+            Interlocked.Exchange(ref cycleSwith, 0);
         }
 
         private void FormMain_SizeChanged(object sender, EventArgs e)
