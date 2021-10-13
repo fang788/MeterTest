@@ -35,7 +35,6 @@ namespace MeterTest.Source.WinowsForm
             this.选项ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.管理数据标识表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hT7036ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于MeterTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.激活ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,8 +100,7 @@ namespace MeterTest.Source.WinowsForm
             this.工具ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.选项ToolStripMenuItem,
             this.日志ToolStripMenuItem,
-            this.管理数据标识表ToolStripMenuItem,
-            this.hT7036ToolStripMenuItem});
+            this.管理数据标识表ToolStripMenuItem});
             this.工具ToolStripMenuItem.Name = "工具ToolStripMenuItem";
             this.工具ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.工具ToolStripMenuItem.Text = "工具";
@@ -110,30 +108,23 @@ namespace MeterTest.Source.WinowsForm
             // 选项ToolStripMenuItem
             // 
             this.选项ToolStripMenuItem.Name = "选项ToolStripMenuItem";
-            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.选项ToolStripMenuItem.Text = "选项";
             this.选项ToolStripMenuItem.Click += new System.EventHandler(this.选项ToolStripMenuItem_Click);
             // 
             // 日志ToolStripMenuItem
             // 
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
-            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.日志ToolStripMenuItem.Text = "日志";
             this.日志ToolStripMenuItem.Click += new System.EventHandler(this.日志ToolStripMenuItem_Click);
             // 
             // 管理数据标识表ToolStripMenuItem
             // 
             this.管理数据标识表ToolStripMenuItem.Name = "管理数据标识表ToolStripMenuItem";
-            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.管理数据标识表ToolStripMenuItem.Text = "管理数据标识表";
             this.管理数据标识表ToolStripMenuItem.Click += new System.EventHandler(this.管理数据标识表ToolStripMenuItem_Click);
-            // 
-            // hT7036ToolStripMenuItem
-            // 
-            this.hT7036ToolStripMenuItem.Name = "hT7036ToolStripMenuItem";
-            this.hT7036ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.hT7036ToolStripMenuItem.Text = "HT7036";
-            this.hT7036ToolStripMenuItem.Click += new System.EventHandler(this.hT7036ToolStripMenuItem_Click);
             // 
             // 帮助ToolStripMenuItem
             // 
@@ -572,6 +563,5 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Button buttonReadClyce;
         private System.Windows.Forms.Button buttonReadOne;
         private System.Windows.Forms.DataGridView dataGridViewReadList;
-        private System.Windows.Forms.ToolStripMenuItem hT7036ToolStripMenuItem;
     }
 }
