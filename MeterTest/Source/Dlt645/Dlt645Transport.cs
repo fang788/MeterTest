@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645.Message;
 
