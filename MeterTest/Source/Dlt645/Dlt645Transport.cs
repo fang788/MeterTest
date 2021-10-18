@@ -33,6 +33,7 @@ namespace MeterTest.Source.Dlt645
                     byte[] frame = BuildMessageFrame(request);
                     TxLogger(frame, dateTime);
                     port.Write(frame, 0, frame.Length);
+                    Thread.Sleep(100);
                     frame = ReadResponse();
                     RxLogger(frame, dateTime);
                     responseMsg.Initialize(frame);
