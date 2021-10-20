@@ -476,7 +476,7 @@ namespace MeterTest.Source.WinowsForm
             buttonReadOne.Left = tabControlMainForm.Left + 10;
             buttonReadClyce.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
             buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
-            if(tabControlMainForm.Height > 150)
+            if (tabControlMainForm.Height > 150)
             {
                 dataGridViewReadList.Height = tabControlMainForm.Height - 150;
                 buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
@@ -651,5 +651,15 @@ namespace MeterTest.Source.WinowsForm
             form.Show();
         }
 
+        private void hT7036校表ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // FormHt7036Adj form = new FormHt7036Adj(client);
+            // this.AddOwnedForm(form);
+            // form.StartPosition = FormStartPosition.CenterParent;
+            // form.ShowDialog();
+            Form form = new FormHt7036Adj(client);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.Show();
+        }
     }
 }

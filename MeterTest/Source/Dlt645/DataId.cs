@@ -154,6 +154,34 @@ namespace MeterTest.Source.Dlt645
                 DataArray[i] = (byte)(data >> (8 * i));
             }
         }
+        public DataId(uint id, int data)
+        {
+            Id = id;
+            DataBytes = 4;
+            DataArray = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                DataArray[i] = (byte)(data >> (8 * i));
+            }
+        }
+
+        public DataId(uint id, byte[] dataArray)
+        {
+            Id = id;
+            DataBytes = dataArray.Length;
+            DataArray = dataArray;
+        }
+
+        public DataId(uint id, short data)
+        {
+            Id = id;
+            DataBytes = sizeof(short);
+            DataArray = new byte[sizeof(short)];
+            for (int i = 0; i < sizeof(short); i++)
+            {
+                DataArray[i] = (byte)(data >> (8 * i));
+            }
+        }
 
         public DataId()
         {
