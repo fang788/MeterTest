@@ -142,7 +142,8 @@ namespace MeterTest.Source.Dlt645
         private byte[] ReadResponse()
         {
             byte[] frame = new byte[512];
-            while (true)
+            int delayCnt = 200;
+            while (delayCnt > 0)
             {
                 ReadBytes(frame, 0, 1);
                 if(frame[0] == 0x68)
@@ -163,6 +164,11 @@ namespace MeterTest.Source.Dlt645
                         }                            
                     }
                 }
+                delayCnt--;
+            }
+            if(delayCnt <= 0)
+            {
+                throw new TimeoutException();
             }
             MemoryStream stream = new MemoryStream(frame[9] + 12);
             stream.Write(frame, 0, frame[9] + 12);

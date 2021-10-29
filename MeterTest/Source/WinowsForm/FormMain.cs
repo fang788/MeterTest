@@ -328,7 +328,7 @@ namespace MeterTest.Source.WinowsForm
                 catch (TimeoutException)
                 {
                     rst.Error = "响应超时";
-                    break;
+                    //break;
                 }
                 catch(Exception e)
                 {
@@ -660,6 +660,11 @@ namespace MeterTest.Source.WinowsForm
             Form form = new FormHt7036Adj(client);
             form.StartPosition = FormStartPosition.CenterParent;
             form.Show();
+        }
+
+        private void buttonFreezeRead_Click(object sender, EventArgs e)
+        {
+            // plotViewFreeze. 
         }
     }
 }
