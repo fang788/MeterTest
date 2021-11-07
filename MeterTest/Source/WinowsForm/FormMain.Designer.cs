@@ -70,17 +70,16 @@ namespace MeterTest.Source.WinowsForm
             this.plotViewFreeze = new OxyPlot.WindowsForms.PlotView();
             this.buttonFreezeRead = new System.Windows.Forms.Button();
             this.statusStrip4 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabelFreeze = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBarFreezeRead = new System.Windows.Forms.ToolStripProgressBar();
             this.label4 = new System.Windows.Forms.Label();
+            this.dateTimePickerFreezeReadEnd = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.dateTimePickerFreezeRead = new System.Windows.Forms.DateTimePicker();
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
-            this.buttonReadFreezeData = new System.Windows.Forms.Button();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.comboBoxFreezeSelect = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -463,17 +462,16 @@ namespace MeterTest.Source.WinowsForm
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.comboBoxFreezeSelect);
             this.tabPage1.Controls.Add(this.plotViewFreeze);
             this.tabPage1.Controls.Add(this.buttonFreezeRead);
             this.tabPage1.Controls.Add(this.statusStrip4);
             this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.dateTimePickerFreezeReadEnd);
             this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.dateTimePicker2);
-            this.tabPage1.Controls.Add(this.dateTimePicker1);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.progressBar1);
+            this.tabPage1.Controls.Add(this.dateTimePickerFreezeRead);
             this.tabPage1.Controls.Add(this.statusStrip3);
-            this.tabPage1.Controls.Add(this.buttonReadFreezeData);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(1044, 457);
@@ -483,10 +481,10 @@ namespace MeterTest.Source.WinowsForm
             // 
             // plotViewFreeze
             // 
-            this.plotViewFreeze.Location = new System.Drawing.Point(13, 24);
+            this.plotViewFreeze.Location = new System.Drawing.Point(3, 3);
             this.plotViewFreeze.Name = "plotViewFreeze";
             this.plotViewFreeze.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewFreeze.Size = new System.Drawing.Size(745, 320);
+            this.plotViewFreeze.Size = new System.Drawing.Size(1033, 352);
             this.plotViewFreeze.TabIndex = 9;
             this.plotViewFreeze.Text = "plotViewFreeze";
             this.plotViewFreeze.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -495,7 +493,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             // buttonFreezeRead
             // 
-            this.buttonFreezeRead.Location = new System.Drawing.Point(442, 375);
+            this.buttonFreezeRead.Location = new System.Drawing.Point(521, 375);
             this.buttonFreezeRead.Name = "buttonFreezeRead";
             this.buttonFreezeRead.Size = new System.Drawing.Size(94, 32);
             this.buttonFreezeRead.TabIndex = 8;
@@ -506,73 +504,60 @@ namespace MeterTest.Source.WinowsForm
             // statusStrip4
             // 
             this.statusStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel2,
-            this.toolStripProgressBar1});
+            this.toolStripStatusLabelFreeze,
+            this.toolStripProgressBarFreezeRead});
             this.statusStrip4.Location = new System.Drawing.Point(0, 413);
             this.statusStrip4.Name = "statusStrip4";
             this.statusStrip4.Size = new System.Drawing.Size(1044, 22);
             this.statusStrip4.TabIndex = 7;
             this.statusStrip4.Text = "statusStrip4";
             // 
-            // toolStripStatusLabel2
+            // toolStripStatusLabelFreeze
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(56, 17);
-            this.toolStripStatusLabel2.Text = "冻结状态";
+            this.toolStripStatusLabelFreeze.Name = "toolStripStatusLabelFreeze";
+            this.toolStripStatusLabelFreeze.Size = new System.Drawing.Size(56, 17);
+            this.toolStripStatusLabelFreeze.Text = "冻结状态";
             // 
-            // toolStripProgressBar1
+            // toolStripProgressBarFreezeRead
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBarFreezeRead.Name = "toolStripProgressBarFreezeRead";
+            this.toolStripProgressBarFreezeRead.Size = new System.Drawing.Size(100, 16);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(224, 383);
+            this.label4.Location = new System.Drawing.Point(256, 383);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 17);
+            this.label4.Size = new System.Drawing.Size(68, 17);
             this.label4.TabIndex = 6;
-            this.label4.Text = "结束时间";
+            this.label4.Text = "结束时间：";
+            // 
+            // dateTimePickerFreezeReadEnd
+            // 
+            this.dateTimePickerFreezeReadEnd.CustomFormat = "yy-MM-dd HH:mm";
+            this.dateTimePickerFreezeReadEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerFreezeReadEnd.Location = new System.Drawing.Point(330, 380);
+            this.dateTimePickerFreezeReadEnd.Name = "dateTimePickerFreezeReadEnd";
+            this.dateTimePickerFreezeReadEnd.Size = new System.Drawing.Size(132, 23);
+            this.dateTimePickerFreezeReadEnd.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(13, 383);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(56, 17);
+            this.label3.Size = new System.Drawing.Size(68, 17);
             this.label3.TabIndex = 6;
-            this.label3.Text = "开始时间";
+            this.label3.Text = "开始时间：";
             // 
-            // dateTimePicker2
+            // dateTimePickerFreezeRead
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(299, 380);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(113, 23);
-            this.dateTimePicker2.TabIndex = 5;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(88, 380);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(110, 23);
-            this.dateTimePicker1.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(777, 185);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 17);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "进度";
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(832, 185);
-            this.progressBar1.Maximum = 672;
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(158, 16);
-            this.progressBar1.TabIndex = 2;
+            this.dateTimePickerFreezeRead.CustomFormat = "yy-MM-dd HH:mm";
+            this.dateTimePickerFreezeRead.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerFreezeRead.Location = new System.Drawing.Point(88, 380);
+            this.dateTimePickerFreezeRead.Name = "dateTimePickerFreezeRead";
+            this.dateTimePickerFreezeRead.Size = new System.Drawing.Size(132, 23);
+            this.dateTimePickerFreezeRead.TabIndex = 4;
             // 
             // statusStrip3
             // 
@@ -583,21 +568,40 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip3.TabIndex = 1;
             this.statusStrip3.Text = "statusStrip3";
             // 
-            // buttonReadFreezeData
-            // 
-            this.buttonReadFreezeData.Location = new System.Drawing.Point(887, 133);
-            this.buttonReadFreezeData.Name = "buttonReadFreezeData";
-            this.buttonReadFreezeData.Size = new System.Drawing.Size(103, 31);
-            this.buttonReadFreezeData.TabIndex = 0;
-            this.buttonReadFreezeData.Text = "读取冻结数据";
-            this.buttonReadFreezeData.UseVisualStyleBackColor = true;
-            this.buttonReadFreezeData.Click += new System.EventHandler(this.buttonReadFreezeData_Click);
-            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "写数据状态";
+            // 
+            // comboBoxFreezeSelect
+            // 
+            this.comboBoxFreezeSelect.FormattingEnabled = true;
+            this.comboBoxFreezeSelect.Items.AddRange(new object[] {
+            "电压",
+            "电流",
+            "有功功率",
+            "无功功率",
+            "视在功率",
+            "功率因数",
+            "正向有功电量",
+            "反向有功电量",
+            "正向无功电量",
+            "反向无功电量"});
+            this.comboBoxFreezeSelect.Location = new System.Drawing.Point(794, 375);
+            this.comboBoxFreezeSelect.Name = "comboBoxFreezeSelect";
+            this.comboBoxFreezeSelect.Size = new System.Drawing.Size(121, 25);
+            this.comboBoxFreezeSelect.TabIndex = 10;
+            this.comboBoxFreezeSelect.SelectedIndexChanged += new System.EventHandler(this.comboBoxFreezeSelect_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(736, 380);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "曲线";
             // 
             // FormMain
             // 
@@ -662,9 +666,6 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.TabPage tabPageV9203;
         private System.Windows.Forms.TabPage tabPageChangeCommAddr;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button buttonReadFreezeData;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.RichTextBox richTextBoxAdjMeterStatus;
         private System.Windows.Forms.Label label2;
@@ -678,14 +679,16 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.DataGridView dataGridViewReadList;
         private System.Windows.Forms.ToolStripMenuItem 校表ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hT7036校表ToolStripMenuItem;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFreezeRead;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.StatusStrip statusStrip4;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFreeze;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarFreezeRead;
         private System.Windows.Forms.Button buttonFreezeRead;
         private OxyPlot.WindowsForms.PlotView plotViewFreeze;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFreezeReadEnd;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxFreezeSelect;
     }
 }

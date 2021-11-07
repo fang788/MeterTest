@@ -146,6 +146,7 @@ namespace MeterTest.Source.Dlt645
             while (delayCnt > 0)
             {
                 ReadBytes(frame, 0, 1);
+                // logger.Log(frame[0].ToString());
                 if(frame[0] == 0x68)
                 {
                     ReadBytes(frame, 1, 9);

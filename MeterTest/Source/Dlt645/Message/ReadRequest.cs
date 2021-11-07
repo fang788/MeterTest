@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using MeterTest.Source.Dlt645;
 
 namespace MeterTest.Source.Dlt645.Message
@@ -23,6 +24,17 @@ namespace MeterTest.Source.Dlt645.Message
             DataFieldLen = dataFieldLen;
             DataId       = dataId;
             dataField = dataId.GetDataIdBytes();
+        }
+        public ReadRequest(MeterAddress address, byte controlCode, DataId dataId, byte[] dataArray)
+        {
+            Address      = address;
+            ControlCode  = controlCode;
+            dataFieldLen = (byte)(DataId.DataIdBytes + dataArray.Length);
+            DataId       = dataId;
+            MemoryStream stream = new MemoryStream(dataArray.Length + DataId.DataIdBytes);
+            stream.Write(dataId.GetDataIdBytes(), 0, DataId.DataIdBytes);
+            stream.Write(dataArray, 0, dataArray.Length);
+            dataField = stream.ToArray();
         }
 
         public MeterAddress Address 

@@ -77,6 +77,92 @@ namespace MeterTest.Source.Test
             new FreezeInfo(2,   213, 1),
             new FreezeInfo(3,   215, 3),
         };
+        /* 相变项目冻结曲线 */
+        private readonly FreezeInfo[] phaseChangeFreezeInfoArray = new FreezeInfo[]
+        {
+            new FreezeInfo(4, 5  , 2),  /* (当前)正向有功总电能  */
+            new FreezeInfo(4, 9  , 2),  /* (当前)反向有功总电能  */
+            new FreezeInfo(4, 13 , 2),  /* (当前)A相正向有功电能 */
+            new FreezeInfo(4, 17 , 2),  /* (当前)A相反向有功电能 */
+            new FreezeInfo(4, 21 , 2),  /* (当前)B相正向有功电能 */
+            new FreezeInfo(4, 25 , 2),  /* (当前)B相反向有功电能 */
+            new FreezeInfo(4, 29 , 2),  /* (当前)C相正向有功电能 */
+            new FreezeInfo(4, 33 , 2),  /* (当前)C相反向有功电能 */
+            new FreezeInfo(4, 37 , 2),  /* (当前)正向无功总电能  */
+            new FreezeInfo(4, 41 , 2),  /* (当前)反向无功总电能  */
+            new FreezeInfo(4, 45 , 2),  /* (当前)A相正向无功电能 */
+            new FreezeInfo(4, 49 , 2),  /* (当前)A相反向无功电能 */
+            new FreezeInfo(4, 53 , 2),  /* (当前)B相正向无功电能 */
+            new FreezeInfo(4, 57 , 2),  /* (当前)B相反向无功电能 */
+            new FreezeInfo(4, 61 , 2),  /* (当前)C相正向无功电能 */
+            new FreezeInfo(4, 65 , 2),  /* (当前)C相反向无功电能 */
+            new FreezeInfo(2, 67 , 1),  /* 电压A                 */
+            new FreezeInfo(2, 69 , 1),  /* 电压B                 */
+            new FreezeInfo(2, 71 , 1),  /* 电压C                 */
+            new FreezeInfo(3, 74 , 3),  /* A相电流               */
+            new FreezeInfo(3, 77 , 3),  /* B相电流               */
+            new FreezeInfo(3, 80 , 3),  /* C相电流               */
+            new FreezeInfo(3, 83 , 4),  /* 瞬时总有功功率        */
+            new FreezeInfo(3, 86 , 4),  /* 瞬时A相有功功率       */
+            new FreezeInfo(3, 89 , 4),  /* 瞬时B相有功功率       */
+            new FreezeInfo(3, 92 , 4),  /* 瞬时C相有功功率       */
+            new FreezeInfo(3, 95 , 4),  /* 瞬时总无功功率        */
+            new FreezeInfo(3, 98 , 4),  /* 瞬时A相无功功率       */
+            new FreezeInfo(3, 101, 4),  /* 瞬时B相无功功率       */
+            new FreezeInfo(3, 104, 4),  /* 瞬时C相无功功率       */
+            new FreezeInfo(3, 107, 4),  /* 瞬时视在总功率        */
+            new FreezeInfo(3, 110, 4),  /* 瞬时A相视在功率       */
+            new FreezeInfo(3, 113, 4),  /* 瞬时B相视在功率       */
+            new FreezeInfo(3, 116, 4),  /* 瞬时C相视在功率       */
+            new FreezeInfo(2, 118, 3),  /* 总功率因数            */
+            new FreezeInfo(2, 120, 3),  /* A相功率因数           */
+            new FreezeInfo(2, 122, 3),  /* B相功率因数           */
+            new FreezeInfo(2, 124, 3),  /* C相功率因数           */
+            new FreezeInfo(2, 126, 2),  /* 频率                  */
+        };
+
+        private readonly string[] tip = new string[]
+        {
+            "(当前)正向有功总电能"      ,
+            "(当前)反向有功总电能"      ,
+            "(当前)A相正向有功电能"     ,
+            "(当前)A相反向有功电能 "    ,
+            "(当前)B相正向有功电能"     ,
+            "(当前)B相反向有功电能"     ,
+            "(当前)C相正向有功电能"     ,
+            "(当前)C相反向有功电能 "    ,
+            "(当前)正向无功总电能 "     ,
+            "(当前)反向无功总电能 "     ,
+            "(当前)A相正向无功电能 "    ,
+            "(当前)A相反向无功电能 "    ,
+            "(当前)B相正向无功电能 "    ,
+            "(当前)B相反向无功电能 "    ,
+            "(当前)C相正向无功电能 "    ,
+            "(当前)C相反向无功电能 "    ,
+            "电压A "                    ,
+            "电压B "                    ,
+            "电压C "                    ,
+            "A相电流 "                  ,
+            "B相电流 "                  ,
+            "C相电流 "                  ,
+            "瞬时总有功功率"            ,
+            "瞬时A相有功功率"           ,
+            "瞬时B相有功功率"           ,
+            "瞬时C相有功功率"           ,
+            "瞬时总无功功率 "           ,
+            "瞬时A相无功功率 "          ,
+            "瞬时B相无功功率 "          ,
+            "瞬时C相无功功率 "          ,
+            "瞬时视在总功率 "           ,
+            "瞬时A相视在功率 "          ,
+            "瞬时B相视在功率 "          ,
+            "瞬时C相视在功率 "          ,
+            "总功率因数 "               ,
+            "A相功率因数 "              ,
+            "B相功率因数 "              ,
+            "C相功率因数 "              ,
+            "频率 "                     ,
+        };
         public FreezeDataTest()
         {
         }
@@ -136,6 +222,48 @@ namespace MeterTest.Source.Test
             
             return stream.ToArray();
         }
+        public byte[] ReadFreeData(DateTime dateTime, int no)
+        {
+            DataId dataId = new DataId();
+            dataId.Id = (uint)(0xA2100000 + no);
+            byte[] array = new byte[6];
+            array[0] = (byte)Convert.ToInt32((dateTime.Year % 100).ToString(), 16);
+            array[1] = (byte)Convert.ToInt32(dateTime.Month       .ToString(), 16);
+            array[2] = (byte)Convert.ToInt32(dateTime.Day         .ToString(), 16);
+            array[3] = (byte)Convert.ToInt32(dateTime.Hour        .ToString(), 16);
+            array[4] = (byte)Convert.ToInt32(dateTime.Minute      .ToString(), 16);
+            array[5] = (byte)0;
+            return client.Read(MeterAddress.Wildcard, dataId, array);
+        }
+
+        public List<FreezeData> GetFreezeDatas(DateTime startDateTime, int days)
+        {
+            List<FreezeData> freezeDataList = new List<FreezeData>();
+            for (int i = 0; i < (days * 24 * 60); i++)
+            {
+                
+            }
+            return freezeDataList;
+        }
+
+        public FreezeData PhaseChangFreezeDataConvert(byte[] bytes)
+        {
+            FreezeData rst = new FreezeData();
+            rst.Time = new DateTime(((bytes[4] & 0xF0) >> 4) * 10 + (bytes[4] & 0x0F) + 2000, 
+                                    ((bytes[3] & 0xF0) >> 4) * 10 + (bytes[3] & 0x0F), 
+                                    ((bytes[2] & 0xF0) >> 4) * 10 + (bytes[2] & 0x0F), 
+                                    ((bytes[1] & 0xF0) >> 4) * 10 + (bytes[1] & 0x0F), 
+                                    ((bytes[0] & 0xF0) >> 4) * 10 + (bytes[0] & 0x0F), 0);
+            Double[] dataArray = new Double[phaseChangeFreezeInfoArray.Length];
+            for (int i = 0; i < phaseChangeFreezeInfoArray.Length; i++)
+            {
+                dataArray[i] = BytesConvertToDouble(bytes, phaseChangeFreezeInfoArray[i].Length, phaseChangeFreezeInfoArray[i].Offset, phaseChangeFreezeInfoArray[i].PointNum);
+                rst.ValueDic.Add(tip[i], dataArray[i]);
+            }
+            rst.ValueArray = dataArray;
+            return rst;
+        }
+         
         public int GetFreezeCnt()
         {
             int cnt = 0;
@@ -147,6 +275,21 @@ namespace MeterTest.Source.Test
                 cnt = cnt * 256 + data1[i];
             }
             return cnt;
+        }
+
+        public DateTime GetFreezeLastDateTime()
+        {
+            DateTime dateTime;
+            DataId dataId = new DataId();
+            dataId.Id = (uint)(0xA2F00001);
+            byte[] data1 = client.Read(MeterAddress.Wildcard, dataId);
+            dateTime = new DateTime(2000 + Convert.ToInt32(data1[4].ToString("X2")), 
+                                    Convert.ToInt32(data1[3].ToString("X2")),  
+                                    Convert.ToInt32(data1[2].ToString("X2")),
+                                    Convert.ToInt32(data1[1].ToString("X2")),
+                                    Convert.ToInt32(data1[0].ToString("X2")),
+                                    0);
+            return dateTime;
         }
 
         public FreezeData FreezeDataConvert(byte[] bytes)

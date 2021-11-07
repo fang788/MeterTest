@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MeterTest.Source.Test
 {
@@ -6,6 +7,11 @@ namespace MeterTest.Source.Test
     {
         public DateTime Time { get; set; }
         public Double[] ValueArray { get; set; }
+        public Dictionary<string, Double> ValueDic = new Dictionary<string, double>();
+
+        public FreezeData()
+        {
+        }
 
         public int CompareTo(object obj)
         {

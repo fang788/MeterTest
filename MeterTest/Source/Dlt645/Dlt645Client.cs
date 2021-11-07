@@ -27,6 +27,15 @@ namespace MeterTest.Source.Dlt645
             return stream.ToArray();
         }
 
+        public byte[] Read(MeterAddress address, DataId dataId, byte[] dataArray)
+        {
+            ReadRequest request = new ReadRequest(address, Dlt645ControlCodes.Read, dataId, dataArray);
+            ReadResponse response = transport.UnicastMessage<ReadResponse>(request);
+            MemoryStream stream = new MemoryStream(response.DataField.Length - 4);
+            stream.Write(response.DataField, 4, response.DataField.Length - 4);
+            return stream.ToArray();
+        }
+
         public void Write(MeterAddress address, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
             WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, password, operatorCode);

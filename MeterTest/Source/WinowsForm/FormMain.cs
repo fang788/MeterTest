@@ -17,6 +17,9 @@ using MeterTest.Source.Test;
 using MeterTest.Source.Emu;
 using MeterTest.Source.WinowsForm;
 using Newtonsoft.Json;
+using OxyPlot.Axes;
+using OxyPlot;
+using OxyPlot.Series;
 
 namespace MeterTest.Source.WinowsForm
 {
@@ -524,27 +527,7 @@ namespace MeterTest.Source.WinowsForm
             }
         }
 
-        private void buttonReadFreezeData_Click(object sender, EventArgs e)
-        {
-            // Thread th = new Thread(ReadFreezeData);
-            Thread th = new Thread(ReadFreezeBlockData);
-            th.IsBackground = true;
-            th.Start();
-        }
-        private void ReadFreezeData()
-        {
-            FreezeDataTest freezeDataTest = new FreezeDataTest(this.client);
-            List<FreezeData> freezeDataList = new List<FreezeData>();
-            for (int i = 1; i < 672; i++)
-            {
-                List<byte[]> rst = freezeDataTest.ReadOnce(i);
-                FreezeData data = freezeDataTest.FreezeDataConvert(rst);
-                freezeDataList.Add(data);
-                synchronizationContext.Post(ReadFreezeDataProgramBar, i);
-            }
-            freezeDataList.Sort();
-            freezeDataTest.SaveFreezeData("冻结数据.xlsx", freezeDataList);
-        }
+        
 
         private void ReadFreezeBlockData()
         {
@@ -585,13 +568,13 @@ namespace MeterTest.Source.WinowsForm
         }
         private void ReadFreezeDataProgramBar(Object obj)
         {
-            int per = (int)obj;
-            progressBar1.Value = per;
+            // int per = (int)obj;
+            // progressBar1.Value = per;
         }
         private void ReadFreezeDataProgramBarStart(Object obj)
         {
-            int per = (int)obj;
-            progressBar1.Maximum = per;
+            // int per = (int)obj;
+            // progressBar1.Maximum = per;
         }
 
         private void buttonStartAdjMeter_Click(object sender, EventArgs e)
@@ -662,9 +645,156 @@ namespace MeterTest.Source.WinowsForm
             form.Show();
         }
 
+        private void ReadFreezeDataPhaseChangeProgramBar(Object obj)
+        {
+            // int per = (int)obj;
+            // progressBar1.Maximum = per;
+
+            FreezeReadMsg msg = (FreezeReadMsg)obj;
+            if (msg.ToolStripStatusLabel == "更新显示")
+            {
+                PlotModel model = new PlotModel { Title = "DateTimeAxis" };
+
+                var startDate = freezeDateTimeStart;
+                var endDate = freezeDateTimeEnd;
+
+                var minValue = DateTimeAxis.ToDouble(startDate);
+                var maxValue = DateTimeAxis.ToDouble(endDate);
+
+                DateTimeAxis bottom = new DateTimeAxis { Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, StringFormat = "M/d HH:mm"};
+                LineSeries line = new LineSeries();
+                foreach (FreezeData item in freezeDataList)
+                {
+                    line.Points.Add(DateTimeAxis.CreateDataPoint(item.Time, item.ValueArray[0]));
+                }
+                model.Axes.Add(bottom);
+                model.Axes.Add(new LinearAxis{Position = AxisPosition.Left, Minimum = 0, Maximum = 1000, StringFormat = "F4"});
+                model.Series.Add(line);
+                this.plotViewFreeze.Model = model;
+            }
+            else
+            {
+                toolStripStatusLabelFreeze.Text = msg.ToolStripStatusLabel;
+                toolStripProgressBarFreezeRead.Value = msg.ProgressBar;
+            }
+        }
+
+        private DateTime freezeDateTimeStart;
+        private DateTime freezeDateTimeEnd;
+        private List<FreezeData> freezeDataList;
+        // private int days;
+        private void ReadPhaseChangeFreezeData()
+        {
+            FreezeDataTest freezeDataTest = new FreezeDataTest(this.client);
+            freezeDataList = new List<FreezeData>();
+            try
+            {
+                DateTime last = freezeDataTest.GetFreezeLastDateTime();
+                FreezeReadMsg msg = null;
+                if(freezeDateTimeStart.Ticks > last.Ticks)
+                {
+                    msg = new FreezeReadMsg("主机最后冻结时间：" + freezeDateTimeStart.ToString("yyyy-MM-dd") + ",晚于开始时间：" + last.ToString("yyyy-MM-dd"), 0);
+                    synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                    return;
+                }
+                else
+                {
+                    msg = new FreezeReadMsg("冻结数据读取中。。。", 0);
+                    synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                }
+                
+                int cnt = (int)((freezeDateTimeEnd.Ticks - freezeDateTimeStart.Ticks) / (60 * 10000000)); 
+                for (int i = 0; i <= cnt; i++)
+                {
+                    DateTime dateTimeTmp = freezeDateTimeStart.AddMinutes(i);;
+                    byte[] rst = null;
+                    try
+                    {
+                        rst = freezeDataTest.ReadFreeData(dateTimeTmp, 0xFF);
+                    }
+                    catch (ClientException)
+                    {
+                        ;
+                    }
+                    finally
+                    {
+                        msg = new FreezeReadMsg("冻结数据读取中。。。", (int)(i * 100) / cnt);
+                        synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                    }
+                    if(rst != null)
+                    {
+                        FreezeData data = freezeDataTest.PhaseChangFreezeDataConvert(rst);
+                        freezeDataList.Add(data);
+                    }
+                }
+                freezeDataList.Sort();
+                msg = new FreezeReadMsg("冻结数据读取完成", 100);
+                synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                freezeDataTest.SaveFreezeData(".\\source\\Test\\冻结数据.xlsx", freezeDataList);
+                msg = new FreezeReadMsg("更新显示", 0);
+                    synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            finally
+            {
+                optLock = false;
+            }
+        }
+
         private void buttonFreezeRead_Click(object sender, EventArgs e)
         {
-            // plotViewFreeze. 
+            if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeRead.Value.Ticks)
+            {
+                MessageBox.Show("开始时间：" + dateTimePickerFreezeRead.Value.ToString("yy-MM-dd HH:mm") + 
+                "，早于结束时间：" + dateTimePickerFreezeReadEnd.Value.ToString("yy-MM-dd HH:mm"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在读取冻结数据";
+            freezeDateTimeStart = new DateTime(dateTimePickerFreezeRead.Value.Year, 
+                                               dateTimePickerFreezeRead.Value.Month, 
+                                               dateTimePickerFreezeRead.Value.Day, 
+                                               dateTimePickerFreezeRead.Value.Hour, 
+                                               dateTimePickerFreezeRead.Value.Minute, 
+                                               0);
+            freezeDateTimeEnd = new DateTime(dateTimePickerFreezeReadEnd.Value.Year, 
+                                             dateTimePickerFreezeReadEnd.Value.Month, 
+                                             dateTimePickerFreezeReadEnd.Value.Day, 
+                                             dateTimePickerFreezeReadEnd.Value.Hour, 
+                                             dateTimePickerFreezeReadEnd.Value.Minute, 
+                                             0);
+            Thread threadFreezeRead = new Thread(ReadPhaseChangeFreezeData);
+            threadFreezeRead.IsBackground = true;
+            threadFreezeRead.Start();
+        }
+
+        private void comboBoxFreezeSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(freezeDataList == null)
+            {
+                toolStripStatusLabelFreeze.Text = "请先读取冻结数据";
+                return;
+            }
+
+        }
+    }
+    class FreezeReadMsg
+    {
+        public string ToolStripStatusLabel;
+        public int ProgressBar;
+
+        public FreezeReadMsg(string t, int p)
+        {
+            ToolStripStatusLabel = t;
+            ProgressBar = p;
         }
     }
 }
