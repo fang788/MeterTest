@@ -475,7 +475,7 @@ namespace MeterTest.Source.WinowsForm
         {
             dataGridViewReadList.Left = tabControlMainForm.Left;
             dataGridViewReadList.Top = tabControlMainForm.Top;
-            dataGridViewReadList.Width = tabControlMainForm.Width;
+            dataGridViewReadList.Width = (int)(tabControlMainForm.Width * 0.96);
             buttonReadOne.Left = tabControlMainForm.Left + 10;
             buttonReadClyce.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
             buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
