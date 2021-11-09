@@ -96,7 +96,7 @@ namespace MeterTest.Source.WinowsForm
 
         private void comboBoxTTPort_DropDown(object sender, EventArgs e)
         {
-            ComboBoxPort.Items.Clear();
+            comboBoxTTPort.Items.Clear();
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
                 comboBoxTTPort.Items.Add(s);
