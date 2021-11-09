@@ -67,6 +67,8 @@ namespace MeterTest.Source.WinowsForm
             this.buttonStartAdjMeter = new System.Windows.Forms.Button();
             this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxFreezeSelect = new System.Windows.Forms.ComboBox();
             this.plotViewFreeze = new OxyPlot.WindowsForms.PlotView();
             this.buttonFreezeRead = new System.Windows.Forms.Button();
             this.statusStrip4 = new System.Windows.Forms.StatusStrip();
@@ -75,11 +77,9 @@ namespace MeterTest.Source.WinowsForm
             this.label4 = new System.Windows.Forms.Label();
             this.dateTimePickerFreezeReadEnd = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
-            this.dateTimePickerFreezeRead = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerFreezeReadStart = new System.Windows.Forms.DateTimePicker();
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.comboBoxFreezeSelect = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -470,7 +470,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.dateTimePickerFreezeReadEnd);
             this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.dateTimePickerFreezeRead);
+            this.tabPage1.Controls.Add(this.dateTimePickerFreezeReadStart);
             this.tabPage1.Controls.Add(this.statusStrip3);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
@@ -478,6 +478,35 @@ namespace MeterTest.Source.WinowsForm
             this.tabPage1.TabIndex = 4;
             this.tabPage1.Text = "冻结";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(736, 380);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "曲线";
+            // 
+            // comboBoxFreezeSelect
+            // 
+            this.comboBoxFreezeSelect.FormattingEnabled = true;
+            this.comboBoxFreezeSelect.Items.AddRange(new object[] {
+            "电压",
+            "电流",
+            "有功功率",
+            "无功功率",
+            "视在功率",
+            "功率因数",
+            "正向有功电量",
+            "反向有功电量",
+            "正向无功电量",
+            "反向无功电量"});
+            this.comboBoxFreezeSelect.Location = new System.Drawing.Point(794, 375);
+            this.comboBoxFreezeSelect.Name = "comboBoxFreezeSelect";
+            this.comboBoxFreezeSelect.Size = new System.Drawing.Size(121, 25);
+            this.comboBoxFreezeSelect.TabIndex = 10;
+            this.comboBoxFreezeSelect.SelectedIndexChanged += new System.EventHandler(this.comboBoxFreezeSelect_SelectedIndexChanged);
             // 
             // plotViewFreeze
             // 
@@ -534,11 +563,11 @@ namespace MeterTest.Source.WinowsForm
             // 
             // dateTimePickerFreezeReadEnd
             // 
-            this.dateTimePickerFreezeReadEnd.CustomFormat = "yy-MM-dd HH:mm";
+            this.dateTimePickerFreezeReadEnd.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePickerFreezeReadEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerFreezeReadEnd.Location = new System.Drawing.Point(330, 380);
             this.dateTimePickerFreezeReadEnd.Name = "dateTimePickerFreezeReadEnd";
-            this.dateTimePickerFreezeReadEnd.Size = new System.Drawing.Size(132, 23);
+            this.dateTimePickerFreezeReadEnd.Size = new System.Drawing.Size(145, 23);
             this.dateTimePickerFreezeReadEnd.TabIndex = 4;
             // 
             // label3
@@ -550,14 +579,14 @@ namespace MeterTest.Source.WinowsForm
             this.label3.TabIndex = 6;
             this.label3.Text = "开始时间：";
             // 
-            // dateTimePickerFreezeRead
+            // dateTimePickerFreezeReadStart
             // 
-            this.dateTimePickerFreezeRead.CustomFormat = "yy-MM-dd HH:mm";
-            this.dateTimePickerFreezeRead.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerFreezeRead.Location = new System.Drawing.Point(88, 380);
-            this.dateTimePickerFreezeRead.Name = "dateTimePickerFreezeRead";
-            this.dateTimePickerFreezeRead.Size = new System.Drawing.Size(132, 23);
-            this.dateTimePickerFreezeRead.TabIndex = 4;
+            this.dateTimePickerFreezeReadStart.CustomFormat = "yyyy-MM-dd HH:mm";
+            this.dateTimePickerFreezeReadStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerFreezeReadStart.Location = new System.Drawing.Point(88, 380);
+            this.dateTimePickerFreezeReadStart.Name = "dateTimePickerFreezeReadStart";
+            this.dateTimePickerFreezeReadStart.Size = new System.Drawing.Size(145, 23);
+            this.dateTimePickerFreezeReadStart.TabIndex = 4;
             // 
             // statusStrip3
             // 
@@ -573,35 +602,6 @@ namespace MeterTest.Source.WinowsForm
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "写数据状态";
-            // 
-            // comboBoxFreezeSelect
-            // 
-            this.comboBoxFreezeSelect.FormattingEnabled = true;
-            this.comboBoxFreezeSelect.Items.AddRange(new object[] {
-            "电压",
-            "电流",
-            "有功功率",
-            "无功功率",
-            "视在功率",
-            "功率因数",
-            "正向有功电量",
-            "反向有功电量",
-            "正向无功电量",
-            "反向无功电量"});
-            this.comboBoxFreezeSelect.Location = new System.Drawing.Point(794, 375);
-            this.comboBoxFreezeSelect.Name = "comboBoxFreezeSelect";
-            this.comboBoxFreezeSelect.Size = new System.Drawing.Size(121, 25);
-            this.comboBoxFreezeSelect.TabIndex = 10;
-            this.comboBoxFreezeSelect.SelectedIndexChanged += new System.EventHandler(this.comboBoxFreezeSelect_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(736, 380);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 17);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "曲线";
             // 
             // FormMain
             // 
@@ -679,7 +679,7 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.DataGridView dataGridViewReadList;
         private System.Windows.Forms.ToolStripMenuItem 校表ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hT7036校表ToolStripMenuItem;
-        private System.Windows.Forms.DateTimePicker dateTimePickerFreezeRead;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFreezeReadStart;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.StatusStrip statusStrip4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFreeze;

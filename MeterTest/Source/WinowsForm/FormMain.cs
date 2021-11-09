@@ -37,6 +37,7 @@ namespace MeterTest.Source.WinowsForm
         private int cycleSwith = 0;
         private Dlt645Password password = null;
         private Dlt645OperatorCode operatorCode = null;
+        private FreezeLineChart freezeLineChart = null;
         static public DataIdDbContext DataIdDb = new DataIdDbContext();
         public FormMain()
         {
@@ -102,6 +103,25 @@ namespace MeterTest.Source.WinowsForm
             DataIdListDisplayAll();
             DataGridViewWriteDisplayUpdate();
             synchronizationContext = SynchronizationContext.Current;
+
+            /* 第一次打开时，加载的折线图 */
+            comboBoxFreezeSelect.Text = comboBoxFreezeSelect.Items[0].ToString();
+            dateTimePickerFreezeReadStart.Value = DateTime.Now.AddDays(-1);
+            
+            PlotModel model = new PlotModel { Title = comboBoxFreezeSelect.Text };
+            freezeLineChart = new FreezeLineChart(model, 
+                                                  new DateTimeAxis{Position = AxisPosition.Bottom, Minimum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadStart.Value), Maximum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadEnd.Value), StringFormat = "M/d HH:mm"},
+                                                  FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text));
+            this.plotViewFreeze.Model = model;
+            // var startDate = freezeDateTimeStart;
+            // var endDate = freezeDateTimeEnd;
+
+            // var minValue = DateTimeAxis.ToDouble(startDate);
+            // var maxValue = DateTimeAxis.ToDouble(endDate);
+
+            // DateTimeAxis bottom = new DateTimeAxis { Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, StringFormat = "M/d HH:mm"};
+            // model.Axes.Add(bottom);
+            // model.Axes.Add(new LinearAxis{Position = AxisPosition.Left, Minimum = 0, Maximum = 1000, StringFormat = "F1"});
         }
 
         private void ParaUpdate()
@@ -651,31 +671,12 @@ namespace MeterTest.Source.WinowsForm
             // progressBar1.Maximum = per;
 
             FreezeReadMsg msg = (FreezeReadMsg)obj;
-            if (msg.ToolStripStatusLabel == "更新显示")
+            
+            toolStripStatusLabelFreeze.Text = msg.ToolStripStatusLabel;
+            toolStripProgressBarFreezeRead.Value = msg.ProgressBar;
+            if(msg.freezeData != null)
             {
-                PlotModel model = new PlotModel { Title = "DateTimeAxis" };
-
-                var startDate = freezeDateTimeStart;
-                var endDate = freezeDateTimeEnd;
-
-                var minValue = DateTimeAxis.ToDouble(startDate);
-                var maxValue = DateTimeAxis.ToDouble(endDate);
-
-                DateTimeAxis bottom = new DateTimeAxis { Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, StringFormat = "M/d HH:mm"};
-                LineSeries line = new LineSeries();
-                foreach (FreezeData item in freezeDataList)
-                {
-                    line.Points.Add(DateTimeAxis.CreateDataPoint(item.Time, item.ValueArray[0]));
-                }
-                model.Axes.Add(bottom);
-                model.Axes.Add(new LinearAxis{Position = AxisPosition.Left, Minimum = 0, Maximum = 1000, StringFormat = "F4"});
-                model.Series.Add(line);
-                this.plotViewFreeze.Model = model;
-            }
-            else
-            {
-                toolStripStatusLabelFreeze.Text = msg.ToolStripStatusLabel;
-                toolStripProgressBarFreezeRead.Value = msg.ProgressBar;
+                freezeLineChart.DisplayFreezeData(comboBoxFreezeSelect.Text, msg.freezeData);
             }
         }
 
@@ -746,9 +747,9 @@ namespace MeterTest.Source.WinowsForm
 
         private void buttonFreezeRead_Click(object sender, EventArgs e)
         {
-            if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeRead.Value.Ticks)
+            if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeReadStart.Value.Ticks)
             {
-                MessageBox.Show("开始时间：" + dateTimePickerFreezeRead.Value.ToString("yy-MM-dd HH:mm") + 
+                MessageBox.Show("开始时间：" + dateTimePickerFreezeReadStart.Value.ToString("yy-MM-dd HH:mm") + 
                 "，早于结束时间：" + dateTimePickerFreezeReadEnd.Value.ToString("yy-MM-dd HH:mm"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -759,11 +760,11 @@ namespace MeterTest.Source.WinowsForm
             }
             optLock = true;
             optMessage = "正在读取冻结数据";
-            freezeDateTimeStart = new DateTime(dateTimePickerFreezeRead.Value.Year, 
-                                               dateTimePickerFreezeRead.Value.Month, 
-                                               dateTimePickerFreezeRead.Value.Day, 
-                                               dateTimePickerFreezeRead.Value.Hour, 
-                                               dateTimePickerFreezeRead.Value.Minute, 
+            freezeDateTimeStart = new DateTime(dateTimePickerFreezeReadStart.Value.Year, 
+                                               dateTimePickerFreezeReadStart.Value.Month, 
+                                               dateTimePickerFreezeReadStart.Value.Day, 
+                                               dateTimePickerFreezeReadStart.Value.Hour, 
+                                               dateTimePickerFreezeReadStart.Value.Minute, 
                                                0);
             freezeDateTimeEnd = new DateTime(dateTimePickerFreezeReadEnd.Value.Year, 
                                              dateTimePickerFreezeReadEnd.Value.Month, 
@@ -771,6 +772,7 @@ namespace MeterTest.Source.WinowsForm
                                              dateTimePickerFreezeReadEnd.Value.Hour, 
                                              dateTimePickerFreezeReadEnd.Value.Minute, 
                                              0);
+            toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
             Thread threadFreezeRead = new Thread(ReadPhaseChangeFreezeData);
             threadFreezeRead.IsBackground = true;
             threadFreezeRead.Start();
@@ -790,11 +792,17 @@ namespace MeterTest.Source.WinowsForm
     {
         public string ToolStripStatusLabel;
         public int ProgressBar;
+        public FreezeData freezeData;
 
         public FreezeReadMsg(string t, int p)
         {
             ToolStripStatusLabel = t;
             ProgressBar = p;
+        }
+
+        public FreezeReadMsg(string toolStripStatusLabel, int progressBar, FreezeData freezeData) : this(toolStripStatusLabel, progressBar)
+        {
+            this.freezeData = freezeData;
         }
     }
 }
