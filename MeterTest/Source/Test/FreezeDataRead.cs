@@ -13,12 +13,15 @@ using NPOI.XSSF.UserModel;
 
 namespace MeterTest.Source.Test
 {
-    public class FreezeDataTest
+    public class FreezeDataRead
     {
         public const int MAX_FREEZE_CNT = 672;
         private List<FreezeData> freezeDataList = new List<FreezeData>();
         public Dictionary<int, List<byte[]>> FreezeData = new Dictionary<int, List<byte[]>>();
         private Dlt645Client client;
+
+        private IFreezeLog freezeLog;
+        private bool isEnd = false;
         private FreezeInfo[] freezeInfoArray = new FreezeInfo[] 
         { 
             new FreezeInfo(5,   5  , 2),   
@@ -96,43 +99,43 @@ namespace MeterTest.Source.Test
             new FreezeInfo(4, 57 , 2),  /* (当前)B相反向无功电能 */
             new FreezeInfo(4, 61 , 2),  /* (当前)C相正向无功电能 */
             new FreezeInfo(4, 65 , 2),  /* (当前)C相反向无功电能 */
-            new FreezeInfo(2, 67 , 1),  /* 电压A                 */
-            new FreezeInfo(2, 69 , 1),  /* 电压B                 */
-            new FreezeInfo(2, 71 , 1),  /* 电压C                 */
-            new FreezeInfo(3, 74 , 3),  /* A相电流               */
-            new FreezeInfo(3, 77 , 3),  /* B相电流               */
-            new FreezeInfo(3, 80 , 3),  /* C相电流               */
-            new FreezeInfo(3, 83 , 4),  /* 瞬时总有功功率        */
-            new FreezeInfo(3, 86 , 4),  /* 瞬时A相有功功率       */
-            new FreezeInfo(3, 89 , 4),  /* 瞬时B相有功功率       */
-            new FreezeInfo(3, 92 , 4),  /* 瞬时C相有功功率       */
-            new FreezeInfo(3, 95 , 4),  /* 瞬时总无功功率        */
-            new FreezeInfo(3, 98 , 4),  /* 瞬时A相无功功率       */
-            new FreezeInfo(3, 101, 4),  /* 瞬时B相无功功率       */
-            new FreezeInfo(3, 104, 4),  /* 瞬时C相无功功率       */
-            new FreezeInfo(3, 107, 4),  /* 瞬时视在总功率        */
-            new FreezeInfo(3, 110, 4),  /* 瞬时A相视在功率       */
-            new FreezeInfo(3, 113, 4),  /* 瞬时B相视在功率       */
-            new FreezeInfo(3, 116, 4),  /* 瞬时C相视在功率       */
-            new FreezeInfo(2, 118, 3),  /* 总功率因数            */
-            new FreezeInfo(2, 120, 3),  /* A相功率因数           */
-            new FreezeInfo(2, 122, 3),  /* B相功率因数           */
-            new FreezeInfo(2, 124, 3),  /* C相功率因数           */
-            new FreezeInfo(2, 126, 2),  /* 频率                  */
+            new FreezeInfo(2, 69 , 1),  /* 电压A                 */
+            new FreezeInfo(2, 71 , 1),  /* 电压B                 */
+            new FreezeInfo(2, 73 , 1),  /* 电压C                 */
+            new FreezeInfo(3, 75 , 3, true),  /* A相电流               */
+            new FreezeInfo(3, 78 , 3, true),  /* B相电流               */
+            new FreezeInfo(3, 81 , 3, true),  /* C相电流               */
+            new FreezeInfo(3, 84 , 4, true),  /* 瞬时总有功功率        */
+            new FreezeInfo(3, 87 , 4, true),  /* 瞬时A相有功功率       */
+            new FreezeInfo(3, 90 , 4, true),  /* 瞬时B相有功功率       */
+            new FreezeInfo(3, 93 , 4, true),  /* 瞬时C相有功功率       */
+            new FreezeInfo(3, 96 , 4, true),  /* 瞬时总无功功率        */
+            new FreezeInfo(3, 99 , 4, true),  /* 瞬时A相无功功率       */
+            new FreezeInfo(3, 102, 4, true),  /* 瞬时B相无功功率       */
+            new FreezeInfo(3, 105, 4, true),  /* 瞬时C相无功功率       */
+            new FreezeInfo(3, 108, 4, true),  /* 瞬时视在总功率        */
+            new FreezeInfo(3, 111, 4, true),  /* 瞬时A相视在功率       */
+            new FreezeInfo(3, 114, 4, true),  /* 瞬时B相视在功率       */
+            new FreezeInfo(3, 117, 4, true),  /* 瞬时C相视在功率       */
+            new FreezeInfo(2, 120, 3, true),  /* 总功率因数            */
+            new FreezeInfo(2, 122, 3, true),  /* A相功率因数           */
+            new FreezeInfo(2, 124, 3, true),  /* B相功率因数           */
+            new FreezeInfo(2, 126, 3, true),  /* C相功率因数           */
+            new FreezeInfo(2, 128, 2),  /* 频率                  */
         };
 
-        private readonly string[] tip = new string[]
+        public static readonly string[] tip = new string[]
         {
-            "(当前)正向有功总电能"      ,
-            "(当前)反向有功总电能"      ,
+            "(当前)总正向有功电能"      ,
+            "(当前)总反向有功电能"      ,
             "(当前)A相正向有功电能"     ,
             "(当前)A相反向有功电能 "    ,
             "(当前)B相正向有功电能"     ,
             "(当前)B相反向有功电能"     ,
             "(当前)C相正向有功电能"     ,
             "(当前)C相反向有功电能 "    ,
-            "(当前)正向无功总电能 "     ,
-            "(当前)反向无功总电能 "     ,
+            "(当前)总正向无功电能 "     ,
+            "(当前)总反向无功电能 "     ,
             "(当前)A相正向无功电能 "    ,
             "(当前)A相反向无功电能 "    ,
             "(当前)B相正向无功电能 "    ,
@@ -163,13 +166,22 @@ namespace MeterTest.Source.Test
             "C相功率因数 "              ,
             "频率 "                     ,
         };
-        public FreezeDataTest()
+        public FreezeDataRead()
         {
         }
 
-        public FreezeDataTest(Dlt645Client client)
+        public FreezeDataRead(Dlt645Client client)
         {
             this.client = client;
+        }
+
+        public FreezeDataRead(Dlt645Client client, IFreezeLog freezeLog, DateTime start, DateTime end)
+        {
+            this.freezeDataList = new List<FreezeData>();
+            this.client = client;
+            this.freezeLog = freezeLog;
+            this.start = start;
+            this.end = end;
         }
 
         public void ReadSingle()
@@ -257,7 +269,17 @@ namespace MeterTest.Source.Test
             Double[] dataArray = new Double[phaseChangeFreezeInfoArray.Length];
             for (int i = 0; i < phaseChangeFreezeInfoArray.Length; i++)
             {
+                int smb = 1;
+                if(phaseChangeFreezeInfoArray[i].HasSmb)
+                {
+                    if((bytes[phaseChangeFreezeInfoArray[i].Offset + phaseChangeFreezeInfoArray[i].Length - 1] & 0x80) == 0x80)
+                    {
+                        bytes[phaseChangeFreezeInfoArray[i].Offset + phaseChangeFreezeInfoArray[i].Length - 1] &= (0x7F);
+                        smb = -1;
+                    }
+                }
                 dataArray[i] = BytesConvertToDouble(bytes, phaseChangeFreezeInfoArray[i].Length, phaseChangeFreezeInfoArray[i].Offset, phaseChangeFreezeInfoArray[i].PointNum);
+                dataArray[i] *= smb;
                 rst.ValueDic.Add(tip[i], dataArray[i]);
             }
             rst.ValueArray = dataArray;
@@ -460,6 +482,146 @@ namespace MeterTest.Source.Test
                 }
             }
         }
+        public void SaveFreezeDataFormat1(List<FreezeData> freezeDataList)
+        {
+            List<DataId> list = new List<DataId>();
+            IWorkbook workbook = null;
+            FileStream fileStream = null;
+            Stream stream   = null;
+            try
+            {
+                // fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                workbook = new XSSFWorkbook();
+                // if(Path.GetExtension(path).Equals(".xlsx"))
+                // {
+                    
+                // }
+                // else
+                // {
+                //     workbook = new HSSFWorkbook(fileStream);
+                // }
+                ISheet sheet = workbook.CreateSheet("冻结数据");
+                IRow row = sheet.CreateRow(0);
+                row.CreateCell(0).SetCellValue("次数");
+                row.CreateCell(1).SetCellValue("时间");
+                for (int i = 0; i < tip.Length; i++)
+                {
+                    row.CreateCell(i + 2).SetCellValue(tip[i]);
+                }
+                for (int i = 0; i < freezeDataList.Count; i++)
+                {
+                    row = sheet.CreateRow(i + 1);
+                    row.CreateCell(0).SetCellValue(i);
+                    row.CreateCell(1).SetCellValue(freezeDataList.ToArray()[i].Time.ToString());
+                    for (int j = 0; j < freezeDataList.ToArray()[i].ValueDic.Count; j++)
+                    {
+                        double value;
+                        ICell cell =  row.CreateCell(2 + j);
+                        if(freezeDataList.ToArray()[i].ValueDic.TryGetValue(tip[j], out value))
+                        {
+                            cell.SetCellValue(value.ToString("F" + phaseChangeFreezeInfoArray[j].PointNum.ToString()));
+                        }
+                    }
+                }
+                string s = System.IO.Directory.GetCurrentDirectory() + "\\冻结数据_" + DateTime.Now.ToString("yy-MM-dd_HH_mm_ss") + ".xlsx";
+                stream = new FileInfo(s).Create();
+                workbook.Write(stream);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            finally
+            {
+                if(workbook != null)
+                {
+                    workbook.Close();
+                }
+                if(fileStream != null)
+                {
+                    fileStream.Close();
+                }
+                if(stream != null)
+                {
+                    stream.Close();
+                }
+            }
+        }
+
+        private DateTime start;
+        private DateTime end;
+        public void ReadPhaseChangeFreezeData()
+        {
+            // FreezeDataRead freezeDataTest = new FreezeDataRead(this.client);
+            freezeDataList = new List<FreezeData>();
+            try
+            {
+                DateTime last = GetFreezeLastDateTime();
+                FreezeReadMsg msg = null;
+                if(start.Ticks > last.Ticks)
+                {
+                    msg = new FreezeReadMsg("主机最后冻结时间：" + start.ToString("yyyy-MM-dd") + ",晚于开始时间：" + last.ToString("yyyy-MM-dd"), 0);
+                    // synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                    freezeLog.SendMsg(msg);
+                    return;
+                }
+                else
+                {
+                    msg = new FreezeReadMsg("冻结数据读取中。。。", 0);
+                    freezeLog.SendMsg(msg);
+                }
+                
+                int cnt = (int)((end.Ticks - start.Ticks) / (60 * 10000000)); 
+                for (int i = 0; i <= cnt; i++)
+                {
+                    DateTime dateTimeTmp = start.AddMinutes(i);;
+                    byte[] rst = null;
+                    FreezeData data = null;
+                    try
+                    {
+                        data = null;
+                        rst = ReadFreeData(dateTimeTmp, 0xFF);
+                        if(rst != null)
+                        {
+                            data = PhaseChangFreezeDataConvert(rst);
+                            freezeDataList.Add(data);
+                        }
+                        if(isEnd)
+                        {
+                            return;
+                        }
+                    }
+                    catch (ClientException)
+                    {
+                        ;
+                    }
+                    finally
+                    {
+                        msg = new FreezeReadMsg("冻结数据读取中。。。", (int)(i * 100) / cnt, data);
+                        freezeLog.SendMsg(msg);
+                    }
+                }
+                freezeDataList.Sort();
+                msg = new FreezeReadMsg("冻结数据读取完成", 100);
+                // synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+                freezeLog.SendMsg(msg);
+                SaveFreezeDataFormat1(freezeDataList);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            finally
+            {
+                // optLock = false;
+                freezeLog.End();
+            }
+        }
+        public void EndFreezeDataRead()
+        {
+            isEnd = true;
+        }
+
     }
     
     public struct FreezeInfo
@@ -467,11 +629,18 @@ namespace MeterTest.Source.Test
         public int Offset;
         public int Length;
         public int PointNum;
+        public bool HasSmb;
         public FreezeInfo(int length, int offset, int pointNum)
         {
             Offset = offset;
             Length = length;
             PointNum = pointNum;
+            HasSmb = false;
+        }
+
+        public FreezeInfo(int offset, int length, int pointNum, bool hasSmb)  : this(offset, length, pointNum)
+        {
+            HasSmb = hasSmb;
         }
     }
 }
