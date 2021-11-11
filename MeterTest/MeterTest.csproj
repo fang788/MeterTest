@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>MeterTest.Program</StartupObject>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <ApplicationIcon />
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
     <Win32Resource />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
