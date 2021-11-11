@@ -496,8 +496,8 @@ namespace MeterTest.Source.WinowsForm
         {
             Interlocked.Exchange(ref cycleSwith, 0);
         }
-
-        private void FormMain_SizeChanged(object sender, EventArgs e)
+        
+        private void ReadTabPageSizeZoom()
         {
             dataGridViewReadList.Left = tabControlMainForm.Left;
             dataGridViewReadList.Top = tabControlMainForm.Top;
@@ -516,13 +516,13 @@ namespace MeterTest.Source.WinowsForm
             {
                 dataGridViewReadList.Height = 10;
             }
-            // size.Height = (int)(tabControlMainForm.Size.Height * 0.9);
-            // Point point1 = new Point(21, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
-            // this.buttonReadOne.Location = point1;
-            // Point point2 = new Point(21 + this.Size.Width / 4, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
-            // buttonReadClyce.Location = point2;
-            // Point point3 = new Point(21 + this.Size.Width / 2, dataGridViewReadList.Location.Y + tabControlMainForm.Size.Height - 10);
-            // buttonStop.Location = point3;
+        }
+        private void FormMain_SizeChanged(object sender, EventArgs e)
+        {
+            if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
+            {
+                ReadTabPageSizeZoom();
+            }
         }
         private void DataGridViewWriteDisplayUpdate()
         {
@@ -849,6 +849,14 @@ namespace MeterTest.Source.WinowsForm
                 }      
                 synchronizationContext.Post(MeterClearDisplay, "清零完成");
             });
+        }
+
+        private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
+            {
+                ReadTabPageSizeZoom();
+            }
         }
     }
 }
