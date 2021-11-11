@@ -114,14 +114,14 @@ namespace MeterTest.Source.SQLite
         {
             int index;
             List<DataId> list = new List<DataId>();
-            foreach (var item in dataGridViewDataId.SelectedRows)
+            DataId[] dataIdArray = dataIdDb.DataIds.ToList().ToArray<DataId>();
+            // foreach (var item in dataGridViewDataId.SelectedRows)
             for (int i = 0; i < dataGridViewDataId.SelectedRows.Count; i++)
             {
                 try
                 {
                     index = Convert.ToInt32(dataGridViewDataId.SelectedRows[i].Cells[0].Value.ToString());
-                    DataId selectDataId = dataIdDb.DataIds.ToList().ToArray<DataId>()[index];
-                    list.Add(selectDataId);
+                    list.Add(dataIdArray[index]);
                 }
                 catch (System.Exception)
                 {
