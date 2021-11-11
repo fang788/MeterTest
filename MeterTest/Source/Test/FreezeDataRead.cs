@@ -323,10 +323,13 @@ namespace MeterTest.Source.Test
                                     ((bytes[1] & 0xF0) >> 4) * 10 + (bytes[1] & 0x0F), 
                                     ((bytes[0] & 0xF0) >> 4) * 10 + (bytes[0] & 0x0F), 0);
             Double[] dataArray = new Double[55];
+            
+            
             for (int i = 0; i < freezeInfoArray.Length; i++)
             {
                 dataArray[i] = BytesConvertToDouble(bytes, freezeInfoArray[i].Length, freezeInfoArray[i].Offset, freezeInfoArray[i].PointNum);
             }
+        
             rst.ValueArray = dataArray;
             return rst;
         }
@@ -560,7 +563,7 @@ namespace MeterTest.Source.Test
                 FreezeReadMsg msg = null;
                 if(start.Ticks > last.Ticks)
                 {
-                    msg = new FreezeReadMsg("主机最后冻结时间：" + start.ToString("yyyy-MM-dd") + ",晚于开始时间：" + last.ToString("yyyy-MM-dd"), 0);
+                    msg = new FreezeReadMsg("主机最后冻结时间：" + last.ToString("yyyy-MM-dd") + ",晚于开始时间：" + start.ToString("yyyy-MM-dd"), 0);
                     // synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
                     freezeLog.SendMsg(msg);
                     return;

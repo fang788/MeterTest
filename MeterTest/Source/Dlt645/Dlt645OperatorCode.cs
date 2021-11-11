@@ -19,7 +19,7 @@ namespace MeterTest.Source.Dlt645
             this.operatorCode = 0;
             for (int i = 0; i < OperatorCodeBytes; i++)
             {
-                this.operatorCode = this.operatorCode * 256 + Convert.ToByte(operatorCode.Substring((i * 2), 2), 10);
+                this.operatorCode = this.operatorCode * 256 + Convert.ToByte(operatorCode.Substring((i * 2), 2), 16);
             }
         }
 

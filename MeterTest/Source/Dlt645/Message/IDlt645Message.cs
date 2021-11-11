@@ -5,7 +5,7 @@ namespace MeterTest.Source.Dlt645.Message
     public interface IDlt645Message
     {
         byte MinimumFrameSize{get; }
-        byte ControlCode{get; set; }
+        byte ControlCode{get;  }
         MeterAddress Address{get; set; }
         byte DataFieldLen{get; set; }
         byte[] DataField{get; set; }

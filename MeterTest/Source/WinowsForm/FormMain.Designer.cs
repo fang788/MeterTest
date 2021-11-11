@@ -65,8 +65,7 @@ namespace MeterTest.Source.WinowsForm
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.buttonStartAdjMeter = new System.Windows.Forms.Button();
-            this.tabPageChangeCommAddr = new System.Windows.Forms.TabPage();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPageFreeze = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxFreezeSelect = new System.Windows.Forms.ComboBox();
             this.plotViewFreeze = new OxyPlot.WindowsForms.PlotView();
@@ -80,6 +79,18 @@ namespace MeterTest.Source.WinowsForm
             this.label3 = new System.Windows.Forms.Label();
             this.dateTimePickerFreezeReadStart = new System.Windows.Forms.DateTimePicker();
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
+            this.tabPageCmd = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonMeterClear = new System.Windows.Forms.Button();
+            this.statusStrip5 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelMeterClear = new System.Windows.Forms.ToolStripStatusLabel();
+            this.comboBoxMeterClearPassword = new System.Windows.Forms.ComboBox();
+            this.textBoxMeterClearOptCode = new System.Windows.Forms.TextBox();
+            this.textBoxMeterClearAddr = new System.Windows.Forms.TextBox();
+            this.textBoxMeterClearPassword = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
@@ -90,8 +101,11 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageWrite.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).BeginInit();
             this.tabPageV9203.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabPageFreeze.SuspendLayout();
             this.statusStrip4.SuspendLayout();
+            this.tabPageCmd.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.statusStrip5.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -184,8 +198,8 @@ namespace MeterTest.Source.WinowsForm
             this.tabControlMainForm.Controls.Add(this.tabPageRead);
             this.tabControlMainForm.Controls.Add(this.tabPageWrite);
             this.tabControlMainForm.Controls.Add(this.tabPageV9203);
-            this.tabControlMainForm.Controls.Add(this.tabPageChangeCommAddr);
-            this.tabControlMainForm.Controls.Add(this.tabPage1);
+            this.tabControlMainForm.Controls.Add(this.tabPageFreeze);
+            this.tabControlMainForm.Controls.Add(this.tabPageCmd);
             this.tabControlMainForm.Location = new System.Drawing.Point(12, 31);
             this.tabControlMainForm.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.tabControlMainForm.Name = "tabControlMainForm";
@@ -464,36 +478,26 @@ namespace MeterTest.Source.WinowsForm
             this.buttonStartAdjMeter.UseVisualStyleBackColor = true;
             this.buttonStartAdjMeter.Click += new System.EventHandler(this.buttonStartAdjMeter_Click);
             // 
-            // tabPageChangeCommAddr
+            // tabPageFreeze
             // 
-            this.tabPageChangeCommAddr.Location = new System.Drawing.Point(4, 29);
-            this.tabPageChangeCommAddr.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.tabPageChangeCommAddr.Name = "tabPageChangeCommAddr";
-            this.tabPageChangeCommAddr.Size = new System.Drawing.Size(1307, 576);
-            this.tabPageChangeCommAddr.TabIndex = 3;
-            this.tabPageChangeCommAddr.Text = "通讯地址";
-            this.tabPageChangeCommAddr.UseVisualStyleBackColor = true;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.comboBoxFreezeSelect);
-            this.tabPage1.Controls.Add(this.plotViewFreeze);
-            this.tabPage1.Controls.Add(this.buttonFreezeReadStop);
-            this.tabPage1.Controls.Add(this.buttonFreezeRead);
-            this.tabPage1.Controls.Add(this.statusStrip4);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.dateTimePickerFreezeReadEnd);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.dateTimePickerFreezeReadStart);
-            this.tabPage1.Controls.Add(this.statusStrip3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1307, 576);
-            this.tabPage1.TabIndex = 4;
-            this.tabPage1.Text = "冻结";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPageFreeze.Controls.Add(this.label1);
+            this.tabPageFreeze.Controls.Add(this.comboBoxFreezeSelect);
+            this.tabPageFreeze.Controls.Add(this.plotViewFreeze);
+            this.tabPageFreeze.Controls.Add(this.buttonFreezeReadStop);
+            this.tabPageFreeze.Controls.Add(this.buttonFreezeRead);
+            this.tabPageFreeze.Controls.Add(this.statusStrip4);
+            this.tabPageFreeze.Controls.Add(this.label4);
+            this.tabPageFreeze.Controls.Add(this.dateTimePickerFreezeReadEnd);
+            this.tabPageFreeze.Controls.Add(this.label3);
+            this.tabPageFreeze.Controls.Add(this.dateTimePickerFreezeReadStart);
+            this.tabPageFreeze.Controls.Add(this.statusStrip3);
+            this.tabPageFreeze.Location = new System.Drawing.Point(4, 29);
+            this.tabPageFreeze.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPageFreeze.Name = "tabPageFreeze";
+            this.tabPageFreeze.Size = new System.Drawing.Size(1307, 576);
+            this.tabPageFreeze.TabIndex = 4;
+            this.tabPageFreeze.Text = "冻结";
+            this.tabPageFreeze.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -636,6 +640,134 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip3.TabIndex = 1;
             this.statusStrip3.Text = "statusStrip3";
             // 
+            // tabPageCmd
+            // 
+            this.tabPageCmd.Controls.Add(this.groupBox1);
+            this.tabPageCmd.Location = new System.Drawing.Point(4, 29);
+            this.tabPageCmd.Name = "tabPageCmd";
+            this.tabPageCmd.Size = new System.Drawing.Size(1307, 576);
+            this.tabPageCmd.TabIndex = 5;
+            this.tabPageCmd.Text = "特殊命令";
+            this.tabPageCmd.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonMeterClear);
+            this.groupBox1.Controls.Add(this.statusStrip5);
+            this.groupBox1.Controls.Add(this.comboBoxMeterClearPassword);
+            this.groupBox1.Controls.Add(this.textBoxMeterClearOptCode);
+            this.groupBox1.Controls.Add(this.textBoxMeterClearAddr);
+            this.groupBox1.Controls.Add(this.textBoxMeterClearPassword);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Location = new System.Drawing.Point(16, 20);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(423, 241);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "清零";
+            // 
+            // buttonMeterClear
+            // 
+            this.buttonMeterClear.Location = new System.Drawing.Point(141, 168);
+            this.buttonMeterClear.Name = "buttonMeterClear";
+            this.buttonMeterClear.Size = new System.Drawing.Size(94, 29);
+            this.buttonMeterClear.TabIndex = 4;
+            this.buttonMeterClear.Text = "清零";
+            this.buttonMeterClear.UseVisualStyleBackColor = true;
+            this.buttonMeterClear.Click += new System.EventHandler(this.buttonMeterClear_Click);
+            // 
+            // statusStrip5
+            // 
+            this.statusStrip5.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelMeterClear});
+            this.statusStrip5.Location = new System.Drawing.Point(3, 212);
+            this.statusStrip5.Name = "statusStrip5";
+            this.statusStrip5.Size = new System.Drawing.Size(417, 26);
+            this.statusStrip5.TabIndex = 3;
+            this.statusStrip5.Text = "statusStrip5";
+            // 
+            // toolStripStatusLabelMeterClear
+            // 
+            this.toolStripStatusLabelMeterClear.Name = "toolStripStatusLabelMeterClear";
+            this.toolStripStatusLabelMeterClear.Size = new System.Drawing.Size(84, 20);
+            this.toolStripStatusLabelMeterClear.Text = "清零状态栏";
+            // 
+            // comboBoxMeterClearPassword
+            // 
+            this.comboBoxMeterClearPassword.FormattingEnabled = true;
+            this.comboBoxMeterClearPassword.Items.AddRange(new object[] {
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09"});
+            this.comboBoxMeterClearPassword.Location = new System.Drawing.Point(141, 44);
+            this.comboBoxMeterClearPassword.Name = "comboBoxMeterClearPassword";
+            this.comboBoxMeterClearPassword.Size = new System.Drawing.Size(54, 28);
+            this.comboBoxMeterClearPassword.TabIndex = 2;
+            this.comboBoxMeterClearPassword.Text = "02";
+            // 
+            // textBoxMeterClearOptCode
+            // 
+            this.textBoxMeterClearOptCode.Location = new System.Drawing.Point(141, 121);
+            this.textBoxMeterClearOptCode.MaxLength = 8;
+            this.textBoxMeterClearOptCode.Name = "textBoxMeterClearOptCode";
+            this.textBoxMeterClearOptCode.Size = new System.Drawing.Size(185, 27);
+            this.textBoxMeterClearOptCode.TabIndex = 1;
+            this.textBoxMeterClearOptCode.Text = "12345678";
+            // 
+            // textBoxMeterClearAddr
+            // 
+            this.textBoxMeterClearAddr.Location = new System.Drawing.Point(141, 85);
+            this.textBoxMeterClearAddr.MaxLength = 12;
+            this.textBoxMeterClearAddr.Name = "textBoxMeterClearAddr";
+            this.textBoxMeterClearAddr.Size = new System.Drawing.Size(185, 27);
+            this.textBoxMeterClearAddr.TabIndex = 1;
+            this.textBoxMeterClearAddr.Text = "111111111111";
+            // 
+            // textBoxMeterClearPassword
+            // 
+            this.textBoxMeterClearPassword.Location = new System.Drawing.Point(201, 45);
+            this.textBoxMeterClearPassword.MaxLength = 6;
+            this.textBoxMeterClearPassword.Name = "textBoxMeterClearPassword";
+            this.textBoxMeterClearPassword.Size = new System.Drawing.Size(125, 27);
+            this.textBoxMeterClearPassword.TabIndex = 1;
+            this.textBoxMeterClearPassword.Text = "123456";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(21, 121);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(99, 20);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "操作者代码：";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(21, 85);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(84, 20);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "通讯地址：";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(21, 45);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(54, 20);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "密码：";
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
@@ -669,10 +801,15 @@ namespace MeterTest.Source.WinowsForm
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).EndInit();
             this.tabPageV9203.ResumeLayout(false);
             this.tabPageV9203.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.tabPageFreeze.ResumeLayout(false);
+            this.tabPageFreeze.PerformLayout();
             this.statusStrip4.ResumeLayout(false);
             this.statusStrip4.PerformLayout();
+            this.tabPageCmd.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.statusStrip5.ResumeLayout(false);
+            this.statusStrip5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -704,8 +841,7 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridViewWrite;
         private System.Windows.Forms.TabPage tabPageV9203;
-        private System.Windows.Forms.TabPage tabPageChangeCommAddr;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPageFreeze;
         private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.RichTextBox richTextBoxAdjMeterStatus;
         private System.Windows.Forms.Label label2;
@@ -731,5 +867,17 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBoxFreezeSelect;
         private System.Windows.Forms.Button buttonFreezeReadStop;
+        private System.Windows.Forms.TabPage tabPageCmd;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonMeterClear;
+        private System.Windows.Forms.StatusStrip statusStrip5;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMeterClear;
+        private System.Windows.Forms.ComboBox comboBoxMeterClearPassword;
+        private System.Windows.Forms.TextBox textBoxMeterClearOptCode;
+        private System.Windows.Forms.TextBox textBoxMeterClearAddr;
+        private System.Windows.Forms.TextBox textBoxMeterClearPassword;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
     }
 }

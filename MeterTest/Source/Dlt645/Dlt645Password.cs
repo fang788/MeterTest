@@ -36,7 +36,7 @@ namespace MeterTest.Source.Dlt645
             this.password = 0;
             for (int i = 0; i < PosswordBytes - 1; i++)
             {
-                this.password = this.password * 256 + Convert.ToByte(password.Substring(2 + (i * 2), 2), 10);
+                this.password = this.password * 256 + Convert.ToByte(password.Substring(2 + (i * 2), 2), 16);
             }
         }
         public byte[] GetPosswordBytes()

@@ -770,5 +770,85 @@ namespace MeterTest.Source.WinowsForm
             }
             optLock = false; 
         }
+        private void MeterClearDisplay(Object obj)
+        {
+            toolStripStatusLabelMeterClear.Text = obj.ToString();
+        }
+        private void buttonMeterClear_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabelMeterClear.Text = "清零中....";
+            if(!comboBoxMeterClearPassword.Items.Contains(comboBoxMeterClearPassword.Text))
+            {
+                toolStripStatusLabelMeterClear.Text = "请选择密级";
+                return;
+            }
+            if(textBoxMeterClearPassword.Text.Length != 6)
+            {
+                toolStripStatusLabelMeterClear.Text = "密码长度不正确";
+                return;
+            }
+            if(textBoxMeterClearAddr.Text.Length != 12)
+            {
+                toolStripStatusLabelMeterClear.Text = "通讯地址长度不为12";
+                return;
+            }
+            if(textBoxMeterClearOptCode.Text.Length != 8)
+            {
+                toolStripStatusLabelMeterClear.Text = "操作者代码长度不为8";
+                return;
+            }
+            Dlt645Password password = null;
+            try
+            {
+                password = new Dlt645Password(comboBoxMeterClearPassword.Text + textBoxMeterClearPassword.Text);
+            }
+            catch (System.Exception)
+            {
+                toolStripStatusLabelMeterClear.Text = "密码格式不正确";
+                return;
+            }
+            MeterAddress addr = null;
+            try
+            {
+                addr = new MeterAddress(textBoxMeterClearAddr.Text); 
+            }
+            catch (System.Exception)
+            {
+                toolStripStatusLabelMeterClear.Text = "通讯地址格式不正确";
+                return;
+            }
+            Dlt645OperatorCode optCode = null;
+            try
+            {
+                optCode = new Dlt645OperatorCode(textBoxMeterClearOptCode.Text);
+            }
+            catch (TimeoutException)
+            {
+                toolStripStatusLabelMeterClear.Text = "响应超时";
+            }
+            catch (System.Exception)
+            {
+                toolStripStatusLabelMeterClear.Text = "操作者代码格式不正确";
+                return;
+            }
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    client.MeterClear(addr, password, optCode);
+                }
+                catch (TimeoutException)
+                {
+                    // toolStripStatusLabelMeterClear.Text = "响应超时";
+                    synchronizationContext.Post(MeterClearDisplay, "响应超时");
+                }   
+                catch (Exception exc)
+                {
+                    // toolStripStatusLabelMeterClear.Text = "其他错误" + exc.Message;
+                    synchronizationContext.Post(MeterClearDisplay, "其他错误" + exc.Message);
+                }      
+                synchronizationContext.Post(MeterClearDisplay, "清零完成");
+            });
+        }
     }
 }

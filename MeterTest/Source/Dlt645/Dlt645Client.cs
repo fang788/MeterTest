@@ -46,5 +46,10 @@ namespace MeterTest.Source.Dlt645
             WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, new Dlt645Password(), new Dlt645OperatorCode());
             WriteResponse response = transport.UnicastMessage<WriteResponse>(requset);
         }
+        public void MeterClear(MeterAddress address, Dlt645Password password, Dlt645OperatorCode opCode)
+        {
+            MeterClearRequset request = new MeterClearRequset(address, password, opCode);
+            transport.UnicastMessage<WriteResponse>(request);
+        }
     }
 }
