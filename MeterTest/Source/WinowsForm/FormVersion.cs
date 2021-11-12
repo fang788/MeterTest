@@ -15,6 +15,7 @@ namespace MeterTest.Source.WinowsForm
         public FormVersion()
         {
             InitializeComponent();
+            labelBuildDateTime.Text = System.IO.File.GetLastWriteTime(this.GetType().Assembly.Location).ToString("yyyy-MM-dd HH:mm:ss"); 
         }
     }
 }

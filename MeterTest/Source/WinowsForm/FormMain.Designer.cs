@@ -510,7 +510,7 @@ namespace MeterTest.Source.WinowsForm
             "正向无功电能",
             "反向无功电能"});
             this.comboBoxFreezeSelect.Location = new System.Drawing.Point(549, 381);
-            this.comboBoxFreezeSelect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxFreezeSelect.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFreezeSelect.Name = "comboBoxFreezeSelect";
             this.comboBoxFreezeSelect.Size = new System.Drawing.Size(121, 25);
             this.comboBoxFreezeSelect.TabIndex = 10;
@@ -622,7 +622,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             this.tabPageCmd.Controls.Add(this.groupBox1);
             this.tabPageCmd.Location = new System.Drawing.Point(4, 26);
-            this.tabPageCmd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageCmd.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageCmd.Name = "tabPageCmd";
             this.tabPageCmd.Size = new System.Drawing.Size(1044, 457);
             this.tabPageCmd.TabIndex = 5;
@@ -641,20 +641,20 @@ namespace MeterTest.Source.WinowsForm
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Location = new System.Drawing.Point(13, 16);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(338, 193);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(282, 211);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "清零";
             // 
             // buttonMeterClear
             // 
-            this.buttonMeterClear.Location = new System.Drawing.Point(113, 134);
-            this.buttonMeterClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonMeterClear.Location = new System.Drawing.Point(96, 151);
+            this.buttonMeterClear.Margin = new System.Windows.Forms.Padding(2);
             this.buttonMeterClear.Name = "buttonMeterClear";
-            this.buttonMeterClear.Size = new System.Drawing.Size(75, 23);
+            this.buttonMeterClear.Size = new System.Drawing.Size(80, 34);
             this.buttonMeterClear.TabIndex = 4;
             this.buttonMeterClear.Text = "清零";
             this.buttonMeterClear.UseVisualStyleBackColor = true;
@@ -665,10 +665,10 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip5.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMeterClear});
-            this.statusStrip5.Location = new System.Drawing.Point(2, 169);
+            this.statusStrip5.Location = new System.Drawing.Point(2, 187);
             this.statusStrip5.Name = "statusStrip5";
             this.statusStrip5.Padding = new System.Windows.Forms.Padding(1, 0, 11, 0);
-            this.statusStrip5.Size = new System.Drawing.Size(334, 22);
+            this.statusStrip5.Size = new System.Drawing.Size(278, 22);
             this.statusStrip5.TabIndex = 3;
             this.statusStrip5.Text = "statusStrip5";
             // 
@@ -691,8 +691,8 @@ namespace MeterTest.Source.WinowsForm
             "07",
             "08",
             "09"});
-            this.comboBoxMeterClearPassword.Location = new System.Drawing.Point(113, 35);
-            this.comboBoxMeterClearPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxMeterClearPassword.Location = new System.Drawing.Point(96, 32);
+            this.comboBoxMeterClearPassword.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxMeterClearPassword.Name = "comboBoxMeterClearPassword";
             this.comboBoxMeterClearPassword.Size = new System.Drawing.Size(44, 25);
             this.comboBoxMeterClearPassword.TabIndex = 2;
@@ -700,8 +700,8 @@ namespace MeterTest.Source.WinowsForm
             // 
             // textBoxMeterClearOptCode
             // 
-            this.textBoxMeterClearOptCode.Location = new System.Drawing.Point(113, 97);
-            this.textBoxMeterClearOptCode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxMeterClearOptCode.Location = new System.Drawing.Point(96, 107);
+            this.textBoxMeterClearOptCode.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMeterClearOptCode.MaxLength = 8;
             this.textBoxMeterClearOptCode.Name = "textBoxMeterClearOptCode";
             this.textBoxMeterClearOptCode.Size = new System.Drawing.Size(149, 23);
@@ -710,8 +710,8 @@ namespace MeterTest.Source.WinowsForm
             // 
             // textBoxMeterClearAddr
             // 
-            this.textBoxMeterClearAddr.Location = new System.Drawing.Point(113, 68);
-            this.textBoxMeterClearAddr.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxMeterClearAddr.Location = new System.Drawing.Point(96, 70);
+            this.textBoxMeterClearAddr.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMeterClearAddr.MaxLength = 12;
             this.textBoxMeterClearAddr.Name = "textBoxMeterClearAddr";
             this.textBoxMeterClearAddr.Size = new System.Drawing.Size(149, 23);
@@ -720,8 +720,8 @@ namespace MeterTest.Source.WinowsForm
             // 
             // textBoxMeterClearPassword
             // 
-            this.textBoxMeterClearPassword.Location = new System.Drawing.Point(161, 36);
-            this.textBoxMeterClearPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxMeterClearPassword.Location = new System.Drawing.Point(144, 33);
+            this.textBoxMeterClearPassword.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMeterClearPassword.MaxLength = 6;
             this.textBoxMeterClearPassword.Name = "textBoxMeterClearPassword";
             this.textBoxMeterClearPassword.Size = new System.Drawing.Size(101, 23);
@@ -731,7 +731,7 @@ namespace MeterTest.Source.WinowsForm
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 97);
+            this.label7.Location = new System.Drawing.Point(17, 110);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(80, 17);
@@ -741,7 +741,7 @@ namespace MeterTest.Source.WinowsForm
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 68);
+            this.label6.Location = new System.Drawing.Point(17, 73);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(68, 17);
