@@ -841,11 +841,13 @@ namespace MeterTest.Source.WinowsForm
                 {
                     // toolStripStatusLabelMeterClear.Text = "响应超时";
                     synchronizationContext.Post(MeterClearDisplay, "响应超时");
+                    return;
                 }   
                 catch (Exception exc)
                 {
                     // toolStripStatusLabelMeterClear.Text = "其他错误" + exc.Message;
                     synchronizationContext.Post(MeterClearDisplay, "其他错误" + exc.Message);
+                    return;
                 }      
                 synchronizationContext.Post(MeterClearDisplay, "清零完成");
             });
