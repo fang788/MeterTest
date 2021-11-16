@@ -237,14 +237,14 @@ namespace MeterTest.Source.Test
         public byte[] ReadFreeData(DateTime dateTime, int no)
         {
             DataId dataId = new DataId();
-            dataId.Id = (uint)(0xA2100000 + no);
+            dataId.Id = (uint)(0xA2F00003);
             byte[] array = new byte[6];
-            array[0] = (byte)Convert.ToInt32((dateTime.Year % 100).ToString(), 16);
-            array[1] = (byte)Convert.ToInt32(dateTime.Month       .ToString(), 16);
-            array[2] = (byte)Convert.ToInt32(dateTime.Day         .ToString(), 16);
-            array[3] = (byte)Convert.ToInt32(dateTime.Hour        .ToString(), 16);
-            array[4] = (byte)Convert.ToInt32(dateTime.Minute      .ToString(), 16);
-            array[5] = (byte)0;
+            array[5] = (byte)Convert.ToInt32((dateTime.Year % 100).ToString(), 16);
+            array[4] = (byte)Convert.ToInt32(dateTime.Month       .ToString(), 16);
+            array[3] = (byte)Convert.ToInt32(dateTime.Day         .ToString(), 16);
+            array[2] = (byte)Convert.ToInt32(dateTime.Hour        .ToString(), 16);
+            array[1] = (byte)Convert.ToInt32(dateTime.Minute      .ToString(), 16);
+            array[0] = (byte)no;
             return client.Read(MeterAddress.Wildcard, dataId, array);
         }
 
@@ -583,7 +583,7 @@ namespace MeterTest.Source.Test
                     try
                     {
                         data = null;
-                        rst = ReadFreeData(dateTimeTmp, 0xFF);
+                        rst = ReadFreeData(dateTimeTmp, 0x01);
                         if(rst != null)
                         {
                             data = PhaseChangFreezeDataConvert(rst);
