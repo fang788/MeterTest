@@ -1,4 +1,4 @@
-namespace MeterTest.Source.Test
+namespace MeterTest.Source.Freeze
 {
     public interface IFreezeLog
     {

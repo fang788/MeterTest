@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MeterTest.Source.Test
+namespace MeterTest.Source.Freeze
 {
     public class FreezeData:IComparable
     {

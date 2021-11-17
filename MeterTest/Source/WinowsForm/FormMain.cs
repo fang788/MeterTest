@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
-using MeterTest.Source.Test;
+using MeterTest.Source.Freeze;
 using MeterTest.Source.Emu;
 using MeterTest.Source.WinowsForm;
 using Newtonsoft.Json;

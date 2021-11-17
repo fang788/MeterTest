@@ -4,7 +4,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
-namespace MeterTest.Source.Test
+namespace MeterTest.Source.Freeze
 {
     public class FreezeLineChart
     {
