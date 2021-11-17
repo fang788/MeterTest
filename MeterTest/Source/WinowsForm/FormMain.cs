@@ -21,10 +21,11 @@ using OxyPlot.Axes;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Annotations;
+using MeterTest.Source.Read;
 
 namespace MeterTest.Source.WinowsForm
 {
-    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog
+    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog
     {
         private FormLogger formLogger = new FormLogger();
         private SerialPort serialPort;
@@ -42,6 +43,7 @@ namespace MeterTest.Source.WinowsForm
         private DateTimeAxis    dateTimeAxis    = null; // y轴
         private LinearAxis      dataAxis = null; // x轴
         private FreezeDataRead freezeDataRead;
+        private ReadData readData;
         static public DataIdDbContext DataIdDb = new DataIdDbContext();
         public FormMain()
         {
@@ -56,6 +58,7 @@ namespace MeterTest.Source.WinowsForm
                 return;
             }
             ParaUpdate();
+            readData = new ReadData(this.client, this, meterAddress);
              //为dgv增加复选框列
             DataGridViewCheckBoxColumn checkbox = new DataGridViewCheckBoxColumn();
             //列显示名称
@@ -273,174 +276,63 @@ namespace MeterTest.Source.WinowsForm
                 }
             }
         }
-        
-        private void ReadOptUiUpdate(Object obj)
+        private void ReadDataIdEndDisplay(Object obj) 
         {
-            Dictionary<String, CommResult> dic = (Dictionary<String, CommResult>)obj;
-            
-            CommResult rst;
-            if(dic.Count > 0)
-            {
-                for (int i = 0; i < dic.Count; i++)
-                {
-                    if(dic.TryGetValue("read", out rst))
-                    {
-                        ReadDisplay(rst);
-                    }
-                    if(dic.TryGetValue("reading", out rst))
-                    {
-                        int index = 0;
-                        for (int j = 0; j < dataGridViewReadList.RowCount; j++)
-                        {
-                            if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
-                            {
-                                index = j;
-                                break;
-                            }
-                        }
-                        dataGridViewReadList.Rows[index].Cells[7].Value = null;
-                        dataGridViewReadList.CurrentCell = dataGridViewReadList.Rows[index].Cells[7];
-                        toolStripStatusLabelStatus.Text = "正在读取数据标识：" + rst.DataId.Id.ToString("X8") + " ...";
-                    }
-                    if(dic.TryGetValue("Read Cycle", out rst))
-                    {
-                        ReadDisplay(rst);
-                    }
-                }
-            }
-        }
-        private void ReadDisplay(CommResult rst) 
-        {
+            ReadMsg msg = (ReadMsg)obj;
             string displayStr = null;
             int index = 0;
             for (int j = 0; j < dataGridViewReadList.RowCount; j++)
             {
-                if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == rst.DataId.Id.ToString("X8"))
+                if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == msg.DataId.Id.ToString("X8"))
                 {
                     index = j;
                     break;
                 }
             }
-            if(rst.Result)
+            dataGridViewReadList.CurrentCell = dataGridViewReadList.Rows[index].Cells[7];
+            if(msg.IsSuccess)
             {
-                displayStr = rst.DataId.GetDataString(rst.DataBytes);
+                displayStr = msg.DataId.GetDataString(msg.DataId.DataArray);
                 dataGridViewReadList.Rows[index].Cells[7].Style.BackColor = Color.White;
             }
             else
             {
-                displayStr = rst.Error.ToString();
+                displayStr = msg.ErrorLog.ToString();
                 dataGridViewReadList.Rows[index].Cells[7].Style.BackColor = Color.Red;
             }
             dataGridViewReadList.Rows[index].Cells[7].Value = displayStr;
         }
-        private void ReadOnce(Object obj)
+        private void ReadingDataIdDisplay(Object obj) 
         {
-            List<DataId> dataIdList = (List<DataId>)obj;
-            CommResult rst = null;
-            Interlocked.Exchange(ref cycleSwith, 10);
-            foreach (var item in dataIdList)
+            DataId dataId = (DataId)obj;
+            for (int j = 0; j < dataGridViewReadList.RowCount; j++)
             {
-                try
+                if(dataGridViewReadList.Rows[j].Cells[2].Value.ToString() == dataId.Id.ToString("X8"))
                 {
-                    rst = new CommResult();
-                    Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
-                    rst.DataId = item;
-                    dic.Add("reading", rst);
-                    synchronizationContext.Post(ReadOptUiUpdate, dic);
-                    rst.DataBytes = client.Read(meterAddress, item);
-                    rst.Result = true;
-                }
-                catch (ClientException e)
-                {
-                    rst.Error = e.Message;
-                }
-                catch (TimeoutException)
-                {
-                    rst.Error = "响应超时";
-                    //break;
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show("未知错误" + e.Message, "MeterTest",  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    rst.Error = "未知错误";
-                    break;
-                }
-                finally
-                {
-                    Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
-                    dic.Add("read", rst);
-                    synchronizationContext.Post(ReadOptUiUpdate, dic);
-                    Thread.Sleep(500);
-                }
-                if(cycleSwith == 0)
-                {
+                    dataGridViewReadList.CurrentCell = dataGridViewReadList.Rows[j].Cells[7];
+                    dataGridViewReadList.Rows[j].Cells[7].Value = null;
+                    toolStripStatusLabelStatus.Text = "正在读取数据标识：" + dataId.Id.ToString("X8") + " ...";
                     break;
                 }
             }
-            CloseLock(); /* 关闭锁 */
         }
-        private void ReadCycle(Object obj)
+        private void ReadEndDisplay(Object obj)
         {
-            List<DataId> dataIdList = (List<DataId>)obj;
-            CommResult rst = null;
-            // Interlocked.Increment(ref cycleSwith);
-            Interlocked.Exchange(ref cycleSwith, 10);
-            // cycleSwith = true;
-            int cycleReadErrorCnt = 0;
-            int cycleReadOkCnt = 0;
-            int timeOutCnt = 0;
-            while(cycleSwith != 0)
-            {
-                for (int i = 0; i < dataIdList.Count; i++)
-                {
-                    try
-                    {
-                        rst = new CommResult();
-                        DataId item = dataIdList[i];
-                        rst.DataId = item;
-                        Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
-                        dic.Add("reading", rst);
-                        synchronizationContext.Post(ReadOptUiUpdate, dic);
-                        rst.DataBytes = client.Read(meterAddress, item);
-                        rst.Result = true;
-                        cycleReadOkCnt++;
-                    }
-                    catch (ClientException e)
-                    {
-                        rst.Error = e.Message;
-                        cycleReadErrorCnt++;
-                    }
-                    catch (TimeoutException)
-                    {
-                        rst.Error = "响应超时";
-                        timeOutCnt++;
-                        Interlocked.Exchange(ref cycleSwith, 0);
-                        break;
-                    }
-                    catch(Exception e)
-                    {
-                        MessageBox.Show("未知错误" + e.Message, "MeterTest",  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        rst.Error = "未知错误";
-                        Interlocked.Exchange(ref cycleSwith, 0);
-                        break;
-                    }
-                    finally
-                    {
-                        Dictionary<String, CommResult> dic = new Dictionary<string, CommResult>();
-                        dic.Add("Read Cycle", rst);
-                        synchronizationContext.Post(ReadOptUiUpdate, dic);
-                        Thread.Sleep(500);
-                    }
-                    if(cycleSwith == 0)
-                    {
-                        break;
-                    }
-                }
-            }
-            MessageBox.Show("响应超时次数: " + timeOutCnt.ToString() + "\n"
-                           + "错误响应次数: "+ cycleReadErrorCnt.ToString() + "\n"
-                           + "正常响应次数: "+ cycleReadOkCnt.ToString() + "\n", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            CloseLock(); /* 关闭锁 */
+            toolStripStatusLabelStatus.Text = obj.ToString();
+        }
+        public void SendMsg(ReadMsg msg)
+        {
+            synchronizationContext.Post(ReadDataIdEndDisplay, msg);
+        }
+        public void SendReadDataId(DataId dataId)
+        {
+            synchronizationContext.Post(ReadingDataIdDisplay, dataId);
+        }
+
+        public void ReadEnd()
+        {
+            synchronizationContext.Post(SetOptLock, false); /* 关闭锁 */
+            synchronizationContext.Post(ReadEndDisplay, "读取完成");
         }
         private void buttonReadOne_Click(object sender, EventArgs e)
         {
@@ -463,7 +355,7 @@ namespace MeterTest.Source.WinowsForm
                     dataIdList.Add(dataId);
                 }
             }
-            Thread readOnceThr = new Thread(ReadOnce);
+            Thread readOnceThr = new Thread(readData.ReadOnce);
             readOnceThr.IsBackground = true;
             readOnceThr.Start(dataIdList);
         }
@@ -487,14 +379,15 @@ namespace MeterTest.Source.WinowsForm
                     dataIdList.Add(dataId);
                 }
             }
-            Thread readCycleThr = new Thread(ReadCycle);
+            Thread readCycleThr = new Thread(readData.ReadCycle);
             readCycleThr.IsBackground = true;
             readCycleThr.Start(dataIdList);
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            Interlocked.Exchange(ref cycleSwith, 0);
+            // Interlocked.Exchange(ref cycleSwith, 0);
+            readData.EndRead();
         }
         
         private void ReadTabPageSizeZoom()
@@ -860,5 +753,7 @@ namespace MeterTest.Source.WinowsForm
                 ReadTabPageSizeZoom();
             }
         }
+
+        
     }
 }

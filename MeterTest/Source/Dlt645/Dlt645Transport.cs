@@ -46,6 +46,11 @@ namespace MeterTest.Source.Dlt645
                 logger.Log($"{e.GetType().Name}, {e}");
                 throw;
             }
+            catch(InvalidOperationException e)
+            {
+                logger.Log("串口：" + port.PortName + "已被打开!\n\r" + $"{e.GetType().Name}, {e}");
+                throw new ClientException("串口：" + port.PortName + " 已被打开");
+            }
             catch(Exception e)
             {
                 logger.Log($"{e.GetType().Name}, {e}");
