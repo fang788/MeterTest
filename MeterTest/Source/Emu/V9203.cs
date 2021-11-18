@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MeterTest.Source.Emu
 {
-    public class V9203
+    public class V9203 : EmuAdj
     {
         public readonly List<DataId> dataIdRegList = new List<DataId>()
         {
@@ -90,10 +90,11 @@ namespace MeterTest.Source.Emu
         };
         public readonly DataId dataIdClrReg = new DataId("校表数据清零", 0xA0020001, "HEX", 1, new byte[]{0x00}, "", false, true);
         public readonly DataId dataIdReset = new DataId("复位", 0xA0020000, "HEX", 1, new byte[]{0x00}, "", false, true);
-        private Dlt645Client client;
-        private IAdjMeterLogger logger;
-        private MeterAddress address;
-        private KpTableBody tableBody;
+        // private Dlt645Client client;
+        // private IAdjMeterLogger logger;
+        // private MeterAddress address;
+        // private KpTableBody kpTableBody;
+        
 
         public V9203()
         {
@@ -106,35 +107,35 @@ namespace MeterTest.Source.Emu
             this.logger = logger;
             GetTableBodyPortName();
         }
-        private void GetTableBodyPortName()
-        {
-            Options opt = null;
-            if(File.Exists("Options.txt"))
-            {
-                opt = JsonConvert.DeserializeObject<Options>(File.ReadAllText("Options.txt"));
-            }
-            else
-            {
-                opt = new Options();
-            }
-            this.tableBody = new KpTableBody();
-            this.tableBody.Dev_Port = Convert.ToInt32(opt.KpTableBodyPortName.Replace("COM", ""));
-            //tableBody.PowerOn();
-            //string s = tableBody.KpTableBodyRead();
-        }
+        // private void GetTableBodyPortName()
+        // {
+        //     Options opt = null;
+        //     if(File.Exists("Options.txt"))
+        //     {
+        //         opt = JsonConvert.DeserializeObject<Options>(File.ReadAllText("Options.txt"));
+        //     }
+        //     else
+        //     {
+        //         opt = new Options();
+        //     }
+        //     this.kpTableBody = new KpTableBody();
+        //     this.kpTableBody.Dev_Port = Convert.ToInt32(opt.KpTableBodyPortName.Replace("COM", ""));
+        //     //kpTableBody.PowerOn();
+        //     //string s = kpTableBody.KpTableBodyRead();
+        // }
 
         // private Dlt645Password password = new Dlt645Password();
         // private Dlt645OperatorCode operatorCode = new Dlt645OperatorCode();
-        public void RegDataClr()
-        {
-            client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
-        }
-        public void Reset()
+        // public void RegDataClr()
+        // {
+        //     client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
+        // }
+        public override void Reset()
         {
             client.Write(address, dataIdReset, new Dlt645Password(), new Dlt645OperatorCode());
             // Thread.Sleep(2000);
         }
-        public void RegDataInit()
+        public override void RegDataInit()
         {
             foreach (var item in dataIdRegList)
             {
@@ -142,12 +143,12 @@ namespace MeterTest.Source.Emu
                 Thread.Sleep(500);
             }
         }
-        public MeterAddress ReadMeterAddress()
-        {
-            DataId readAddress = new DataId(0x04000401);
-            byte[] data = client.Read(MeterAddress.Wildcard, readAddress);
-            return new MeterAddress(data);
-        }
+        // public MeterAddress ReadMeterAddress()
+        // {
+        //     DataId readAddress = new DataId(0x04000401);
+        //     byte[] data = client.Read(MeterAddress.Wildcard, readAddress);
+        //     return new MeterAddress(data);
+        // }
         public void FactoryIn(MeterAddress addr)
         {
             DataId factoryStatusDataId = new DataId(0xA5A01101);
@@ -155,27 +156,27 @@ namespace MeterTest.Source.Emu
             factoryStatusDataId.DataArray = new byte[]{0x55};
             client.Write(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         }
-        public void FactoryIn()
-        {
-            DataId factoryStatusDataId = new DataId(0xA5A01101);
-            factoryStatusDataId.DataBytes = 1;
-            factoryStatusDataId.DataArray = new byte[]{0x55};
-            client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
-        }
-        public void FactoryOut()
-        {
-            DataId factoryStatusDataId = new DataId(0xA5A01101);
-            factoryStatusDataId.DataBytes = 1;
-            factoryStatusDataId.DataArray = new byte[]{0xAA};
-            client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
-        }
-        public void FactoryOut(MeterAddress addr)
-        {
-            DataId factoryStatusDataId = new DataId(0xA5A01101);
-            factoryStatusDataId.DataBytes = 1;
-            factoryStatusDataId.DataArray = new byte[]{0xAA};
-            client.Write(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
-        }
+        // public void FactoryIn()
+        // {
+        //     DataId factoryStatusDataId = new DataId(0xA5A01101);
+        //     factoryStatusDataId.DataBytes = 1;
+        //     factoryStatusDataId.DataArray = new byte[]{0x55};
+        //     client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        // }
+        // public void FactoryOut()
+        // {
+        //     DataId factoryStatusDataId = new DataId(0xA5A01101);
+        //     factoryStatusDataId.DataBytes = 1;
+        //     factoryStatusDataId.DataArray = new byte[]{0xAA};
+        //     client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        // }
+        // public void FactoryOut(MeterAddress addr)
+        // {
+        //     DataId factoryStatusDataId = new DataId(0xA5A01101);
+        //     factoryStatusDataId.DataBytes = 1;
+        //     factoryStatusDataId.DataArray = new byte[]{0xAA};
+        //     client.Write(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        // }
         private double GetVariableError(V9203VariableType type)
         {
             DataId dataId = new DataId(v9203AdjList[(int)type].VariableDataId);
@@ -190,7 +191,7 @@ namespace MeterTest.Source.Emu
                 for (i = 0; i < 5; i++)
                 {
                     Thread.Sleep(3000);
-                    status = this.tableBody.KpTableBodyRead();
+                    status = this.kpTableBody.KpTableBodyRead();
                     status = status.Split(',')[v9203AdjList[(int)type].VariableIndex].Trim(new char[]{'V','A','W','v','a','r','w','+','-'});
                     double tb = Convert.ToDouble(status);
                     data = client.Read(address, dataId);
@@ -230,7 +231,7 @@ namespace MeterTest.Source.Emu
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    status = this.tableBody.KpTableBodyRead();
+                    status = this.kpTableBody.KpTableBodyRead();
                     double[] tb = new double[array.Length];
                     for (int k = 0; k < array.Length; k++)
                     {
@@ -306,15 +307,15 @@ namespace MeterTest.Source.Emu
         private void AdjMeterA()
         {
             TableBodyError error = new TableBodyError();
-            tableBody.IABC = "A";
-            tableBody.CosP = "1.0";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "A";
+            kpTableBody.CosP = "1.0";
+            kpTableBody.PowerOn();
             Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PA);
 
-            tableBody.IABC = "A";
-            tableBody.CosP = "0.5L";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "A";
+            kpTableBody.CosP = "0.5L";
+            kpTableBody.PowerOn();
             Thread.Sleep(5000);
             // V9203VariableType[] array = new V9203VariableType[]
             // {
@@ -342,15 +343,15 @@ namespace MeterTest.Source.Emu
         private void AdjMeterB()
         {
             TableBodyError error = new TableBodyError();
-            tableBody.IABC = "B";
-            tableBody.CosP = "1.0";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "B";
+            kpTableBody.CosP = "1.0";
+            kpTableBody.PowerOn();
             Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PB);
 
-            tableBody.IABC = "B";
-            tableBody.CosP = "0.5L";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "B";
+            kpTableBody.CosP = "0.5L";
+            kpTableBody.PowerOn();
             Thread.Sleep(5000);
             // V9203VariableType[] array = new V9203VariableType[]
             // {
@@ -378,15 +379,15 @@ namespace MeterTest.Source.Emu
         private void AdjMeterC()
         {
             TableBodyError error = new TableBodyError();
-            tableBody.IABC = "C";
-            tableBody.CosP = "1.0";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "C";
+            kpTableBody.CosP = "1.0";
+            kpTableBody.PowerOn();
             Thread.Sleep(3000);
             error.P0 = GetVariableError(V9203VariableType.PC);
 
-            tableBody.IABC = "C";
-            tableBody.CosP = "0.5L";
-            tableBody.PowerOn();
+            kpTableBody.IABC = "C";
+            kpTableBody.CosP = "0.5L";
+            kpTableBody.PowerOn();
             Thread.Sleep(7000);
             // V9203VariableType[] array = new V9203VariableType[]
             // {
@@ -411,18 +412,18 @@ namespace MeterTest.Source.Emu
             AdjVariableError(V9203VariableType.QC, error.GetQAdj());
             AdjAngleError(V9203VariableType.ANGLE_C, error.GetAngleAdj());
         }
-        public void AdjMeter()
+        public override void AdjMeter()
         {
             try
             {
                 logger.IAdjMeterLog("1.正在升源。。。");
-                tableBody.PowerOn();
-                tableBody.PowerPause();
+                kpTableBody.PowerOn();
+                kpTableBody.PowerPause();
                 this.address = ReadMeterAddress();
                 logger.IAdjMeterLog("2.读取表号完成，表号：" + address.ToString());
                 FactoryIn();
                 logger.IAdjMeterLog("3.已切换至厂内状态");
-                RegDataClr();
+                AdjDataClr();
                 logger.IAdjMeterLog("4.校表数据清零完成");
                 RegDataInit();
                 Reset();
@@ -446,9 +447,40 @@ namespace MeterTest.Source.Emu
             }
             finally
             {
-                tableBody.PowerOff();
+                kpTableBody.PowerOff();
+                logger.CloseLock();
             }
         }
+
+        protected override double GetTableVariable(EmuVariableType type)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override double GetEmuVariable(EmuVariableType type)
+        {
+            throw new NotImplementedException();
+        }
+
+        // public override void AdjMeter()
+        // {
+        //     throw new NotImplementedException();
+        // }
+
+        // public override void Reset()
+        // {
+        //     throw new NotImplementedException();
+        // }
+
+        public override void AdjDataClr()
+        {
+            client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
+        }
+
+        // public override void RegDataInit()
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
     class V9203Adj
     {

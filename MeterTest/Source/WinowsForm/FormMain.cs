@@ -36,7 +36,6 @@ namespace MeterTest.Source.WinowsForm
         private SynchronizationContext synchronizationContext = null;
         private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
         private String optMessage = null;
-        private int cycleSwith = 0;
         private Dlt645Password password = null;
         private Dlt645OperatorCode operatorCode = null;
         private FreezeLineChart freezeLineChart = null;
@@ -254,7 +253,7 @@ namespace MeterTest.Source.WinowsForm
         {
             this.optLock = (bool)value;
         }
-        private void CloseLock()
+        public void CloseLock()
         {
             synchronizationContext.Post(SetOptLock, false); /* 关闭锁 */
         }
@@ -446,60 +445,40 @@ namespace MeterTest.Source.WinowsForm
             }
         }
 
-        
-
-        private void ReadFreezeBlockData()
-        {
-            FreezeDataRead freezeDataTest = new FreezeDataRead(this.client);
-            List<FreezeData> freezeDataList = new List<FreezeData>();
-            try
-            {
-                int cnt = freezeDataTest.GetFreezeCnt();
-                cnt = cnt > FreezeDataRead.MAX_FREEZE_CNT? FreezeDataRead.MAX_FREEZE_CNT : cnt;
-                synchronizationContext.Post(ReadFreezeDataProgramBarStart, cnt);
-                for (int i = 1; i <= cnt; i++)
-                {
-                    byte[] rst = null;
-                    try
-                    {
-                        rst = freezeDataTest.ReadBlock(i);
-                    }
-                    catch (System.Exception e)
-                    {
-                        MessageBox.Show(e.ToString());
-                        // throw;
-                    }
-                    if(rst != null)
-                    {
-                        FreezeData data = freezeDataTest.FreezeDataConvert(rst);
-                        freezeDataList.Add(data);
-                        synchronizationContext.Post(ReadFreezeDataProgramBar, i);
-                    }
-                }
-                freezeDataList.Sort();
-                freezeDataTest.SaveFreezeData(".\\source\\Test\\冻结数据.xlsx", freezeDataList);
-            }
-            catch (System.Exception e)
-            {
-                MessageBox.Show(e.ToString());
-                // throw;
-            }
-        }
-        private void ReadFreezeDataProgramBar(Object obj)
-        {
-            // int per = (int)obj;
-            // progressBar1.Value = per;
-        }
-        private void ReadFreezeDataProgramBarStart(Object obj)
-        {
-            // int per = (int)obj;
-            // progressBar1.Maximum = per;
-        }
-
         private void buttonStartAdjMeter_Click(object sender, EventArgs e)
         {
-            V9203 v9203 = new V9203(this.client, this);
-            Thread th = new Thread(v9203.AdjMeter);
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在校表。。。";
+            if(!comboBoxTypeSelect.Items.Contains(comboBoxTypeSelect.Text))
+            {
+                richTextBoxAdjMeterStatus.AppendText("未选择校表方案\n");
+                richTextBoxAdjMeterStatus.ScrollToCaret();
+                optLock = false;
+                return;
+            }
+            EmuAdj emuAdj = null;
+            if(comboBoxTypeSelect.Text == "相变-HT7036")
+            {
+                emuAdj = new Ht7036(this.client, this);
+            }
+            else if(comboBoxTypeSelect.Text == "II型终端-V9203")
+            {
+                emuAdj = new V9203(this.client, this);
+            }
+            else
+            {
+                richTextBoxAdjMeterStatus.AppendText("校表方案错误\n");
+                richTextBoxAdjMeterStatus.ScrollToCaret();
+                optLock = false;
+                return;
+            }
+
+            Thread th = new Thread(emuAdj.AdjMeter);
             th.IsBackground = true;
             th.Start();
         }
@@ -515,55 +494,22 @@ namespace MeterTest.Source.WinowsForm
             synchronizationContext.Post(UpdateAdjMeterStatus, message);
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if(!endTest)
-            {
-                endTest = true;
-                Thread th = new Thread(V9203AdjTest);
-                th.IsBackground = true;
-                th.Start();
-                button4.Text = "结束测试";
-            }
-            else
-            {
-                endTest = false;
-                button4.Text = "开始测试";
-            }
-        }
-        bool endTest = false;
-        private void V9203AdjTest()
-        {
-            V9203 v9203 = new V9203(this.client, this);
-            int cnt = 0;
-            while(endTest)
-            {
-                cnt ++;
-                IAdjMeterLog("第" + cnt + "次测试开始");
-                v9203.AdjMeter();
-                IAdjMeterLog("第" + cnt + "次测试结束");
-                IAdjMeterLog("");
-            }
-        }
-
-        private void hT7036ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form form = new Ht7036Convert();
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.Show();
-        }
-
-        private void hT7036校表ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // FormHt7036Adj form = new FormHt7036Adj(client);
-            // this.AddOwnedForm(form);
-            // form.StartPosition = FormStartPosition.CenterParent;
-            // form.ShowDialog();
-            Form form = new FormHt7036Adj(client);
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.Show();
-        }
-
+        //private void button4_Click(object sender, EventArgs e)
+        //{
+        //    if(!endTest)
+        //    {
+        //        endTest = true;
+        //        Thread th = new Thread(V9203AdjTest);
+        //        th.IsBackground = true;
+        //        th.Start();
+        //        button4.Text = "结束测试";
+        //    }
+        //    else
+        //    {
+        //        endTest = false;
+        //        button4.Text = "开始测试";
+        //    }
+        //}
         private void ReadFreezeDataPhaseChangeProgramBar(Object obj)
         {
             FreezeReadMsg msg = (FreezeReadMsg)obj;

@@ -46,5 +46,10 @@ namespace MeterTest.Source.Emu
             th.IsBackground = true;
             th.Start();
         }
+
+        public void CloseLock()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

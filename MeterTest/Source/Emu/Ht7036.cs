@@ -187,6 +187,7 @@ namespace MeterTest.Source.Emu
             finally
             {
                 kpTableBody.PowerOff();
+                logger.CloseLock();
             }
         }
         

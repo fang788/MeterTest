@@ -35,8 +35,6 @@ namespace MeterTest.Source.WinowsForm
             this.选项ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.管理数据标识表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.校表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hT7036校表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于MeterTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.激活ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,10 +58,11 @@ namespace MeterTest.Source.WinowsForm
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridViewWrite = new System.Windows.Forms.DataGridView();
-            this.tabPageV9203 = new System.Windows.Forms.TabPage();
+            this.tabPageEmuAdj = new System.Windows.Forms.TabPage();
+            this.comboBoxTypeSelect = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.richTextBoxAdjMeterStatus = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
             this.buttonStartAdjMeter = new System.Windows.Forms.Button();
             this.tabPageFreeze = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -78,7 +77,6 @@ namespace MeterTest.Source.WinowsForm
             this.dateTimePickerFreezeReadEnd = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.dateTimePickerFreezeReadStart = new System.Windows.Forms.DateTimePicker();
-            this.statusStrip3 = new System.Windows.Forms.StatusStrip();
             this.tabPageCmd = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonMeterClear = new System.Windows.Forms.Button();
@@ -100,7 +98,7 @@ namespace MeterTest.Source.WinowsForm
             this.contextMenuStrip1.SuspendLayout();
             this.tabPageWrite.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).BeginInit();
-            this.tabPageV9203.SuspendLayout();
+            this.tabPageEmuAdj.SuspendLayout();
             this.tabPageFreeze.SuspendLayout();
             this.statusStrip4.SuspendLayout();
             this.tabPageCmd.SuspendLayout();
@@ -113,7 +111,6 @@ namespace MeterTest.Source.WinowsForm
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.工具ToolStripMenuItem,
-            this.校表ToolStripMenuItem,
             this.帮助ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -153,21 +150,6 @@ namespace MeterTest.Source.WinowsForm
             this.管理数据标识表ToolStripMenuItem.Text = "管理数据标识表";
             this.管理数据标识表ToolStripMenuItem.Click += new System.EventHandler(this.管理数据标识表ToolStripMenuItem_Click);
             // 
-            // 校表ToolStripMenuItem
-            // 
-            this.校表ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hT7036校表ToolStripMenuItem});
-            this.校表ToolStripMenuItem.Name = "校表ToolStripMenuItem";
-            this.校表ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.校表ToolStripMenuItem.Text = "校表";
-            // 
-            // hT7036校表ToolStripMenuItem
-            // 
-            this.hT7036校表ToolStripMenuItem.Name = "hT7036校表ToolStripMenuItem";
-            this.hT7036校表ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.hT7036校表ToolStripMenuItem.Text = "HT7036校表";
-            this.hT7036校表ToolStripMenuItem.Click += new System.EventHandler(this.hT7036校表ToolStripMenuItem_Click);
-            // 
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -198,7 +180,7 @@ namespace MeterTest.Source.WinowsForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMainForm.Controls.Add(this.tabPageRead);
             this.tabControlMainForm.Controls.Add(this.tabPageWrite);
-            this.tabControlMainForm.Controls.Add(this.tabPageV9203);
+            this.tabControlMainForm.Controls.Add(this.tabPageEmuAdj);
             this.tabControlMainForm.Controls.Add(this.tabPageFreeze);
             this.tabControlMainForm.Controls.Add(this.tabPageCmd);
             this.tabControlMainForm.Location = new System.Drawing.Point(10, 25);
@@ -415,50 +397,65 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewWrite.TabIndex = 3;
             this.dataGridViewWrite.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewWrite_CellDoubleClick);
             // 
-            // tabPageV9203
+            // tabPageEmuAdj
             // 
-            this.tabPageV9203.Controls.Add(this.richTextBoxAdjMeterStatus);
-            this.tabPageV9203.Controls.Add(this.label2);
-            this.tabPageV9203.Controls.Add(this.button4);
-            this.tabPageV9203.Controls.Add(this.buttonStartAdjMeter);
-            this.tabPageV9203.Location = new System.Drawing.Point(4, 26);
-            this.tabPageV9203.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabPageV9203.Name = "tabPageV9203";
-            this.tabPageV9203.Size = new System.Drawing.Size(1044, 457);
-            this.tabPageV9203.TabIndex = 2;
-            this.tabPageV9203.Text = "V9203";
-            this.tabPageV9203.UseVisualStyleBackColor = true;
+            this.tabPageEmuAdj.Controls.Add(this.comboBoxTypeSelect);
+            this.tabPageEmuAdj.Controls.Add(this.label8);
+            this.tabPageEmuAdj.Controls.Add(this.richTextBoxAdjMeterStatus);
+            this.tabPageEmuAdj.Controls.Add(this.label2);
+            this.tabPageEmuAdj.Controls.Add(this.buttonStartAdjMeter);
+            this.tabPageEmuAdj.Location = new System.Drawing.Point(4, 26);
+            this.tabPageEmuAdj.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabPageEmuAdj.Name = "tabPageEmuAdj";
+            this.tabPageEmuAdj.Size = new System.Drawing.Size(1044, 457);
+            this.tabPageEmuAdj.TabIndex = 2;
+            this.tabPageEmuAdj.Text = "校表";
+            this.tabPageEmuAdj.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxTypeSelect
+            // 
+            this.comboBoxTypeSelect.FormattingEnabled = true;
+            this.comboBoxTypeSelect.Items.AddRange(new object[] {
+            "II型终端-V9203",
+            "相变-HT7036"});
+            this.comboBoxTypeSelect.Location = new System.Drawing.Point(75, 34);
+            this.comboBoxTypeSelect.Name = "comboBoxTypeSelect";
+            this.comboBoxTypeSelect.Size = new System.Drawing.Size(121, 25);
+            this.comboBoxTypeSelect.TabIndex = 4;
+            this.comboBoxTypeSelect.Text = "II型终端-V9203";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(25, 38);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(44, 17);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "方案：";
             // 
             // richTextBoxAdjMeterStatus
             // 
-            this.richTextBoxAdjMeterStatus.Location = new System.Drawing.Point(46, 119);
+            this.richTextBoxAdjMeterStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxAdjMeterStatus.Location = new System.Drawing.Point(25, 119);
             this.richTextBoxAdjMeterStatus.Name = "richTextBoxAdjMeterStatus";
-            this.richTextBoxAdjMeterStatus.Size = new System.Drawing.Size(379, 304);
+            this.richTextBoxAdjMeterStatus.Size = new System.Drawing.Size(1011, 318);
             this.richTextBoxAdjMeterStatus.TabIndex = 2;
             this.richTextBoxAdjMeterStatus.Text = "";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(46, 89);
+            this.label2.Location = new System.Drawing.Point(25, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "校表状态";
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(309, 39);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(82, 26);
-            this.button4.TabIndex = 0;
-            this.button4.Text = "开始测试";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // buttonStartAdjMeter
             // 
-            this.buttonStartAdjMeter.Location = new System.Drawing.Point(46, 39);
+            this.buttonStartAdjMeter.Location = new System.Drawing.Point(266, 33);
             this.buttonStartAdjMeter.Name = "buttonStartAdjMeter";
             this.buttonStartAdjMeter.Size = new System.Drawing.Size(82, 26);
             this.buttonStartAdjMeter.TabIndex = 0;
@@ -478,7 +475,6 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageFreeze.Controls.Add(this.dateTimePickerFreezeReadEnd);
             this.tabPageFreeze.Controls.Add(this.label3);
             this.tabPageFreeze.Controls.Add(this.dateTimePickerFreezeReadStart);
-            this.tabPageFreeze.Controls.Add(this.statusStrip3);
             this.tabPageFreeze.Location = new System.Drawing.Point(4, 26);
             this.tabPageFreeze.Name = "tabPageFreeze";
             this.tabPageFreeze.Size = new System.Drawing.Size(1044, 457);
@@ -489,7 +485,7 @@ namespace MeterTest.Source.WinowsForm
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(500, 383);
+            this.label1.Location = new System.Drawing.Point(510, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 17);
             this.label1.TabIndex = 11;
@@ -509,7 +505,7 @@ namespace MeterTest.Source.WinowsForm
             "反向有功电能",
             "正向无功电能",
             "反向无功电能"});
-            this.comboBoxFreezeSelect.Location = new System.Drawing.Point(549, 381);
+            this.comboBoxFreezeSelect.Location = new System.Drawing.Point(559, 19);
             this.comboBoxFreezeSelect.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFreezeSelect.Name = "comboBoxFreezeSelect";
             this.comboBoxFreezeSelect.Size = new System.Drawing.Size(121, 25);
@@ -518,10 +514,13 @@ namespace MeterTest.Source.WinowsForm
             // 
             // plotViewFreeze
             // 
-            this.plotViewFreeze.Location = new System.Drawing.Point(3, 3);
+            this.plotViewFreeze.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.plotViewFreeze.Location = new System.Drawing.Point(15, 62);
             this.plotViewFreeze.Name = "plotViewFreeze";
             this.plotViewFreeze.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewFreeze.Size = new System.Drawing.Size(1033, 352);
+            this.plotViewFreeze.Size = new System.Drawing.Size(1010, 352);
             this.plotViewFreeze.TabIndex = 9;
             this.plotViewFreeze.Text = "plotViewFreeze";
             this.plotViewFreeze.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -530,7 +529,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             // buttonFreezeReadStop
             // 
-            this.buttonFreezeReadStop.Location = new System.Drawing.Point(862, 376);
+            this.buttonFreezeReadStop.Location = new System.Drawing.Point(872, 14);
             this.buttonFreezeReadStop.Name = "buttonFreezeReadStop";
             this.buttonFreezeReadStop.Size = new System.Drawing.Size(94, 32);
             this.buttonFreezeReadStop.TabIndex = 8;
@@ -540,7 +539,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             // buttonFreezeRead
             // 
-            this.buttonFreezeRead.Location = new System.Drawing.Point(711, 375);
+            this.buttonFreezeRead.Location = new System.Drawing.Point(721, 13);
             this.buttonFreezeRead.Name = "buttonFreezeRead";
             this.buttonFreezeRead.Size = new System.Drawing.Size(94, 32);
             this.buttonFreezeRead.TabIndex = 8;
@@ -554,7 +553,7 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelFreeze,
             this.toolStripProgressBarFreezeRead});
-            this.statusStrip4.Location = new System.Drawing.Point(0, 411);
+            this.statusStrip4.Location = new System.Drawing.Point(0, 433);
             this.statusStrip4.Name = "statusStrip4";
             this.statusStrip4.Size = new System.Drawing.Size(1044, 24);
             this.statusStrip4.TabIndex = 7;
@@ -574,7 +573,7 @@ namespace MeterTest.Source.WinowsForm
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(256, 383);
+            this.label4.Location = new System.Drawing.Point(266, 21);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 17);
             this.label4.TabIndex = 6;
@@ -584,7 +583,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             this.dateTimePickerFreezeReadEnd.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePickerFreezeReadEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerFreezeReadEnd.Location = new System.Drawing.Point(330, 380);
+            this.dateTimePickerFreezeReadEnd.Location = new System.Drawing.Point(340, 18);
             this.dateTimePickerFreezeReadEnd.Name = "dateTimePickerFreezeReadEnd";
             this.dateTimePickerFreezeReadEnd.Size = new System.Drawing.Size(145, 23);
             this.dateTimePickerFreezeReadEnd.TabIndex = 4;
@@ -593,7 +592,7 @@ namespace MeterTest.Source.WinowsForm
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 383);
+            this.label3.Location = new System.Drawing.Point(23, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 17);
             this.label3.TabIndex = 6;
@@ -603,20 +602,11 @@ namespace MeterTest.Source.WinowsForm
             // 
             this.dateTimePickerFreezeReadStart.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePickerFreezeReadStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerFreezeReadStart.Location = new System.Drawing.Point(88, 380);
+            this.dateTimePickerFreezeReadStart.Location = new System.Drawing.Point(98, 18);
             this.dateTimePickerFreezeReadStart.Name = "dateTimePickerFreezeReadStart";
             this.dateTimePickerFreezeReadStart.Size = new System.Drawing.Size(145, 23);
             this.dateTimePickerFreezeReadStart.TabIndex = 4;
             this.dateTimePickerFreezeReadStart.ValueChanged += new System.EventHandler(this.dateTimePickerFreezeReadStart_ValueChanged);
-            // 
-            // statusStrip3
-            // 
-            this.statusStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip3.Location = new System.Drawing.Point(0, 435);
-            this.statusStrip3.Name = "statusStrip3";
-            this.statusStrip3.Size = new System.Drawing.Size(1044, 22);
-            this.statusStrip3.TabIndex = 1;
-            this.statusStrip3.Text = "statusStrip3";
             // 
             // tabPageCmd
             // 
@@ -788,8 +778,8 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageWrite.ResumeLayout(false);
             this.tabPageWrite.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).EndInit();
-            this.tabPageV9203.ResumeLayout(false);
-            this.tabPageV9203.PerformLayout();
+            this.tabPageEmuAdj.ResumeLayout(false);
+            this.tabPageEmuAdj.PerformLayout();
             this.tabPageFreeze.ResumeLayout(false);
             this.tabPageFreeze.PerformLayout();
             this.statusStrip4.ResumeLayout(false);
@@ -829,21 +819,17 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridViewWrite;
-        private System.Windows.Forms.TabPage tabPageV9203;
+        private System.Windows.Forms.TabPage tabPageEmuAdj;
         private System.Windows.Forms.TabPage tabPageFreeze;
-        private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.RichTextBox richTextBoxAdjMeterStatus;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonStartAdjMeter;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonReadClyce;
         private System.Windows.Forms.Button buttonReadOne;
         private System.Windows.Forms.DataGridView dataGridViewReadList;
-        private System.Windows.Forms.ToolStripMenuItem 校表ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hT7036校表ToolStripMenuItem;
         private System.Windows.Forms.DateTimePicker dateTimePickerFreezeReadStart;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.StatusStrip statusStrip4;
@@ -868,5 +854,7 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBoxTypeSelect;
+        private System.Windows.Forms.Label label8;
     }
 }
