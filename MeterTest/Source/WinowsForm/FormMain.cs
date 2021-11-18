@@ -358,7 +358,7 @@ namespace MeterTest.Source.WinowsForm
             readOnceThr.IsBackground = true;
             readOnceThr.Start(dataIdList);
         }
-        private void buttonReadClyce_Click(object sender, EventArgs e)
+        private void buttonReadCycle_Click(object sender, EventArgs e)
         {
             if(optLock)
             {
@@ -385,7 +385,6 @@ namespace MeterTest.Source.WinowsForm
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            // Interlocked.Exchange(ref cycleSwith, 0);
             readData.EndRead();
         }
         
@@ -395,13 +394,13 @@ namespace MeterTest.Source.WinowsForm
             dataGridViewReadList.Top = tabControlMainForm.Top;
             dataGridViewReadList.Width = (int)(tabControlMainForm.Width * 0.96);
             buttonReadOne.Left = tabControlMainForm.Left + 10;
-            buttonReadClyce.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
+            buttonReadCycle.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
             buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
             if (tabControlMainForm.Height > 150)
             {
                 dataGridViewReadList.Height = tabControlMainForm.Height - 150;
                 buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-                buttonReadClyce.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+                buttonReadCycle.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
                 buttonStop.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
             }
             else
@@ -493,23 +492,6 @@ namespace MeterTest.Source.WinowsForm
         {
             synchronizationContext.Post(UpdateAdjMeterStatus, message);
         }
-
-        //private void button4_Click(object sender, EventArgs e)
-        //{
-        //    if(!endTest)
-        //    {
-        //        endTest = true;
-        //        Thread th = new Thread(V9203AdjTest);
-        //        th.IsBackground = true;
-        //        th.Start();
-        //        button4.Text = "结束测试";
-        //    }
-        //    else
-        //    {
-        //        endTest = false;
-        //        button4.Text = "开始测试";
-        //    }
-        //}
         private void ReadFreezeDataPhaseChangeProgramBar(Object obj)
         {
             FreezeReadMsg msg = (FreezeReadMsg)obj;

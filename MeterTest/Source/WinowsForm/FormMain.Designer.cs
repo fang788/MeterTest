@@ -43,7 +43,7 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonStop = new System.Windows.Forms.Button();
-            this.buttonReadClyce = new System.Windows.Forms.Button();
+            this.buttonReadCycle = new System.Windows.Forms.Button();
             this.buttonReadOne = new System.Windows.Forms.Button();
             this.dataGridViewReadList = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -90,6 +90,7 @@ namespace MeterTest.Source.WinowsForm
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tabPageParaConfig = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -132,21 +133,21 @@ namespace MeterTest.Source.WinowsForm
             // 选项ToolStripMenuItem
             // 
             this.选项ToolStripMenuItem.Name = "选项ToolStripMenuItem";
-            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.选项ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.选项ToolStripMenuItem.Text = "选项";
             this.选项ToolStripMenuItem.Click += new System.EventHandler(this.选项ToolStripMenuItem_Click);
             // 
             // 日志ToolStripMenuItem
             // 
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
-            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.日志ToolStripMenuItem.Text = "日志";
             this.日志ToolStripMenuItem.Click += new System.EventHandler(this.日志ToolStripMenuItem_Click);
             // 
             // 管理数据标识表ToolStripMenuItem
             // 
             this.管理数据标识表ToolStripMenuItem.Name = "管理数据标识表ToolStripMenuItem";
-            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.管理数据标识表ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.管理数据标识表ToolStripMenuItem.Text = "管理数据标识表";
             this.管理数据标识表ToolStripMenuItem.Click += new System.EventHandler(this.管理数据标识表ToolStripMenuItem_Click);
             // 
@@ -162,14 +163,14 @@ namespace MeterTest.Source.WinowsForm
             // 关于MeterTestToolStripMenuItem
             // 
             this.关于MeterTestToolStripMenuItem.Name = "关于MeterTestToolStripMenuItem";
-            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.关于MeterTestToolStripMenuItem.Text = "关于 MeterTest";
             this.关于MeterTestToolStripMenuItem.Click += new System.EventHandler(this.关于MeterTestToolStripMenuItem_Click);
             // 
             // 激活ToolStripMenuItem
             // 
             this.激活ToolStripMenuItem.Name = "激活ToolStripMenuItem";
-            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.激活ToolStripMenuItem.Text = "激活";
             this.激活ToolStripMenuItem.Click += new System.EventHandler(this.激活ToolStripMenuItem_Click);
             // 
@@ -183,6 +184,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabControlMainForm.Controls.Add(this.tabPageEmuAdj);
             this.tabControlMainForm.Controls.Add(this.tabPageFreeze);
             this.tabControlMainForm.Controls.Add(this.tabPageCmd);
+            this.tabControlMainForm.Controls.Add(this.tabPageParaConfig);
             this.tabControlMainForm.Location = new System.Drawing.Point(10, 25);
             this.tabControlMainForm.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControlMainForm.Name = "tabControlMainForm";
@@ -195,7 +197,7 @@ namespace MeterTest.Source.WinowsForm
             // 
             this.tabPageRead.Controls.Add(this.statusStrip1);
             this.tabPageRead.Controls.Add(this.buttonStop);
-            this.tabPageRead.Controls.Add(this.buttonReadClyce);
+            this.tabPageRead.Controls.Add(this.buttonReadCycle);
             this.tabPageRead.Controls.Add(this.buttonReadOne);
             this.tabPageRead.Controls.Add(this.dataGridViewReadList);
             this.tabPageRead.Location = new System.Drawing.Point(4, 26);
@@ -236,17 +238,17 @@ namespace MeterTest.Source.WinowsForm
             this.buttonStop.UseVisualStyleBackColor = true;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
             // 
-            // buttonReadClyce
+            // buttonReadCycle
             // 
-            this.buttonReadClyce.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReadClyce.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonReadClyce.Location = new System.Drawing.Point(305, 386);
-            this.buttonReadClyce.Name = "buttonReadClyce";
-            this.buttonReadClyce.Size = new System.Drawing.Size(90, 30);
-            this.buttonReadClyce.TabIndex = 9;
-            this.buttonReadClyce.Text = "循环读取";
-            this.buttonReadClyce.UseVisualStyleBackColor = true;
-            this.buttonReadClyce.Click += new System.EventHandler(this.buttonReadClyce_Click);
+            this.buttonReadCycle.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonReadCycle.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonReadCycle.Location = new System.Drawing.Point(305, 386);
+            this.buttonReadCycle.Name = "buttonReadCycle";
+            this.buttonReadCycle.Size = new System.Drawing.Size(90, 30);
+            this.buttonReadCycle.TabIndex = 9;
+            this.buttonReadCycle.Text = "循环读取";
+            this.buttonReadCycle.UseVisualStyleBackColor = true;
+            this.buttonReadCycle.Click += new System.EventHandler(this.buttonReadCycle_Click);
             // 
             // buttonReadOne
             // 
@@ -754,6 +756,15 @@ namespace MeterTest.Source.WinowsForm
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "写数据状态";
             // 
+            // tabPageParaConfig
+            // 
+            this.tabPageParaConfig.Location = new System.Drawing.Point(4, 26);
+            this.tabPageParaConfig.Name = "tabPageParaConfig";
+            this.tabPageParaConfig.Size = new System.Drawing.Size(1044, 457);
+            this.tabPageParaConfig.TabIndex = 6;
+            this.tabPageParaConfig.Text = "参数配置";
+            this.tabPageParaConfig.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -827,7 +838,7 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
         private System.Windows.Forms.Button buttonStop;
-        private System.Windows.Forms.Button buttonReadClyce;
+        private System.Windows.Forms.Button buttonReadCycle;
         private System.Windows.Forms.Button buttonReadOne;
         private System.Windows.Forms.DataGridView dataGridViewReadList;
         private System.Windows.Forms.DateTimePicker dateTimePickerFreezeReadStart;
@@ -856,5 +867,6 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboBoxTypeSelect;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TabPage tabPageParaConfig;
     }
 }
