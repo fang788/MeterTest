@@ -194,9 +194,10 @@ namespace MeterTest.Source.SQLite
             // {
             int index = dataGridViewDataId.CurrentCell.RowIndex;
             DataId dataIdSelect = dataIdDb.DataIds.ToList().ToArray<DataId>()[index];
-            Form form = new DataIdShowForm(dataIdSelect);
+            DataIdShowForm form = new DataIdShowForm(dataIdSelect);
             form.StartPosition = FormStartPosition.CenterParent;
-            if(form.ShowDialog() == DialogResult.OK)
+            form.ShowDialog();
+            if(form.IsChg)
             {
                 if(textBoxDataId.Text == "")
                 {
@@ -206,13 +207,10 @@ namespace MeterTest.Source.SQLite
                 {
                     DisplayOne();
                 }
-                DialogResult = DialogResult.OK;
+                IsChg = true;
+                dataIdDb.SaveChanges();
+                //DialogResult = DialogResult.OK;
             }
-            // }
-            // else
-            // {
-            //     toolStripStatusLabelOpt.Text = "错误：未选择数据标识！";
-            // }
         }
 
         private void textBoxDataId_KeyPress(object sender, KeyPressEventArgs e)

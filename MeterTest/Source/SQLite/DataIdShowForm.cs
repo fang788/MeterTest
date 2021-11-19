@@ -15,7 +15,9 @@ namespace MeterTest.Source.SQLite
     public partial class DataIdShowForm : Form
     {
         public DataId DataId;
-        private int index;
+        // private int index;
+        public bool IsChg = false;
+        private bool optChg = false;
         private DataIdDbContext dataIdDb = FormMain.DataIdDb;
         public DataIdShowForm(DataId id)
         {
@@ -33,26 +35,29 @@ namespace MeterTest.Source.SQLite
             checkBoxIsWritable.Checked = DataId.IsWritable;
             textBoxName.Text = DataId.Name;
             textBoxGroup.Text = DataId.GroupName;
-            if(dataIdDb.DataIds.ToList<DataId>().Contains(DataId))
-            {
-                index = dataIdDb.DataIds.ToList<DataId>().IndexOf(DataId);
-            }
-            else
-            {
-                index = -1;
-            }
+            // if(dataIdDb.DataIds.ToList<DataId>().Contains(DataId))
+            // {
+            //     index = dataIdDb.DataIds.ToList<DataId>().IndexOf(DataId);
+            // }
+            // else
+            // {
+            //     index = -1;
+            // }
         }
 
         private void buttonCertain_Click(object sender, EventArgs e)
         {
-            if(index != -1)
+            // if(index != -1)
+            // {
+            //     dataIdDb.DataIds.Remove(dataIdDb.DataIds.ToList<DataId>()[index]);
+            // }
+            if(optChg)
             {
-                dataIdDb.DataIds.Remove(dataIdDb.DataIds.ToList<DataId>()[index]);
+                IsChg = true;
+                this.Close();
             }
-            dataIdDb.DataIds.AddAsync(DataId);
-            dataIdDb.SaveChangesAsync();
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            // dataIdDb.DataIds.AddAsync(DataId);
+            // dataIdDb.SaveChangesAsync();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -74,37 +79,65 @@ namespace MeterTest.Source.SQLite
 
         private void textBoxFormat_TextChanged(object sender, EventArgs e)
         {
-            DataId.Format = textBoxFormat.Text;
+            if(DataId.Format != textBoxFormat.Text)
+            {
+                DataId.Format = textBoxFormat.Text;
+                optChg = true;
+            }
         }
 
         private void numericUpDownDataBytes_ValueChanged(object sender, EventArgs e)
         {
-            DataId.DataBytes = Convert.ToInt32(numericUpDownDataBytes.Value);
+            if(DataId.DataBytes != Convert.ToInt32(numericUpDownDataBytes.Value))
+            {
+                DataId.DataBytes = Convert.ToInt32(numericUpDownDataBytes.Value);
+                optChg = true;
+            }
         }
 
         private void textBoxUnit_TextChanged(object sender, EventArgs e)
         {
-            DataId.Unit = textBoxUnit.Text;
+            if(DataId.Unit != textBoxUnit.Text)
+            {
+                DataId.Unit = textBoxUnit.Text;
+                optChg = true;
+            }
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e)
         {
-            DataId.Name = textBoxName.Text;
+            if(DataId.Name != textBoxName.Text)
+            {
+                DataId.Name = textBoxName.Text;
+                optChg = true;
+            }
         }
 
         private void textBoxGroup_TextChanged(object sender, EventArgs e)
         {
-            DataId.GroupName = textBoxGroup.Text;
+            if(DataId.GroupName != textBoxGroup.Text)
+            {
+                DataId.GroupName = textBoxGroup.Text;
+                optChg = true;
+            }
         }
 
         private void checkBoxIsReadable_CheckedChanged(object sender, EventArgs e)
         {
-            DataId.IsReadable = checkBoxIsReadable.Checked;
+            if(DataId.IsReadable != checkBoxIsReadable.Checked)
+            {
+                DataId.IsReadable = checkBoxIsReadable.Checked;
+                optChg = true;
+            }
         }
 
         private void checkBoxIsWritable_CheckedChanged(object sender, EventArgs e)
         {
-            DataId.IsWritable = checkBoxIsWritable.Checked;
+            if(DataId.IsWritable != checkBoxIsWritable.Checked)
+            {
+                DataId.IsWritable = checkBoxIsWritable.Checked;
+                optChg = true;
+            }
         }
     }
 }
