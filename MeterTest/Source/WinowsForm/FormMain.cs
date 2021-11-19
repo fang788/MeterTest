@@ -57,7 +57,6 @@ namespace MeterTest.Source.WinowsForm
                 return;
             }
             ParaUpdate();
-            readData = new ReadData(this.client, this, meterAddress);
              //为dgv增加复选框列
             DataGridViewCheckBoxColumn checkbox = new DataGridViewCheckBoxColumn();
             //列显示名称
@@ -354,6 +353,7 @@ namespace MeterTest.Source.WinowsForm
                     dataIdList.Add(dataId);
                 }
             }
+            readData = new ReadData(this.client, this, meterAddress);
             Thread readOnceThr = new Thread(readData.ReadOnce);
             readOnceThr.IsBackground = true;
             readOnceThr.Start(dataIdList);
@@ -378,6 +378,7 @@ namespace MeterTest.Source.WinowsForm
                     dataIdList.Add(dataId);
                 }
             }
+            readData = new ReadData(this.client, this, meterAddress);
             Thread readCycleThr = new Thread(readData.ReadCycle);
             readCycleThr.IsBackground = true;
             readCycleThr.Start(dataIdList);
@@ -385,7 +386,10 @@ namespace MeterTest.Source.WinowsForm
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            readData.EndRead();
+            if(readData != null)
+            {
+                readData.EndRead();
+            }
         }
         
         private void ReadTabPageSizeZoom()
