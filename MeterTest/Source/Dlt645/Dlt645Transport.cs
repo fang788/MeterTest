@@ -182,12 +182,12 @@ namespace MeterTest.Source.Dlt645
         }
         private void ReadBytes(byte[] array, int offset, int length)
         {
-            int readCnts = 0;
+            int readCnt = 0;
             try
             {
-                while (readCnts < length)
+                while (readCnt < length)
                 {
-                    readCnts += port.Read(array, offset + readCnts, length);
+                    readCnt += port.Read(array, offset + readCnt, length);
                 }
             }
             catch(ArgumentException e)
