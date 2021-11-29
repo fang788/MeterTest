@@ -208,7 +208,7 @@ namespace MeterTest.Source.Emu
                 error /= 5;
                 // logger.IAdjMeterLog(type.ToString() + "误差：" + (error * 100).ToString("F2") + "%");
                 //Thread.Sleep(5000);
-                if ((error > 0.1) || (error < -0.1))
+                if ((error > 0.2) || (error < -0.2))
                 {
                     throw new InvalidOperationException(type.ToString() + "-误差为" + (error * 100).ToString("F2") + "%，已超过10% ");
                 } 
@@ -419,6 +419,7 @@ namespace MeterTest.Source.Emu
                 logger.IAdjMeterLog("1.正在升源。。。");
                 kpTableBody.PowerOn();
                 kpTableBody.PowerPause();
+                //Thread.Sleep(5000);
                 this.address = ReadMeterAddress();
                 logger.IAdjMeterLog("2.读取表号完成，表号：" + address.ToString());
                 FactoryIn();
