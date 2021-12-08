@@ -22,6 +22,7 @@ using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Annotations;
 using MeterTest.Source.Read;
+using MeterTest.Source.SQLite.ParaConfig;
 
 namespace MeterTest.Source.WinowsForm
 {
@@ -686,6 +687,16 @@ namespace MeterTest.Source.WinowsForm
             }
         }
 
-        
+        private void 管理参数配置表ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParaConfigManageForm form = new ParaConfigManageForm();
+            this.AddOwnedForm(form);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog();
+            // if (form.IsChg)
+            // {
+            //     DataIdListDisplayAll();
+            // }
+        }
     }
 }

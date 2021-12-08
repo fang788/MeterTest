@@ -451,5 +451,66 @@ namespace MeterTest.Source.Dlt645
             }
             return rst;
         }
+    
+        public byte[] GetByteArray(string s)
+        {
+            byte[] byteArray = null;
+            try 
+            {
+                if(string.IsNullOrEmpty(this.Format) == false) 
+                {
+                    if((this.Format.Contains('X')) 
+                    || (this.Format.Contains('N')))
+                    {
+                        byteArray = new byte[(s.Length + 1) / 2];
+                        for (int i = 0; i < (s.Length + 1) / 2; i++)
+                        {
+                            byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
+                        }
+                    }
+                     
+                    if((this.Format == "YYMMDDWW") 
+                    || (this.Format == "hhmmss")
+                    || (this.Format == "YYMMDDhhmm"))
+                    {
+                        byteArray = new byte[(s.Length + 1) / 2];
+                        if(s.Contains('A'))
+                        {
+                            for (int i = 0; i < (s.Length + 1) / 2; i++)
+                            {
+                                byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < (s.Length + 1) / 2; i++)
+                            {
+                                byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
+                            }
+                        }
+                    }
+                    if(this.Format == "ASC")
+                    {
+                        byteArray = System.Text.Encoding.Default.GetBytes(s);
+                    }
+                }
+                else
+                {
+                    throw new Exception("格式不能为空");
+                }
+
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            for (int i = 0; i < byteArray.Length / 2; i++)
+            {
+                byte tmp = byteArray[i];
+                byteArray[i] = byteArray[byteArray.Length - 1 - i];
+                byteArray[byteArray.Length - 1 - i] = tmp;
+            }
+            return byteArray;
+        }
     }
 }

@@ -89,8 +89,9 @@ namespace MeterTest.Source.WinowsForm
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabPageParaConfig = new System.Windows.Forms.TabPage();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.管理参数配置表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -125,7 +126,8 @@ namespace MeterTest.Source.WinowsForm
             this.工具ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.选项ToolStripMenuItem,
             this.日志ToolStripMenuItem,
-            this.管理数据标识表ToolStripMenuItem});
+            this.管理数据标识表ToolStripMenuItem,
+            this.管理参数配置表ToolStripMenuItem});
             this.工具ToolStripMenuItem.Name = "工具ToolStripMenuItem";
             this.工具ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.工具ToolStripMenuItem.Text = "工具";
@@ -163,14 +165,14 @@ namespace MeterTest.Source.WinowsForm
             // 关于MeterTestToolStripMenuItem
             // 
             this.关于MeterTestToolStripMenuItem.Name = "关于MeterTestToolStripMenuItem";
-            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.关于MeterTestToolStripMenuItem.Text = "关于 MeterTest";
             this.关于MeterTestToolStripMenuItem.Click += new System.EventHandler(this.关于MeterTestToolStripMenuItem_Click);
             // 
             // 激活ToolStripMenuItem
             // 
             this.激活ToolStripMenuItem.Name = "激活ToolStripMenuItem";
-            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.激活ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.激活ToolStripMenuItem.Text = "激活";
             this.激活ToolStripMenuItem.Click += new System.EventHandler(this.激活ToolStripMenuItem_Click);
             // 
@@ -750,12 +752,6 @@ namespace MeterTest.Source.WinowsForm
             this.label5.TabIndex = 0;
             this.label5.Text = "密码：";
             // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
-            this.toolStripStatusLabel1.Text = "写数据状态";
-            // 
             // tabPageParaConfig
             // 
             this.tabPageParaConfig.Location = new System.Drawing.Point(4, 26);
@@ -764,6 +760,19 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageParaConfig.TabIndex = 6;
             this.tabPageParaConfig.Text = "参数配置";
             this.tabPageParaConfig.UseVisualStyleBackColor = true;
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
+            this.toolStripStatusLabel1.Text = "写数据状态";
+            // 
+            // 管理参数配置表ToolStripMenuItem
+            // 
+            this.管理参数配置表ToolStripMenuItem.Name = "管理参数配置表ToolStripMenuItem";
+            this.管理参数配置表ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.管理参数配置表ToolStripMenuItem.Text = "管理参数配置表";
+            this.管理参数配置表ToolStripMenuItem.Click += new System.EventHandler(this.管理参数配置表ToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -868,5 +877,6 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.ComboBox comboBoxTypeSelect;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabPage tabPageParaConfig;
+        private System.Windows.Forms.ToolStripMenuItem 管理参数配置表ToolStripMenuItem;
     }
 }
