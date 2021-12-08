@@ -18,7 +18,7 @@ namespace MeterTest.Migrations
 
             modelBuilder.Entity("MeterTest.Source.Dlt645.DataId", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -34,7 +34,7 @@ namespace MeterTest.Migrations
                     b.Property<string>("GroupName")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsReadAble")
+                    b.Property<bool>("IsReadable")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsWritable")
