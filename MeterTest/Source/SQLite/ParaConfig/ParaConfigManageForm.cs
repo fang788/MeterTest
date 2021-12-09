@@ -197,9 +197,10 @@ namespace MeterTest.Source.SQLite.ParaConfig
                 {
                     using var context = new ParaConfigTableDbContext();
                     // ParaConfigTable table = paraConfigTableDb.ParaConfigTables.ToArray()[treeViewProject.SelectedNode.Index];
-                    ParaConfigTable table = context.ParaConfigTables.Single(e => e.Name == treeViewProject.SelectedNode.Text);
-                    List<ParaConfigDataId> dataIdList = table.DataIds;
+                    ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).Single(e => e.Name == treeViewProject.SelectedNode.Text);
+                    //List<ParaConfigDataId> dataIdList = table.DataIds;
                     // ParaConfigTable table = paraConfigTableDb.ParaConfigTables.OrderBy(e => e.Name).Include(e => e.Posts).First();
+                    context.DataIds.RemoveRange(table.DataIds);
                     context.ParaConfigTables.Remove(table);
                     // paraConfigTableDb.RemoveRange(dataIdList);
                     // paraConfigTableDb.Remove(table);

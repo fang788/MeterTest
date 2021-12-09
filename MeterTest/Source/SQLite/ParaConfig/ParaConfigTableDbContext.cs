@@ -40,11 +40,14 @@ namespace MeterTest.Source.SQLite.ParaConfig
             {
                 entity.HasKey(e => e.Name);
                 entity.Property(e => e.Name).IsRequired();
-                entity.HasMany(e => e.DataIds).WithOne();
+                // entity.HasMany(e => e.DataIds).WithOne();
             });
             modelBuilder.Entity<ParaConfigDataId>(entity =>
             {
-                entity.HasKey(e => new {e.Id, e.DataArray});
+                entity.HasOne(p => p.table)
+                      .WithMany(b => b.DataIds)
+                      .HasForeignKey(p => p.ConfigTableName);
+                entity.HasKey(e => new {e.ConfigTableName, e.Id, e.DataArray});
                 // entity.Property(e => e.Format).IsRequired();
                 entity.Property(e => e.DataBytes).IsRequired();
                 entity.Property(e => e.DataArray).IsRequired();

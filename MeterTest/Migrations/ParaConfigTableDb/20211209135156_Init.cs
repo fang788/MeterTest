@@ -24,8 +24,7 @@ namespace MeterTest.Migrations.ParaConfigTableDb
                 {
                     DataArray = table.Column<byte[]>(type: "BLOB", nullable: false),
                     Id = table.Column<uint>(type: "INTEGER", nullable: false),
-                    ConfigTableName = table.Column<string>(type: "TEXT", nullable: true),
-                    ParaConfigTableName = table.Column<string>(type: "TEXT", nullable: true),
+                    ConfigTableName = table.Column<string>(type: "TEXT", nullable: false),
                     Format = table.Column<string>(type: "TEXT", nullable: true),
                     DataBytes = table.Column<int>(type: "INTEGER", nullable: false),
                     Unit = table.Column<string>(type: "TEXT", nullable: true),
@@ -36,19 +35,14 @@ namespace MeterTest.Migrations.ParaConfigTableDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DataIds", x => new { x.Id, x.DataArray });
+                    table.PrimaryKey("PK_DataIds", x => new { x.ConfigTableName, x.Id, x.DataArray });
                     table.ForeignKey(
-                        name: "FK_DataIds_ParaConfigTables_ParaConfigTableName",
-                        column: x => x.ParaConfigTableName,
+                        name: "FK_DataIds_ParaConfigTables_ConfigTableName",
+                        column: x => x.ConfigTableName,
                         principalTable: "ParaConfigTables",
                         principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DataIds_ParaConfigTableName",
-                table: "DataIds",
-                column: "ParaConfigTableName");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -18,14 +18,14 @@ namespace MeterTest.Migrations.ParaConfigTableDb
 
             modelBuilder.Entity("MeterTest.Source.SQLite.ParaConfig.ParaConfigDataId", b =>
                 {
+                    b.Property<string>("ConfigTableName")
+                        .HasColumnType("TEXT");
+
                     b.Property<uint>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("DataArray")
                         .HasColumnType("BLOB");
-
-                    b.Property<string>("ConfigTableName")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("DataBytes")
                         .HasColumnType("INTEGER");
@@ -47,15 +47,10 @@ namespace MeterTest.Migrations.ParaConfigTableDb
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ParaConfigTableName")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Unit")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id", "DataArray");
-
-                    b.HasIndex("ParaConfigTableName");
+                    b.HasKey("ConfigTableName", "Id", "DataArray");
 
                     b.ToTable("DataIds");
                 });
@@ -72,9 +67,13 @@ namespace MeterTest.Migrations.ParaConfigTableDb
 
             modelBuilder.Entity("MeterTest.Source.SQLite.ParaConfig.ParaConfigDataId", b =>
                 {
-                    b.HasOne("MeterTest.Source.SQLite.ParaConfig.ParaConfigTable", null)
+                    b.HasOne("MeterTest.Source.SQLite.ParaConfig.ParaConfigTable", "table")
                         .WithMany("DataIds")
-                        .HasForeignKey("ParaConfigTableName");
+                        .HasForeignKey("ConfigTableName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("table");
                 });
 
             modelBuilder.Entity("MeterTest.Source.SQLite.ParaConfig.ParaConfigTable", b =>
