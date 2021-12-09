@@ -269,7 +269,7 @@ namespace MeterTest.Source.Write
                     }
                 }
             }
-            log.End(); /* 关闭锁 */
+            log.ConfigEnd(); /* 关闭锁 */
         }
 
         public void ParaCompare(object obj)
@@ -322,7 +322,7 @@ namespace MeterTest.Source.Write
                     break;
                 }
             }
-            log.End(); /* 关闭锁 */
+            log.ConfigEnd(); /* 关闭锁 */
         }
     }
 }

@@ -847,12 +847,12 @@ namespace MeterTest.Source.WinowsForm
                     if(optMessage == "正在参数比对")
                     {
                         dataGridViewParaConfig.Rows[j].Cells[9].Value = null;
-                        toolStripStatusLabelStatus.Text = "当前比对的数据标识-<" + dataId.Id.ToString("X8") + ">";
+                        toolStripStatusLabelParaConfig.Text = "当前比对的数据标识-<" + dataId.Id.ToString("X8") + ">";
                     }
                     else
                     {
                         dataGridViewParaConfig.Rows[j].Cells[8].Value = null;
-                        toolStripStatusLabelStatus.Text = "当前配置的数据标识-<" + dataId.Id.ToString("X8") + ">";
+                        toolStripStatusLabelParaConfig.Text = "当前配置的数据标识-<" + dataId.Id.ToString("X8") + ">";
                     }
                     break;
                 }
@@ -895,7 +895,18 @@ namespace MeterTest.Source.WinowsForm
                     break;
                 }
             }
-
+        }
+        private void ParaConfigEnd(object obj)
+        {
+            if(optMessage == "正在参数比对")
+            {
+                toolStripStatusLabelParaConfig.Text = "参数比对完成";
+            }
+            else
+            {
+                toolStripStatusLabelParaConfig.Text = "参数配置完成";
+            }
+            End();
         }
         public void SendMsg(ParaConfigMsg msg)
         {
@@ -906,6 +917,10 @@ namespace MeterTest.Source.WinowsForm
         {
             // string s = "当前操作的数据标识-<" + dataId.Id.ToString("X8") + ">";
             synchronizationContext.Post(ToolStripStatusLabelStatusUpdate, dataId);
+        }
+        public void ConfigEnd()
+        {
+            synchronizationContext.Post(ParaConfigEnd, new object());
         }
     }
 }
