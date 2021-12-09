@@ -18,7 +18,7 @@ namespace MeterTest.Source.SQLite
 {
     public partial class DataIdAddListForm : Form
     {
-        DataIdDbContext dataIdDb = FormMain.DataIdDb;
+        // DataIdDbContext dataIdDb = FormMain.DataIdDb;
 
         public bool IsChg = false;
 
@@ -131,17 +131,19 @@ namespace MeterTest.Source.SQLite
                 textBoxAddLot.Text = fileDialog.FileName;
                 List<DataId> list = this.GetDataIdList(fileDialog.FileName);
                 DataId[] dataIdArray = list.ToList().ToArray<DataId>();
+                using var context = new DataIdDbContext();
+                List<DataId> dataIdList = context.DataIds.ToList();
                 for (int i = 0; i < dataIdArray.Length; i++)
                 {
-                    if(!dataIdDb.DataIds.Contains(dataIdArray[i]))
+                    if(!dataIdList.Contains(dataIdArray[i]))
                     {
-                        dataIdDb.DataIds.AddAsync(dataIdArray[i]);
+                        context.DataIds.Add(dataIdArray[i]);
                         dataIdList.Add(dataIdArray[i]);
                         IsChg = true;
                     }
                 }
                 DisplayAll();
-                dataIdDb.SaveChangesAsync();
+                context.SaveChanges();
             }
         }
 
@@ -152,7 +154,9 @@ namespace MeterTest.Source.SQLite
             form.Text = "添加单个数据标识";
             if(form.ShowDialog() == DialogResult.OK)
             {
-                dataIdDb.DataIds.AddAsync(form.DataId);
+                using var context = new DataIdDbContext();
+                context.DataIds.Add(form.DataId);
+                context.SaveChanges();
                 dataIdList.Add(form.DataId);
                 DisplayAll();
                 IsChg = true;

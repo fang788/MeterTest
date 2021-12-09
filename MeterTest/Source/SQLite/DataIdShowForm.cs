@@ -18,7 +18,7 @@ namespace MeterTest.Source.SQLite
         // private int index;
         public bool IsChg = false;
         private bool optChg = false;
-        private DataIdDbContext dataIdDb = FormMain.DataIdDb;
+        // private DataIdDbContext dataIdDb = FormMain.DataIdDb;
         public DataIdShowForm(DataId id)
         {
             InitializeComponent();

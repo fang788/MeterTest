@@ -45,10 +45,10 @@ namespace MeterTest.Source.SQLite.ParaConfig
             modelBuilder.Entity<ParaConfigDataId>(entity =>
             {
                 entity.HasKey(e => new {e.Id, e.DataArray});
-                entity.Property(e => e.Format).IsRequired();
+                // entity.Property(e => e.Format).IsRequired();
                 entity.Property(e => e.DataBytes).IsRequired();
                 entity.Property(e => e.DataArray).IsRequired();
-                entity.Property(e => e.Unit).IsRequired();
+                // entity.Property(e => e.Unit).IsRequired();
                 entity.Property(e => e.IsReadable).IsRequired();
                 entity.Property(e => e.IsWritable).IsRequired();
 

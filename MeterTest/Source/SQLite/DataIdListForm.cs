@@ -16,7 +16,7 @@ namespace MeterTest.Source.SQLite
 {
     public partial class DataIdListForm : Form
     {
-        DataIdDbContext dataIdDb = FormMain.DataIdDb;
+        // DataIdDbContext dataIdDb = FormMain.DataIdDb;
         public bool IsChg = false;
         public DataIdListForm()
         {
@@ -53,7 +53,8 @@ namespace MeterTest.Source.SQLite
         }
         private void DisplayAll()
         {
-            DataId[] dataIdArray = dataIdDb.DataIds.ToList().ToArray<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray<DataId>();
             dataGridViewDataId.Rows.Clear();
             for (int i = 0; i < dataIdArray.Length; i++)
             {
@@ -81,7 +82,8 @@ namespace MeterTest.Source.SQLite
             {
                 throw;
             }
-            DataId[] dataIdArray = dataIdDb.DataIds.ToList().ToArray<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray<DataId>();
             int i;
             for (i = 0; i < dataIdArray.Length; i++)
             {
@@ -114,7 +116,8 @@ namespace MeterTest.Source.SQLite
         {
             int index;
             List<DataId> list = new List<DataId>();
-            DataId[] dataIdArray = dataIdDb.DataIds.ToList().ToArray<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray<DataId>();
             // foreach (var item in dataGridViewDataId.SelectedRows)
             for (int i = 0; i < dataGridViewDataId.SelectedRows.Count; i++)
             {
@@ -141,11 +144,12 @@ namespace MeterTest.Source.SQLite
             s += "将被永久删除";
             if (MessageBox.Show(s, "MeterTest",  MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                // using var context = new DataIdDbContext();
                 foreach (var item in list)
                 {
-                    dataIdDb.DataIds.Remove(item);
+                    context.DataIds.Remove(item);
                 }
-                dataIdDb.SaveChangesAsync();
+                context.SaveChangesAsync();
                 DisplayAll();
                 IsChg = true;
             }
@@ -193,7 +197,8 @@ namespace MeterTest.Source.SQLite
             // if(dataGridViewDataId.SelectedRows.Count != 0)
             // {
             int index = dataGridViewDataId.CurrentCell.RowIndex;
-            DataId dataIdSelect = dataIdDb.DataIds.ToList().ToArray<DataId>()[index];
+            using var context = new DataIdDbContext();
+            DataId dataIdSelect = context.DataIds.ToArray<DataId>()[index];
             DataIdShowForm form = new DataIdShowForm(dataIdSelect);
             form.StartPosition = FormStartPosition.CenterParent;
             form.ShowDialog();
@@ -208,7 +213,7 @@ namespace MeterTest.Source.SQLite
                     DisplayOne();
                 }
                 IsChg = true;
-                dataIdDb.SaveChanges();
+                context.SaveChanges();
                 //DialogResult = DialogResult.OK;
             }
         }

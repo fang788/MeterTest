@@ -23,10 +23,12 @@ using OxyPlot.Series;
 using OxyPlot.Annotations;
 using MeterTest.Source.Read;
 using MeterTest.Source.SQLite.ParaConfig;
+using Microsoft.EntityFrameworkCore;
+using MeterTest.Source.Write;
 
 namespace MeterTest.Source.WinowsForm
 {
-    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog
+    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog, IParaConfigLog
     {
         private FormLogger formLogger = new FormLogger();
         private SerialPort serialPort;
@@ -44,7 +46,8 @@ namespace MeterTest.Source.WinowsForm
         private LinearAxis      dataAxis = null; // x轴
         private FreezeDataRead freezeDataRead;
         private ReadData readData;
-        static public DataIdDbContext DataIdDb = new DataIdDbContext();
+        private string  paraConfigTableName;
+        // static public DataIdDbContext DataIdDb = new DataIdDbContext();
         public FormMain()
         {
             InitializeComponent();
@@ -82,6 +85,7 @@ namespace MeterTest.Source.WinowsForm
             dataGridViewReadList.Columns.Add("Rst", "结果");
             
             dataGridViewReadList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewParaConfig.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             checkbox = new DataGridViewCheckBoxColumn();
             //列显示名称
@@ -130,6 +134,18 @@ namespace MeterTest.Source.WinowsForm
                                                   dataAxis,
                                                   comboBoxFreezeSelect.Text);
             this.plotViewFreeze.Model = model;
+
+            using var context = new ParaConfigTableDbContext();
+            if(context.ParaConfigTables.Count() > 0)
+            {
+                ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().ToArray().First();
+                ParaConfigTableDisplay(table);
+                paraConfigTableName = table.Name;
+            }
+            else
+            {
+                toolStripStatusLabelParaConfigTable.Text = "当前项目：无";
+            }
         }
 
         private void ParaUpdate()
@@ -260,7 +276,8 @@ namespace MeterTest.Source.WinowsForm
         private void DataIdListDisplayAll()
         {
             dataGridViewReadList.Rows.Clear();
-            DataId[] dataIdArray = DataIdDb.DataIds.ToArray();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
             for (int i = 0; i < dataIdArray.Length; i++)
             {
                 if(dataIdArray[i].IsReadable)
@@ -345,12 +362,14 @@ namespace MeterTest.Source.WinowsForm
             optMessage = "正在单次读取";
             DataId dataId = null;
             List<DataId> dataIdList = new List<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
             for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
                 if((dataGridViewReadList.Rows[i].Cells[0].Value != null) 
                 && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
                 {
-                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
+                    dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
                     dataIdList.Add(dataId);
                 }
             }
@@ -370,12 +389,14 @@ namespace MeterTest.Source.WinowsForm
             optMessage = "正在循环读取";
             DataId dataId = null;
             List<DataId> dataIdList = new List<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
             for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
                 if((dataGridViewReadList.Rows[i].Cells[0].Value != null) 
                 && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
                 {
-                    dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
+                    dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
                     dataIdList.Add(dataId);
                 }
             }
@@ -422,7 +443,8 @@ namespace MeterTest.Source.WinowsForm
         }
         private void DataGridViewWriteDisplayUpdate()
         {
-            DataId[] dataIdArray = DataIdDb.DataIds.ToArray();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
             for (int i = 0; i < dataIdArray.Length; i++)
             {
                 if(dataIdArray[i].IsWritable)
@@ -440,7 +462,9 @@ namespace MeterTest.Source.WinowsForm
 
         private void dataGridViewWrite_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataId dataId = DataIdDb.DataIds.ToArray()[Convert.ToInt32(dataGridViewWrite.Rows[dataGridViewWrite.CurrentCell.RowIndex].Cells[1].Value)];
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
+            DataId dataId = dataIdArray[Convert.ToInt32(dataGridViewWrite.Rows[dataGridViewWrite.CurrentCell.RowIndex].Cells[1].Value)];
             FormWrite form = new FormWrite(dataId);
             form.StartPosition = FormStartPosition.CenterParent;
             if(form.ShowDialog() == DialogResult.OK)
@@ -685,6 +709,7 @@ namespace MeterTest.Source.WinowsForm
             {
                 ReadTabPageSizeZoom();
             }
+            
         }
 
         private void 管理参数配置表ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -697,6 +722,190 @@ namespace MeterTest.Source.WinowsForm
             // {
             //     DataIdListDisplayAll();
             // }
+        }
+        private void ParaConfigTableDisplay(ParaConfigTable table)
+        {
+            toolStripStatusLabelParaConfigTable.Text = "当前项目: "+ table.Name;
+            if(dataGridViewParaConfig.Columns.Count == 0)
+            {
+                dataGridViewParaConfig.Columns.Add("No", "编号");
+                dataGridViewParaConfig.Columns.Add("Id", "标识");
+                dataGridViewParaConfig.Columns.Add("Name", "名称");
+                dataGridViewParaConfig.Columns.Add("Format", "格式");
+                dataGridViewParaConfig.Columns.Add("DataBytes", "长度");
+                dataGridViewParaConfig.Columns.Add("Unit", "单位");
+                dataGridViewParaConfig.Columns.Add("data", "数据");
+                dataGridViewParaConfig.Columns.Add("Rst", "自动加一");
+                dataGridViewParaConfig.Columns.Add("Rst", "编程结果");
+                dataGridViewParaConfig.Columns.Add("Rst", "比对结果");
+            }
+            if(table.DataIds != null)
+            {
+                int no = 0;
+                foreach (var item in table.DataIds)
+                {
+                    int index = dataGridViewParaConfig.Rows.Add();
+                    dataGridViewParaConfig.Rows[index].Cells[0].Value = no;
+                    dataGridViewParaConfig.Rows[index].Cells[1].Value = item.Id.ToString("X8");
+                    dataGridViewParaConfig.Rows[index].Cells[2].Value = item.Name;
+                    dataGridViewParaConfig.Rows[index].Cells[3].Value = item.Format;// == null? null : (dataIdArray[i].Format.ToString());
+                    dataGridViewParaConfig.Rows[index].Cells[4].Value = item.DataBytes;
+                    dataGridViewParaConfig.Rows[index].Cells[5].Value = item.Unit;
+                    dataGridViewParaConfig.Rows[index].Cells[6].Value = item.GetDataString(item.DataArray);
+                    no++;
+                }
+            }
+        }
+
+        private ParaConfig paraConfig;
+        private void 编程ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(paraConfigTableName == null)
+            {
+                toolStripStatusLabelParaConfig.Text = "错误：参数配置表为空";
+                return;
+            }
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在参数配置";
+            paraConfig = new ParaConfig(client, meterAddress, password, operatorCode, this);
+
+            using var context = new ParaConfigTableDbContext();
+            ParaConfigTable paraConfigTable = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == paraConfigTableName);
+            List<DataId> dataIds = new List<DataId>();
+            foreach (var item in paraConfigTable.DataIds)
+            {
+                dataIds.Add((DataId)item);  
+            }
+            
+            Thread thread = new Thread(paraConfig.ParaSet);
+            thread.IsBackground = true;
+            thread.Start(dataIds);
+        }
+
+        private void 比对ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(paraConfigTableName == null)
+            {
+                toolStripStatusLabelParaConfig.Text = "错误：参数配置表为空";
+                return;
+            }
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在参数比对";
+            paraConfig = new ParaConfig(client, meterAddress, password, operatorCode, this);
+            
+            using var context = new ParaConfigTableDbContext();
+            ParaConfigTable paraConfigTable = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == paraConfigTableName);
+            List<DataId> dataIds = new List<DataId>();
+            foreach (var item in paraConfigTable.DataIds)
+            {
+                dataIds.Add((DataId)item);  
+            }
+
+            Thread thread = new Thread(paraConfig.ParaCompare);
+            thread.IsBackground = true;
+            thread.Start(dataIds);
+        }
+
+        private void 自动加1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 停止ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(paraConfig != null)
+            {
+                paraConfig.StopOpt();
+                toolStripStatusLabelParaConfig.Text = "已停止";
+            }
+
+        }
+
+        private void 选择参数配置方案ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void ToolStripStatusLabelStatusUpdate(Object obj)
+        {
+            DataId dataId = (DataId)obj;
+            toolStripStatusLabelStatus.Text = obj.ToString();
+            for (int j = 0; j < dataGridViewParaConfig.RowCount; j++)
+            {
+                if(dataGridViewParaConfig.Rows[j].Cells[1].Value.ToString() == dataId.Id.ToString("X8"))
+                {
+                    dataGridViewParaConfig.CurrentCell = dataGridViewParaConfig.Rows[j].Cells[7];
+                    if(optMessage == "正在参数比对")
+                    {
+                        dataGridViewParaConfig.Rows[j].Cells[9].Value = null;
+                        toolStripStatusLabelStatus.Text = "当前比对的数据标识-<" + dataId.Id.ToString("X8") + ">";
+                    }
+                    else
+                    {
+                        dataGridViewParaConfig.Rows[j].Cells[8].Value = null;
+                        toolStripStatusLabelStatus.Text = "当前配置的数据标识-<" + dataId.Id.ToString("X8") + ">";
+                    }
+                    break;
+                }
+            }
+
+        }
+        private void ParaConfigRstDisplay(object obj)
+        {
+            ParaConfigMsg msg = (ParaConfigMsg)obj;
+            for (int j = 0; j < dataGridViewParaConfig.RowCount; j++)
+            {
+                if(dataGridViewParaConfig.Rows[j].Cells[1].Value.ToString() == msg.DataId.Id.ToString("X8"))
+                {
+                    if(optMessage == "正在参数比对")
+                    {
+                        if(msg.IsSuccess)
+                        {
+                            dataGridViewParaConfig.Rows[j].Cells[9].Value = "一致";
+                            dataGridViewParaConfig.Rows[j].Cells[9].Style.BackColor = Color.Green;
+                        }
+                        else
+                        {
+                            dataGridViewParaConfig.Rows[j].Cells[9].Value = msg.ErrorLog;
+                            dataGridViewParaConfig.Rows[j].Cells[9].Style.BackColor = Color.Red;
+                        }
+                    }
+                    else
+                    {
+                        if(msg.IsSuccess)
+                        {
+                            dataGridViewParaConfig.Rows[j].Cells[8].Value = "成功";
+                            dataGridViewParaConfig.Rows[j].Cells[8].Style.BackColor = Color.Green;
+                        }
+                        else
+                        {
+                            dataGridViewParaConfig.Rows[j].Cells[8].Value = msg.ErrorLog;
+                            dataGridViewParaConfig.Rows[j].Cells[8].Style.BackColor = Color.Red;
+                        }
+                    }
+                    break;
+                }
+            }
+
+        }
+        public void SendMsg(ParaConfigMsg msg)
+        {
+            synchronizationContext.Post(ParaConfigRstDisplay, msg);
+        }
+
+        public void SendConfigDataId(DataId dataId)
+        {
+            // string s = "当前操作的数据标识-<" + dataId.Id.ToString("X8") + ">";
+            synchronizationContext.Post(ToolStripStatusLabelStatusUpdate, dataId);
         }
     }
 }

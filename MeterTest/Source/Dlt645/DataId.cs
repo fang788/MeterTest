@@ -491,7 +491,19 @@ namespace MeterTest.Source.Dlt645
                     }
                     if(this.Format == "ASC")
                     {
-                        byteArray = System.Text.Encoding.Default.GetBytes(s);
+                        byteArray = new byte[DataBytes];
+                        byte[] tmp = System.Text.Encoding.Default.GetBytes(s);
+                        if(tmp.Length > DataBytes)
+                        {
+                            throw new Exception(Name + Id.ToString("X8") + "-数据长度不争取");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < tmp.Length; i++)
+                            {
+                                byteArray[i] = tmp[i];
+                            }
+                        }
                     }
                 }
                 else
