@@ -6,7 +6,7 @@ namespace MeterTest.Source.SQLite.ParaConfig
 {
     public class ParaConfigTable
     {
-        public DateTime DateTime;
+        // public DateTime DateTime;
         private String name;
         public List<ParaConfigDataId> DataIds{get; set;}
 

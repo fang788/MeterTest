@@ -38,13 +38,13 @@ namespace MeterTest.Source.SQLite.ParaConfig
             // base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ParaConfigTable>(entity =>
             {
-                entity.HasKey(e => e.DateTime);
+                entity.HasKey(e => e.Name);
                 entity.Property(e => e.Name).IsRequired();
                 entity.HasMany(e => e.DataIds).WithOne();
             });
             modelBuilder.Entity<ParaConfigDataId>(entity =>
             {
-                entity.HasKey(e => e.DateTime);
+                entity.HasKey(e => new {e.Id, e.DataArray});
                 entity.Property(e => e.Format).IsRequired();
                 entity.Property(e => e.DataBytes).IsRequired();
                 entity.Property(e => e.DataArray).IsRequired();

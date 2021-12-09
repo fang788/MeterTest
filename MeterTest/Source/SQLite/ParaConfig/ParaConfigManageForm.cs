@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
+using Microsoft.EntityFrameworkCore;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -18,7 +19,7 @@ namespace MeterTest.Source.SQLite.ParaConfig
     public partial class ParaConfigManageForm : Form
     {
         // 数据库
-        private ParaConfigTableDbContext paraConfigTableDb = ParaConfigTableDbContext.GetParaConfigTableDbContextInstance();
+        // private ParaConfigTableDbContext paraConfigTableDb = ParaConfigTableDbContext.GetParaConfigTableDbContextInstance();
         public ParaConfigManageForm()
         {
             InitializeComponent();
@@ -26,7 +27,8 @@ namespace MeterTest.Source.SQLite.ParaConfig
         private void ParaConfigManageForm_Load(object sender, EventArgs e)
         {
             List<string> nameList = new List<string>();
-            List<ParaConfigTable> ParaConfigTableList = paraConfigTableDb.ParaConfigTables.ToList<ParaConfigTable>();
+            using var context = new ParaConfigTableDbContext();
+            List<ParaConfigTable> ParaConfigTableList = context.ParaConfigTables.ToList<ParaConfigTable>();
             if(ParaConfigTableList != null)
             {
                 foreach (var item in ParaConfigTableList)
@@ -37,7 +39,6 @@ namespace MeterTest.Source.SQLite.ParaConfig
                 {
                     ProjectTreeUpdate(nameList);
                     treeViewProject.SelectedNode = treeViewProject.Nodes[0].Nodes[0];
-                    //ParaConfigTable paraTable = paraConfigTableDb.ParaConfigTables.Single(b => b.Name == treeViewProject.SelectedNode.Text);
                 }
             }
             
@@ -113,7 +114,7 @@ namespace MeterTest.Source.SQLite.ParaConfig
                 {
                     IRow row = sheet.GetRow(i);
                     ParaConfigDataId dataId = new ParaConfigDataId();
-                    dataId.DateTime   = DateTime.Now;
+                    // dataId.DateTime   = DateTime.Now;
                     dataId.Id         = Convert.ToUInt32(row.GetCell(0).StringCellValue, 16);
                     dataId.Name       = row.GetCell(1).StringCellValue;
                     dataId.Format     = row.GetCell(2) == null? null : row.GetCell(2).StringCellValue;
@@ -153,11 +154,18 @@ namespace MeterTest.Source.SQLite.ParaConfig
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 ParaConfigTable table = GetParaConfigTableFromExcel(fileDialog.FileName);
-                table.DateTime = DateTime.Now;
-                paraConfigTableDb.ParaConfigTables.Add(table);
-                paraConfigTableDb.SaveChanges();
+                // table.DateTime = DateTime.Now;
+                using var context = new ParaConfigTableDbContext();
+                if(context.ParaConfigTables.Contains(table))
+                {
+                    MessageBox.Show(table.Name + "已存在，请勿重复添加", "Meter Test", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                context.ParaConfigTables.Add(table);
+                context.SaveChanges();
                 List<string> nameList = new List<string>();
-                foreach (var item in paraConfigTableDb.ParaConfigTables)
+                List<ParaConfigTable> List = context.ParaConfigTables.ToList();
+                foreach (var item in List)
                 {
                     nameList.Add(item.Name);
                 }
@@ -181,20 +189,26 @@ namespace MeterTest.Source.SQLite.ParaConfig
 
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(treeViewProject.SelectedNode != null)
+            if((treeViewProject.SelectedNode != null) 
+            && (treeViewProject.Nodes[0].Nodes != null)
+            && (treeViewProject.Nodes[0].Nodes.Contains(treeViewProject.SelectedNode)))
             {
                 if(MessageBox.Show("是否删除" + treeViewProject.SelectedNode.Name, "Meter Test Tip", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    ParaConfigTable table = paraConfigTableDb.ParaConfigTables.ToArray()[treeViewProject.SelectedNode.Index];
+                    using var context = new ParaConfigTableDbContext();
+                    // ParaConfigTable table = paraConfigTableDb.ParaConfigTables.ToArray()[treeViewProject.SelectedNode.Index];
+                    ParaConfigTable table = context.ParaConfigTables.Single(e => e.Name == treeViewProject.SelectedNode.Text);
                     List<ParaConfigDataId> dataIdList = table.DataIds;
                     // ParaConfigTable table = paraConfigTableDb.ParaConfigTables.OrderBy(e => e.Name).Include(e => e.Posts).First();
-                    paraConfigTableDb.RemoveRange(dataIdList);
-                    paraConfigTableDb.Remove(table);
-                    paraConfigTableDb.SaveChanges();
+                    context.ParaConfigTables.Remove(table);
+                    // paraConfigTableDb.RemoveRange(dataIdList);
+                    // paraConfigTableDb.Remove(table);
+                    context.SaveChanges();
                     //paraConfigTableDb.Update(paraConfigTableDb.ParaConfigTables);
                     //paraConfigTableDb.Update(paraConfigTableDb.DataIds);
                     List<string> nameList = new List<string>();
-                    foreach (var item in paraConfigTableDb.ParaConfigTables)
+                    List<ParaConfigTable> list = context.ParaConfigTables.ToList();
+                    foreach (var item in list)
                     {
                         nameList.Add(item.Name);
                     }
@@ -202,7 +216,7 @@ namespace MeterTest.Source.SQLite.ParaConfig
                     {
                         ProjectTreeUpdate(nameList);
                         treeViewProject.SelectedNode = treeViewProject.Nodes[0].Nodes[0];
-                        TableListUpdate(paraConfigTableDb.ParaConfigTables.ToArray()[0]);
+                        TableListUpdate(context.ParaConfigTables.ToArray()[0]);
                     }
                     else
                     {
@@ -239,8 +253,9 @@ namespace MeterTest.Source.SQLite.ParaConfig
             && (treeViewProject.Nodes[0].Nodes.Contains(treeViewProject.SelectedNode))
             && (SelectedNode != treeViewProject.SelectedNode))
             {
+                using var context = new ParaConfigTableDbContext();
                 SelectedNode = treeViewProject.SelectedNode;
-                ParaConfigTable table = paraConfigTableDb.ParaConfigTables.ToList()[treeViewProject.SelectedNode.Index];
+                ParaConfigTable table = context.ParaConfigTables.Include(blog => blog.DataIds).Single(e => e.Name == treeViewProject.SelectedNode.Text);
                 TableListUpdate(table);
             }
         }
