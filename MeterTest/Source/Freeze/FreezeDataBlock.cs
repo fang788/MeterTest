@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using MeterTest.Source.Dlt645;
 
 namespace MeterTest.Source.Freeze
 {
-    public abstract class FreezeDataBlock : IComparable
+    public class FreezeDataBlock : IComparable
     {
         public DateTime time;
         public int No;
@@ -12,16 +13,44 @@ namespace MeterTest.Source.Freeze
         public uint TimeReadDataId;
         public List<FreezeItem> ItemList = new List<FreezeItem>();
 
-        public abstract void ByteArrayConvetToItemList();
+        public void ByteArrayConvetToItemList()
+        {
+            if(ByteArray.Length != Bytes)
+            {
+                throw new System.Exception("读取的数据长度不正确");
+            }
+            DateTime dateTime = new DateTime(PublicClass.ByteBcd2Hex(ByteArray[0]) + 2000,
+                                             PublicClass.ByteBcd2Hex(ByteArray[1]),
+                                             PublicClass.ByteBcd2Hex(ByteArray[2]),
+                                             PublicClass.ByteBcd2Hex(ByteArray[3]),
+                                             PublicClass.ByteBcd2Hex(ByteArray[4]),
+                                             0);
+            this.time = dateTime;
+            for (int i = 0; i < ItemList.Count; i++)
+            {
+                FreezeItem item = ItemList[i];
+                item.Value = 0;
+                for (int j = 0; j < item.Length; j++)
+                {
+                    item.Value *= 10;
+                    item.Value += PublicClass.ByteBcd2Hex(ByteArray[j + item.Offset]);
+                }
+                for (int j = 0; j < item.Point; j++)
+                {
+                    item.Value /= 10;
+                }
+            }
+        }
 
         public FreezeDataBlock()
         {
         }
         
-        public FreezeDataBlock(DateTime time, int no, List<FreezeItem> itemList)
+        public FreezeDataBlock(int no, int bytes, uint dataId, List<FreezeItem> itemList)
         {
-            this.time = time;
             No = no;
+            Bytes = bytes;
+            TimeReadDataId = dataId;
             ItemList = itemList;
         }
 

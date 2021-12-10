@@ -18,13 +18,14 @@ namespace MeterTest.Source.Freeze
         {
 
         }
-        public FreezeItem(int offset, int length, string format, string unit, string name)
+        public FreezeItem(int offset, int length, int point, string format, string unit, string name)
         {
             Name = name;
             Offset = offset;
             Length = length;
             Format = format;
             Unit = unit;
+            Point = point;
         }
         public FreezeItem(string name, double value)
         {
