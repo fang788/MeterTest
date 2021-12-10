@@ -109,7 +109,7 @@ namespace MeterTest.Source.Freeze
         }
 
         // public static FreezeDataBlock[2]
-        public List<FreezeDataBlock> ReadFreezeDataFromCntBlk(int cnt, int blockNo)
+        public FreezeDataBlock ReadFreezeDataFromCntBlk(int cnt, int blockNo)
         {
             if((cnt == 0) 
             || (cnt > FreezeDataBlockCnt) 
@@ -118,21 +118,16 @@ namespace MeterTest.Source.Freeze
             {
                 throw new InvalidOperationException("cnt = ${cnt}, blockNo = ${blockNo}");
             }
-            List<FreezeDataBlock> freezeDataBlocks = new List<FreezeDataBlock>();
             
             DataId dataId = new DataId();
-            for (int i = 0; i < cnt; i++)
-            {
-                FreezeDataBlock block = this.CreateFreezeDataBlock(blockNo);
-                dataId.Id = (uint)((uint)0xA20000FF + (blockNo << 20) + (cnt << 8));
-                block.ByteArray = client.Read(address, dataId);
-                block.ByteArrayConvetToItemList();
-                freezeDataBlocks.Add(block);
-            }
-            return freezeDataBlocks;
+            FreezeDataBlock block = this.CreateFreezeDataBlock(blockNo);
+            dataId.Id = (uint)((uint)0xA20000FF + (blockNo << 20) + (cnt << 8));
+            block.ByteArray = client.Read(address, dataId);
+            block.ByteArrayConvetToItemList();
+            return block;
         }
 
-        public List<FreezeDataBlock> ReadFreezeDataFromCntOnce(int cnt, int blockNo)
+        public FreezeDataBlock ReadFreezeDataFromCntOnce(int cnt, int blockNo)
         {
             if((cnt == 0) 
             || (cnt > FreezeDataBlockCnt) 
@@ -141,56 +136,43 @@ namespace MeterTest.Source.Freeze
             {
                 throw new InvalidOperationException("cnt = ${cnt}, blockNo = ${blockNo}");
             }
-            List<FreezeDataBlock> freezeDataBlocks = new List<FreezeDataBlock>();
             DataId dataId = new DataId();
-            for (int i = 0; i < cnt; i++)
+            FreezeDataBlock block = CreateFreezeDataBlock(blockNo);
+            dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (cnt << 8));
+            block.ByteArray = client.Read(address, dataId);
+            for (int j = 0; j < block.ItemList.Count; j++)
             {
-                FreezeDataBlock block = CreateFreezeDataBlock(blockNo);
-                dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (i << 8));
-                block.ByteArray = client.Read(address, dataId);
-                for (int j = 0; j < block.ItemList.Count; j++)
-                {
-                    dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (i << 8) + (j + 1));
-                    byte[] arrayTmp = client.Read(address, dataId);
-                    byte[] decArray = new byte[block.ByteArray.Length + arrayTmp.Length];
-                    Array.Copy(block.ByteArray, decArray, block.ByteArray.Length);
-                    Array.Copy(arrayTmp, 0, decArray, block.ByteArray.Length, arrayTmp.Length);
-                    block.ByteArray = decArray;
-                    block.ByteArrayConvetToItemList();
-                    freezeDataBlocks.Add(block);
-                }
+                dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (cnt << 8) + (j + 1));
+                byte[] arrayTmp = client.Read(address, dataId);
+                byte[] decArray = new byte[block.ByteArray.Length + arrayTmp.Length];
+                Array.Copy(block.ByteArray, decArray, block.ByteArray.Length);
+                Array.Copy(arrayTmp, 0, decArray, block.ByteArray.Length, arrayTmp.Length);
+                block.ByteArray = decArray;
             }
-            return freezeDataBlocks;
+            block.ByteArrayConvetToItemList();
+            return block;
         }
 
-        public List<FreezeDataBlock> ReadFreezeDataFromTime(DateTime start, DateTime end, int time, int blockNo)
+        public FreezeDataBlock ReadFreezeDataFromTime(DateTime time, int blockNo)
         {
-            if((time == 0) 
-            || (time > 60) 
-            || (blockNo > FreezeMaxCnt)
+            if((blockNo > FreezeMaxCnt)
             || (blockNo == 0))
             {
                 throw new InvalidOperationException("cnt = ${time}, blockNo = ${blockNo}");
             }
-            List<FreezeDataBlock> freezeDataBlocks = new List<FreezeDataBlock>();
             DataId dataId = new DataId();
-            while(start <= end)
-            {
-                FreezeDataBlock block = CreateFreezeDataBlock(blockNo);
-                dataId.Id = block.TimeReadDataId;
-                byte[] array = new byte[6];
-                array[5] = PublicClass.ByteHex2Bcd((byte)((start.Year % 100)));//(byte)((((byte)(((start.Year % 100)) / 10)) << 4) | (((byte)(((start.Year % 100)) % 10))));
-                array[4] = PublicClass.ByteHex2Bcd((byte)(start.Month       ));//(byte)((((byte)((start.Month       ) / 10)) << 4) | (((byte)((start.Month       ) % 10))));
-                array[3] = PublicClass.ByteHex2Bcd((byte)(start.Day         ));//(byte)((((byte)((start.Day         ) / 10)) << 4) | (((byte)((start.Day         ) % 10))));
-                array[2] = PublicClass.ByteHex2Bcd((byte)(start.Hour        ));//(byte)((((byte)((start.Hour        ) / 10)) << 4) | (((byte)((start.Hour        ) % 10))));
-                array[1] = PublicClass.ByteHex2Bcd((byte)(start.Minute      ));//(byte)((((byte)((start.Minute      ) / 10)) << 4) | (((byte)((start.Minute      ) % 10))));
-                array[0] = (byte)1;
-                block.ByteArray = client.Read(MeterAddress.Wildcard, dataId, array);
-                block.ByteArrayConvetToItemList();
-                freezeDataBlocks.Add(block);
-                start.AddMinutes(time);
-            } 
-            return freezeDataBlocks;
+            FreezeDataBlock block = CreateFreezeDataBlock(blockNo);
+            dataId.Id = block.TimeReadDataId;
+            byte[] array = new byte[6];
+            array[5] = PublicClass.ByteHex2Bcd((byte)((time.Year % 100)));//(byte)((((byte)(((start.Year % 100)) / 10)) << 4) | (((byte)(((start.Year % 100)) % 10))));
+            array[4] = PublicClass.ByteHex2Bcd((byte)(time.Month       ));//(byte)((((byte)((start.Month       ) / 10)) << 4) | (((byte)((start.Month       ) % 10))));
+            array[3] = PublicClass.ByteHex2Bcd((byte)(time.Day         ));//(byte)((((byte)((start.Day         ) / 10)) << 4) | (((byte)((start.Day         ) % 10))));
+            array[2] = PublicClass.ByteHex2Bcd((byte)(time.Hour        ));//(byte)((((byte)((start.Hour        ) / 10)) << 4) | (((byte)((start.Hour        ) % 10))));
+            array[1] = PublicClass.ByteHex2Bcd((byte)(time.Minute      ));//(byte)((((byte)((start.Minute      ) / 10)) << 4) | (((byte)((start.Minute      ) % 10))));
+            array[0] = (byte)1;
+            block.ByteArray = client.Read(MeterAddress.Wildcard, dataId, array);
+            block.ByteArrayConvetToItemList();
+            return block;
         }
     }
 }
