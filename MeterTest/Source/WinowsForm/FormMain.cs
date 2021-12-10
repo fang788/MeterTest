@@ -915,12 +915,40 @@ namespace MeterTest.Source.WinowsForm
 
         public void SendConfigDataId(DataId dataId)
         {
-            // string s = "当前操作的数据标识-<" + dataId.Id.ToString("X8") + ">";
             synchronizationContext.Post(ToolStripStatusLabelStatusUpdate, dataId);
         }
         public void ConfigEnd()
         {
             synchronizationContext.Post(ParaConfigEnd, new object());
+        }
+
+        private void contextMenuStripParaConfig_Opening(object sender, CancelEventArgs e)
+        {
+            using var context = new ParaConfigTableDbContext();
+            List<ParaConfigTable> list = context.ParaConfigTables.AsNoTracking().ToList();
+            if(list.Count > 0)
+            {
+                ToolStripMenuItem menu = (ToolStripMenuItem)contextMenuStripParaConfig.Items[contextMenuStripParaConfig.Items.IndexOf(选择参数配置方案ToolStripMenuItem)];
+                menu.DropDownItems.Clear();
+                foreach (var item in list)
+                {
+                    ToolStripMenuItem addMenu = new ToolStripMenuItem(item.Name);
+                    addMenu.Click += new System.EventHandler(this.addMenu_Click);
+                    menu.DropDownItems.Add(addMenu);
+                }
+            }
+        }
+
+        private void addMenu_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menu = (ToolStripMenuItem)sender;
+            if(paraConfigTableName != menu.Text)
+            {
+                using var context = new ParaConfigTableDbContext();
+                ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == menu.Text);
+                ParaConfigTableDisplay(table);
+                paraConfigTableName = menu.Text;
+            }
         }
     }
 }

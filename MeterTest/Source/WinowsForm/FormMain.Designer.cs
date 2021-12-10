@@ -815,7 +815,7 @@ namespace MeterTest.Source.WinowsForm
             this.toolStripStatusLabelParaConfigTable.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabelParaConfigTable.Name = "toolStripStatusLabelParaConfigTable";
             this.toolStripStatusLabelParaConfigTable.Size = new System.Drawing.Size(68, 17);
-            this.toolStripStatusLabelParaConfigTable.Text = "当前项目：";
+            this.toolStripStatusLabelParaConfigTable.Text = "当前方案：";
             // 
             // dataGridViewParaConfig
             // 
@@ -841,6 +841,7 @@ namespace MeterTest.Source.WinowsForm
             this.选择参数配置方案ToolStripMenuItem});
             this.contextMenuStripParaConfig.Name = "contextMenuStripParaConfig";
             this.contextMenuStripParaConfig.Size = new System.Drawing.Size(181, 158);
+            this.contextMenuStripParaConfig.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripParaConfig_Opening);
             // 
             // 编程ToolStripMenuItem
             // 
