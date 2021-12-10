@@ -99,11 +99,10 @@ namespace MeterTest.Source.WinowsForm
             this.contextMenuStripParaConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.编程ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.比对ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.自动加1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.停止ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.暂停ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选择参数配置方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.通讯地址自适应ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageRead.SuspendLayout();
@@ -835,12 +834,11 @@ namespace MeterTest.Source.WinowsForm
             this.contextMenuStripParaConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.编程ToolStripMenuItem,
             this.比对ToolStripMenuItem,
-            this.自动加1ToolStripMenuItem,
             this.停止ToolStripMenuItem,
-            this.暂停ToolStripMenuItem,
-            this.选择参数配置方案ToolStripMenuItem});
+            this.选择参数配置方案ToolStripMenuItem,
+            this.通讯地址自适应ToolStripMenuItem});
             this.contextMenuStripParaConfig.Name = "contextMenuStripParaConfig";
-            this.contextMenuStripParaConfig.Size = new System.Drawing.Size(181, 158);
+            this.contextMenuStripParaConfig.Size = new System.Drawing.Size(181, 136);
             this.contextMenuStripParaConfig.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripParaConfig_Opening);
             // 
             // 编程ToolStripMenuItem
@@ -857,13 +855,6 @@ namespace MeterTest.Source.WinowsForm
             this.比对ToolStripMenuItem.Text = "比对";
             this.比对ToolStripMenuItem.Click += new System.EventHandler(this.比对ToolStripMenuItem_Click);
             // 
-            // 自动加1ToolStripMenuItem
-            // 
-            this.自动加1ToolStripMenuItem.Name = "自动加1ToolStripMenuItem";
-            this.自动加1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.自动加1ToolStripMenuItem.Text = "自动加1";
-            this.自动加1ToolStripMenuItem.Click += new System.EventHandler(this.自动加1ToolStripMenuItem_Click);
-            // 
             // 停止ToolStripMenuItem
             // 
             this.停止ToolStripMenuItem.Name = "停止ToolStripMenuItem";
@@ -871,24 +862,23 @@ namespace MeterTest.Source.WinowsForm
             this.停止ToolStripMenuItem.Text = "停止";
             this.停止ToolStripMenuItem.Click += new System.EventHandler(this.停止ToolStripMenuItem_Click);
             // 
-            // 暂停ToolStripMenuItem
-            // 
-            this.暂停ToolStripMenuItem.Name = "暂停ToolStripMenuItem";
-            this.暂停ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.暂停ToolStripMenuItem.Text = "暂停";
-            // 
             // 选择参数配置方案ToolStripMenuItem
             // 
             this.选择参数配置方案ToolStripMenuItem.Name = "选择参数配置方案ToolStripMenuItem";
             this.选择参数配置方案ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.选择参数配置方案ToolStripMenuItem.Text = "选择参数配置方案";
-            this.选择参数配置方案ToolStripMenuItem.Click += new System.EventHandler(this.选择参数配置方案ToolStripMenuItem_Click);
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "写数据状态";
+            // 
+            // 通讯地址自适应ToolStripMenuItem
+            // 
+            this.通讯地址自适应ToolStripMenuItem.Name = "通讯地址自适应ToolStripMenuItem";
+            this.通讯地址自适应ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.通讯地址自适应ToolStripMenuItem.Text = "通讯地址自适应";
             // 
             // FormMain
             // 
@@ -1004,13 +994,12 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.ContextMenuStrip contextMenuStripParaConfig;
         private System.Windows.Forms.ToolStripMenuItem 编程ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 比对ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 自动加1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 停止ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 暂停ToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelParaConfig;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelParaConfigTable;
         private System.Windows.Forms.ToolStripMenuItem 选择参数配置方案ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 通讯地址自适应ToolStripMenuItem;
     }
 }

@@ -6,7 +6,11 @@ namespace MeterTest.Source.SQLite.ParaConfig
 {
     public class ParaConfigTable
     {
-        // public DateTime DateTime;
+        public static List<DataId> HasCommAddrAutoAddList = new List<DataId>
+        {
+            new DataId(0x04000401),
+            new DataId(0x04000402),
+        };
         private String name;
         public List<ParaConfigDataId> DataIds{get; set;}
 

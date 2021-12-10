@@ -735,7 +735,14 @@ namespace MeterTest.Source.WinowsForm
                 dataGridViewParaConfig.Columns.Add("DataBytes", "长度");
                 dataGridViewParaConfig.Columns.Add("Unit", "单位");
                 dataGridViewParaConfig.Columns.Add("data", "数据");
-                dataGridViewParaConfig.Columns.Add("Rst", "自动加一");
+                 //为dgv增加复选框列
+                DataGridViewCheckBoxColumn checkbox = new DataGridViewCheckBoxColumn();
+                checkbox.HeaderText = "自动加一";
+                checkbox.Name = "IsChecked";
+                checkbox.TrueValue = true;
+                checkbox.FalseValue = false;
+                checkbox.DataPropertyName = "IsChecked";
+                dataGridViewParaConfig.Columns.Add(checkbox);
                 dataGridViewParaConfig.Columns.Add("Rst", "编程结果");
                 dataGridViewParaConfig.Columns.Add("Rst", "比对结果");
             }
@@ -752,6 +759,10 @@ namespace MeterTest.Source.WinowsForm
                     dataGridViewParaConfig.Rows[index].Cells[4].Value = item.DataBytes;
                     dataGridViewParaConfig.Rows[index].Cells[5].Value = item.Unit;
                     dataGridViewParaConfig.Rows[index].Cells[6].Value = item.GetDataString(item.DataArray);
+                    if(!ParaConfigTable.HasCommAddrAutoAddList.Contains(item))
+                    {
+                        dataGridViewParaConfig.Rows[index].Cells[7].ReadOnly = true;;
+                    }
                     no++;
                 }
             }
@@ -773,15 +784,42 @@ namespace MeterTest.Source.WinowsForm
             optLock = true;
             optMessage = "正在参数配置";
             paraConfig = new ParaConfig(client, meterAddress, password, operatorCode, this);
-
+            
             using var context = new ParaConfigTableDbContext();
-            ParaConfigTable paraConfigTable = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == paraConfigTableName);
+
+            for (int j = 1; j < dataGridViewParaConfig.RowCount; j++)
+            {
+                if((dataGridViewParaConfig.Rows[j].Cells[7].Value != null)
+                && ((bool)dataGridViewParaConfig.Rows[j].Cells[7].Value == true))
+                {
+                    uint id = Convert.ToUInt32(dataGridViewParaConfig.Rows[j].Cells[1].Value.ToString(), 16);
+                    ulong tmp = Convert.ToUInt64(dataGridViewParaConfig.Rows[j].Cells[6].Value.ToString());
+                    tmp++;
+                    dataGridViewParaConfig.Rows[j].Cells[6].Value = tmp.ToString();
+                    byte[] arrayTmp = new byte[6];
+
+                    string sTmp = tmp.ToString();
+                    int lenTmp = sTmp.Length;
+                    for (int i = 0; i < arrayTmp.Length; i++)
+                    {
+                        arrayTmp[i] = Convert.ToByte(sTmp.Substring(lenTmp - 2 - i * 2, 2), 16);
+                    }
+
+                    ParaConfigDataId dataId = context.DataIds.Single(e => e.Id == id);
+                    context.Remove(dataId);
+                    context.SaveChanges();
+                    dataId.DataArray = arrayTmp;
+                    context.DataIds.Add(dataId);
+                    context.SaveChanges();
+                }
+            }
+
+            ParaConfigTable paraConfigTable = context.ParaConfigTables.AsNoTracking().Include(e => e.DataIds).Single(e => e.Name == paraConfigTableName);
             List<DataId> dataIds = new List<DataId>();
             foreach (var item in paraConfigTable.DataIds)
             {
                 dataIds.Add((DataId)item);  
             }
-            
             Thread thread = new Thread(paraConfig.ParaSet);
             thread.IsBackground = true;
             thread.Start(dataIds);
@@ -828,11 +866,6 @@ namespace MeterTest.Source.WinowsForm
                 paraConfig.StopOpt();
                 toolStripStatusLabelParaConfig.Text = "已停止";
             }
-
-        }
-
-        private void 选择参数配置方案ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
         }
         private void ToolStripStatusLabelStatusUpdate(Object obj)
