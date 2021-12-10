@@ -534,39 +534,52 @@ namespace MeterTest.Source.WinowsForm
         }
         private void buttonFreezeRead_Click(object sender, EventArgs e)
         {
-            if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeReadStart.Value.Ticks)
+            if(buttonFreezeRead.Text == "读取")
             {
-                MessageBox.Show("开始时间：" + dateTimePickerFreezeReadStart.Value.ToString("yy-MM-dd HH:mm") + 
-                "，早于结束时间：" + dateTimePickerFreezeReadEnd.Value.ToString("yy-MM-dd HH:mm"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeReadStart.Value.Ticks)
+                {
+                    MessageBox.Show("开始时间：" + dateTimePickerFreezeReadStart.Value.ToString("yy-MM-dd HH:mm") + 
+                    "，早于结束时间：" + dateTimePickerFreezeReadEnd.Value.ToString("yy-MM-dd HH:mm"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if(optLock)
+                {
+                    MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                optLock = true;
+                optMessage = "正在读取冻结数据";
+                DateTime start = new DateTime(dateTimePickerFreezeReadStart.Value.Year, 
+                                                dateTimePickerFreezeReadStart.Value.Month, 
+                                                dateTimePickerFreezeReadStart.Value.Day, 
+                                                dateTimePickerFreezeReadStart.Value.Hour, 
+                                                dateTimePickerFreezeReadStart.Value.Minute, 
+                                                0);
+                DateTime End = new DateTime(dateTimePickerFreezeReadEnd.Value.Year, 
+                                                dateTimePickerFreezeReadEnd.Value.Month, 
+                                                dateTimePickerFreezeReadEnd.Value.Day, 
+                                                dateTimePickerFreezeReadEnd.Value.Hour, 
+                                                dateTimePickerFreezeReadEnd.Value.Minute, 
+                                                0);
+                toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
+                plotViewFreeze.Model.Series.Clear();  
+                freezeLineChart.lineDict.Clear();          
+                plotViewFreeze.Model.InvalidatePlot(true);
+                freezeDataRead = new FreezeDataRead(client, this, start, End);
+                Thread threadFreezeRead = new Thread(freezeDataRead.ReadPhaseChangeFreezeData);
+                threadFreezeRead.IsBackground = true;
+                threadFreezeRead.Start();
+                buttonFreezeRead.Text = "停止";
             }
-            if(optLock)
+            else if(buttonFreezeRead.Text == "停止")
             {
-                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if(freezeDataRead != null)
+                {
+                    freezeDataRead.EndFreezeDataRead();
+                }
+                optLock = false; 
+                buttonFreezeRead.Text = "读取";
             }
-            optLock = true;
-            optMessage = "正在读取冻结数据";
-            DateTime start = new DateTime(dateTimePickerFreezeReadStart.Value.Year, 
-                                               dateTimePickerFreezeReadStart.Value.Month, 
-                                               dateTimePickerFreezeReadStart.Value.Day, 
-                                               dateTimePickerFreezeReadStart.Value.Hour, 
-                                               dateTimePickerFreezeReadStart.Value.Minute, 
-                                               0);
-            DateTime End = new DateTime(dateTimePickerFreezeReadEnd.Value.Year, 
-                                             dateTimePickerFreezeReadEnd.Value.Month, 
-                                             dateTimePickerFreezeReadEnd.Value.Day, 
-                                             dateTimePickerFreezeReadEnd.Value.Hour, 
-                                             dateTimePickerFreezeReadEnd.Value.Minute, 
-                                             0);
-            toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
-            plotViewFreeze.Model.Series.Clear();  
-            freezeLineChart.lineDict.Clear();          
-            plotViewFreeze.Model.InvalidatePlot(true);
-            freezeDataRead = new FreezeDataRead(client, this, start, End);
-            Thread threadFreezeRead = new Thread(freezeDataRead.ReadPhaseChangeFreezeData);
-            threadFreezeRead.IsBackground = true;
-            threadFreezeRead.Start();
         }
         
         private void comboBoxFreezeSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -981,6 +994,78 @@ namespace MeterTest.Source.WinowsForm
                 ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == menu.Text);
                 ParaConfigTableDisplay(table);
                 paraConfigTableName = menu.Text;
+            }
+        }
+
+        private void comboBoxProjectSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBoxProjectSelect.Text == "相变") 
+            {
+                comboBoxFreezeMethon.Items.Clear();
+                comboBoxFreezeMethon.Items.Add("时间");
+                comboBoxFreezeMethon.Text = "时间";
+                numericUpDownFreezeCnt.Visible = false;
+                labelFreezeCnt.Visible = false;
+                dateTimePickerFreezeReadEnd.Visible = true;
+                dateTimePickerFreezeReadStart.Visible = true;
+                label3.Visible = true;
+                label4.Visible = true;
+                comboBoxFreezeBlkNo.Items.Clear();
+                comboBoxFreezeBlkNo.Items.Add(1);
+
+                numericUpDownFreezeTime.Visible = true;
+                label12.Visible = true;
+                label13.Visible = true;
+            }
+            else if(comboBoxProjectSelect.Text == "II型终端")
+            {
+                comboBoxFreezeMethon.Items.Clear();
+                comboBoxFreezeMethon.Items.Add("时间");
+                comboBoxFreezeMethon.Items.Add("次数块");
+                comboBoxFreezeMethon.Items.Add("次数单个");
+                comboBoxFreezeMethon.Text = "时间";
+                numericUpDownFreezeCnt.Visible = false;
+                labelFreezeCnt.Visible = false;
+                dateTimePickerFreezeReadEnd.Visible = true;
+                dateTimePickerFreezeReadStart.Visible = true;
+                label3.Visible = true;
+                label4.Visible = true;
+                comboBoxFreezeBlkNo.Items.Clear();
+                comboBoxFreezeBlkNo.Items.Add(1);
+                comboBoxFreezeBlkNo.Items.Add(2);
+
+                numericUpDownFreezeTime.Visible = true;
+                label12.Visible = true;
+                label13.Visible = true;
+            }
+        }
+
+        private void comboBoxFreezeMethon_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBoxFreezeMethon.Text == "时间") 
+            {
+                numericUpDownFreezeCnt.Visible = false;
+                labelFreezeCnt.Visible = false;
+                dateTimePickerFreezeReadEnd.Visible = true;
+                dateTimePickerFreezeReadStart.Visible = true;
+                label3.Visible = true;
+                label4.Visible = true;
+                numericUpDownFreezeTime.Visible = true;
+                label12.Visible = true;
+                label13.Visible = true;
+            }
+            else if(comboBoxFreezeMethon.Text.Contains("次数"))
+            {
+                dateTimePickerFreezeReadEnd.Visible = false;
+                dateTimePickerFreezeReadStart.Visible = false;
+                label3.Visible = false;
+                label4.Visible = false;
+                numericUpDownFreezeCnt.Visible = true;
+                labelFreezeCnt.Visible = true;
+
+                numericUpDownFreezeTime.Visible = false;
+                label12.Visible = false;
+                label13.Visible = false;
             }
         }
     }
