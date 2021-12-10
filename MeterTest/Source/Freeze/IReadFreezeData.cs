@@ -8,5 +8,6 @@ namespace MeterTest.Source.Freeze
         List<FreezeDataBlock> ReadFreezeDataFromTime(DateTime start, DateTime end, int time, int blockNo);
         List<FreezeDataBlock> ReadFreezeDataFromCntBlk(int cnt, int blockNo);
         List<FreezeDataBlock> ReadFreezeDataFromCntOnce(int cnt, int blockNo);
+        int GetFreezeDateBlockCnt();
     }
 }

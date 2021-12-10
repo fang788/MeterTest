@@ -3,16 +3,21 @@ using System.Collections.Generic;
 
 namespace MeterTest.Source.Freeze
 {
-    public class FreezeDataBlock : IComparable
+    public abstract class FreezeDataBlock : IComparable
     {
         public DateTime time;
         public int No;
+        public int Bytes;
+        public byte[] ByteArray = null;
+        public uint TimeReadDataId;
         public List<FreezeItem> ItemList = new List<FreezeItem>();
+
+        public abstract void ByteArrayConvetToItemList();
 
         public FreezeDataBlock()
         {
         }
-
+        
         public FreezeDataBlock(DateTime time, int no, List<FreezeItem> itemList)
         {
             this.time = time;
