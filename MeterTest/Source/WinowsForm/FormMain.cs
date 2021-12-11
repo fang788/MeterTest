@@ -532,6 +532,7 @@ namespace MeterTest.Source.WinowsForm
                 plotViewFreeze.Model.InvalidatePlot(true);
             }
         }
+        FreezeDataFactory factory = null;
         private void buttonFreezeRead_Click(object sender, EventArgs e)
         {
             if(buttonFreezeRead.Text == "读取")
@@ -547,35 +548,50 @@ namespace MeterTest.Source.WinowsForm
                     MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                optLock = true;
-                optMessage = "正在读取冻结数据";
-                DateTime start = new DateTime(dateTimePickerFreezeReadStart.Value.Year, 
-                                                dateTimePickerFreezeReadStart.Value.Month, 
-                                                dateTimePickerFreezeReadStart.Value.Day, 
-                                                dateTimePickerFreezeReadStart.Value.Hour, 
-                                                dateTimePickerFreezeReadStart.Value.Minute, 
-                                                0);
-                DateTime End = new DateTime(dateTimePickerFreezeReadEnd.Value.Year, 
-                                                dateTimePickerFreezeReadEnd.Value.Month, 
-                                                dateTimePickerFreezeReadEnd.Value.Day, 
-                                                dateTimePickerFreezeReadEnd.Value.Hour, 
-                                                dateTimePickerFreezeReadEnd.Value.Minute, 
-                                                0);
-                toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
-                plotViewFreeze.Model.Series.Clear();  
-                freezeLineChart.lineDict.Clear();          
-                plotViewFreeze.Model.InvalidatePlot(true);
-                freezeDataRead = new FreezeDataRead(client, this, start, End);
-                Thread threadFreezeRead = new Thread(freezeDataRead.ReadPhaseChangeFreezeData);
-                threadFreezeRead.IsBackground = true;
-                threadFreezeRead.Start();
-                buttonFreezeRead.Text = "停止";
+                Stream myStream ;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            
+                saveFileDialog1.Filter = "excel文件 (*.xlsx)|*.xlsx"  ;
+                saveFileDialog1.FilterIndex = 1 ;
+                saveFileDialog1.RestoreDirectory = true ;
+            
+                if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if((myStream = saveFileDialog1.OpenFile()) != null)
+                    {
+                        optLock = true;
+                        optMessage = "正在读取冻结数据";
+                        toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
+                        factory = new FreezeDataFactory(comboBoxProjectSelect.Text,
+                                                        comboBoxFreezeMethon.Text,
+                                                        dateTimePickerFreezeReadStart.Value,
+                                                        dateTimePickerFreezeReadEnd.Value,
+                                                        (int)numericUpDownFreezeTime.Value,
+                                                        Convert.ToInt32(numericUpDownFreezeCnt.Text),
+                                                        Convert.ToInt32(comboBoxFreezeBlkNo.Text),
+                                                        this,
+                                                        client,
+                                                        meterAddress,
+                                                        myStream);
+                        //plotViewFreeze.Model.Series.Clear();  
+                        //freezeLineChart.lineDict.Clear();       
+
+                        //plotViewFreeze.Model.InvalidatePlot(true);
+
+                        Thread threadFreezeRead = new Thread(factory.GetFreezeDataList);
+                        threadFreezeRead.IsBackground = true;
+                        threadFreezeRead.Start();
+                        buttonFreezeRead.Text = "停止";
+                        myStream.Close();
+                    }
+                }
+                
             }
             else if(buttonFreezeRead.Text == "停止")
             {
-                if(freezeDataRead != null)
+                if(factory != null)
                 {
-                    freezeDataRead.EndFreezeDataRead();
+                    factory.GetFreezeDataListStop();
                 }
                 optLock = false; 
                 buttonFreezeRead.Text = "读取";

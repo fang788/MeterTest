@@ -21,7 +21,9 @@ namespace MeterTest.Source.Freeze
         private Dlt645Client client;
         private MeterAddress address;
         private IReadFreezeData reader;
-        private string excelSavePath;
+        // private string excelSavePath;
+        private Stream stream;
+        public bool stopFlg;
         public  List<FreezeDataBlock> FreezeDataBlocks = new List<FreezeDataBlock>();
 
         public FreezeDataFactory()
@@ -38,7 +40,7 @@ namespace MeterTest.Source.Freeze
                                  IFreezeLog log, 
                                  Dlt645Client client, 
                                  MeterAddress address,
-                                 string path)
+                                 Stream s)
         {
             this.readerName = readerName;
             this.methond = methond;
@@ -50,7 +52,7 @@ namespace MeterTest.Source.Freeze
             this.log = log;
             this.client = client;
             this.address = address;
-            this.excelSavePath = path;
+            this.stream = s;
             reader = CreateFreezeDataReader(readerName);
         }
 
@@ -77,7 +79,7 @@ namespace MeterTest.Source.Freeze
             FreezeReadMsg msg = new FreezeReadMsg();
             int total = (int)((end.Ticks - start.Ticks) / TimeSpan.TicksPerMinute);
             int tmp = 0;
-            while(start >= end)
+            while((start >= end) && (!stopFlg))
             {
                 FreezeDataBlock block = reader.ReadFreezeDataFromTime(start, blockNo);
                 start.AddMinutes(time);
@@ -102,6 +104,10 @@ namespace MeterTest.Source.Freeze
                 msg.ToolStripStatusLabel = "正读取的上" + i.ToString() + "次的冻结数据";
                 log.SendMsg(msg);
                 cnt--;
+                if(!stopFlg)
+                {
+                    break;
+                }
             }
             msg.ProgressBar = 100;
             msg.ToolStripStatusLabel = "读取完成";
@@ -119,6 +125,10 @@ namespace MeterTest.Source.Freeze
                 msg.ToolStripStatusLabel = "正读取的上" + i.ToString() + "次的冻结数据";
                 log.SendMsg(msg);
                 cnt--;
+                if(!stopFlg)
+                {
+                    break;
+                }
             }
             msg.ProgressBar = 100;
             msg.ToolStripStatusLabel = "读取完成";
@@ -127,7 +137,6 @@ namespace MeterTest.Source.Freeze
         private void SaveFreezeData()
         {
             IWorkbook workbook = null;
-            FileStream fileStream = null;
             Stream stream   = null;
             try
             {
@@ -168,7 +177,6 @@ namespace MeterTest.Source.Freeze
                         row.CreateCell(2 + j).SetCellValue(block.ItemList[j].Value.ToString(format));
                     }
                 }
-                stream = new FileInfo(excelSavePath).Create();
                 workbook.Write(stream);
             }
             catch (System.Exception e)
@@ -181,18 +189,14 @@ namespace MeterTest.Source.Freeze
                 {
                     workbook.Close();
                 }
-                if(fileStream != null)
-                {
-                    fileStream.Close();
-                }
-                if(stream != null)
-                {
-                    stream.Close();
-                }
             }
         }
         public void GetFreezeDataList()
         {
+            lock (this)
+            {
+                stopFlg = false;
+            }
             if(methond == "时间")
             {
                 GetFreezeDataListFormTime();
@@ -205,8 +209,19 @@ namespace MeterTest.Source.Freeze
             {
                 GetFreezeDataListFromCntOnce();
             }
-            SaveFreezeData();
+            if(!stopFlg)
+            {
+                SaveFreezeData();
+            }
+            
             log.End();
+        }
+        public void  GetFreezeDataListStop()
+        {
+            lock (this)
+            {
+                stopFlg = true;
+            }
         }
     }
 }
