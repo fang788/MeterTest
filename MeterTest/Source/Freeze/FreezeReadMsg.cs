@@ -6,6 +6,10 @@ namespace MeterTest.Source.Freeze
         public int ProgressBar;
         public FreezeData freezeData;
 
+        public FreezeReadMsg()
+        {
+        }
+
         public FreezeReadMsg(string t, int p)
         {
             ToolStripStatusLabel = t;
