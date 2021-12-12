@@ -44,7 +44,7 @@ namespace MeterTest.Source.WinowsForm
         private FreezeLineChart freezeLineChart = null;
         private DateTimeAxis    dateTimeAxis    = null; // y轴
         private LinearAxis      dataAxis = null; // x轴
-        private FreezeDataRead freezeDataRead;
+        //private FreezeDataRead freezeDataRead;
         private ReadData readData;
         private string  paraConfigTableName;
         // static public DataIdDbContext DataIdDb = new DataIdDbContext();
@@ -526,11 +526,11 @@ namespace MeterTest.Source.WinowsForm
             FreezeReadMsg msg = (FreezeReadMsg)obj;
             toolStripStatusLabelFreeze.Text = msg.ToolStripStatusLabel;
             toolStripProgressBarFreezeRead.Value = msg.ProgressBar;
-            if(msg.freezeData != null)
-            {
-                freezeLineChart.DisplayFreezeData(comboBoxFreezeSelect.Text, msg.freezeData);
-                plotViewFreeze.Model.InvalidatePlot(true);
-            }
+            // if(msg.freezeData != null)
+            // {
+            //     freezeLineChart.DisplayFreezeData(comboBoxFreezeSelect.Text, msg.freezeData);
+            //     plotViewFreeze.Model.InvalidatePlot(true);
+            // }
         }
         FreezeDataFactory factory = null;
         private void buttonFreezeRead_Click(object sender, EventArgs e)
@@ -633,7 +633,7 @@ namespace MeterTest.Source.WinowsForm
 
         public void SendMsg(FreezeReadMsg msg)
         {
-            synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, msg);
+            synchronizationContext.Post(ReadFreezeDataPhaseChangeProgramBar, (object)msg);
         }
 
         public void End()
@@ -641,14 +641,7 @@ namespace MeterTest.Source.WinowsForm
             optLock = false;
         }
 
-        private void buttonFreezeReadStop_Click(object sender, EventArgs e)
-        {
-            if(freezeDataRead != null)
-            {
-                freezeDataRead.EndFreezeDataRead();
-            }
-            optLock = false; 
-        }
+       
         private void MeterClearDisplay(Object obj)
         {
             toolStripStatusLabelMeterClear.Text = obj.ToString();

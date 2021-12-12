@@ -79,7 +79,7 @@ namespace MeterTest.Source.Freeze
             FreezeReadMsg msg = new FreezeReadMsg();
             int total = (int)((end.Ticks - start.Ticks) / TimeSpan.TicksPerMinute);
             int tmp = 0;
-            while((start >= end) && (!stopFlg))
+            while((start <= end) && (!stopFlg))
             {
                 FreezeDataBlock block = reader.ReadFreezeDataFromTime(start, blockNo);
                 start.AddMinutes(time);
@@ -197,23 +197,40 @@ namespace MeterTest.Source.Freeze
             {
                 stopFlg = false;
             }
-            if(methond == "时间")
+            FreezeReadMsg msg = null;
+            try
             {
-                GetFreezeDataListFormTime();
+                if(methond == "时间")
+                {
+                    GetFreezeDataListFormTime();
+                }
+                else if(methond == "次数块")
+                {
+                    GetFreezeDataListFormCntBlock();
+                }
+                else if(methond == "次数单次")
+                {
+                    GetFreezeDataListFromCntOnce();
+                }
+                if(!stopFlg)
+                {
+                    SaveFreezeData();
+                }
             }
-            else if(methond == "次数块")
+            catch (ClientException)
             {
-                GetFreezeDataListFormCntBlock();
+                msg = new FreezeReadMsg();
+                msg.ToolStripStatusLabel = "错误：从站异常响应帧";
+                msg.ProgressBar = 0;
+                log.SendMsg(msg);
             }
-            else if(methond == "次数单次")
+            catch (TimeoutException)
             {
-                GetFreezeDataListFromCntOnce();
+                msg = new FreezeReadMsg();
+                msg.ToolStripStatusLabel = "错误：响应超时";
+                msg.ProgressBar = 0;
+                log.SendMsg(msg);
             }
-            if(!stopFlg)
-            {
-                SaveFreezeData();
-            }
-            
             log.End();
         }
         public void  GetFreezeDataListStop()

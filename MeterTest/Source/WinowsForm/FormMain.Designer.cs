@@ -556,13 +556,23 @@ namespace MeterTest.Source.WinowsForm
             this.numericUpDownFreezeTime.Location = new System.Drawing.Point(804, 82);
             this.numericUpDownFreezeTime.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownFreezeTime.Maximum = new decimal(new int[] {
-            672,
+            60,
+            0,
+            0,
+            0});
+            this.numericUpDownFreezeTime.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.numericUpDownFreezeTime.Name = "numericUpDownFreezeTime";
             this.numericUpDownFreezeTime.Size = new System.Drawing.Size(146, 30);
             this.numericUpDownFreezeTime.TabIndex = 12;
+            this.numericUpDownFreezeTime.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
             // 
             // numericUpDownFreezeCnt
             // 
