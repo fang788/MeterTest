@@ -19,13 +19,13 @@ namespace MeterTest.Source.Freeze
             {
                 throw new System.Exception("读取的数据长度不正确");
             }
-            DateTime dateTime = new DateTime(PublicClass.ByteBcd2Hex(ByteArray[0]) + 2000,
-                                             PublicClass.ByteBcd2Hex(ByteArray[1]),
-                                             PublicClass.ByteBcd2Hex(ByteArray[2]),
-                                             PublicClass.ByteBcd2Hex(ByteArray[3]),
-                                             PublicClass.ByteBcd2Hex(ByteArray[4]),
-                                             0);
-            this.time = dateTime;
+            this.time = new DateTime(PublicClass.ByteBcd2Hex(ByteArray[4]) + 2000,
+                                     PublicClass.ByteBcd2Hex(ByteArray[3]),
+                                     PublicClass.ByteBcd2Hex(ByteArray[2]),
+                                     PublicClass.ByteBcd2Hex(ByteArray[1]),
+                                     PublicClass.ByteBcd2Hex(ByteArray[0]),
+                                     0);
+            //  = dateTime;
             for (int i = 0; i < ItemList.Count; i++)
             {
                 FreezeItem item = ItemList[i];

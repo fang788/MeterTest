@@ -617,7 +617,7 @@ namespace MeterTest.Source.Freeze
             finally
             {
                 // optLock = false;
-                freezeLog.End();
+                freezeLog.FreezeReadEnd();
             }
         }
         public void EndFreezeDataRead()

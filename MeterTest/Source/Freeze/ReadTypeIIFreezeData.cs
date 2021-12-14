@@ -83,6 +83,29 @@ namespace MeterTest.Source.Freeze
             }
             return items;
         }
+        public byte[] ClientReadFormTime(MeterAddress address, DataId dataId, byte[] dataArray)
+        {
+            int cnt = 5;
+            byte[] array = null;
+            
+            while(cnt > 0)
+            {
+                try
+                {
+                    array = client.Read(address, dataId, dataArray);
+                    break;
+                }
+                catch (TimeoutException)
+                {
+                    cnt--;
+                    if(cnt == 0)
+                    {
+                        throw;
+                    }
+                }
+            }
+            return array;
+        }
         public FreezeDataBlock CreateFreezeDataBlock (int blockNo)
         {
              FreezeDataBlock block = null;
@@ -170,7 +193,7 @@ namespace MeterTest.Source.Freeze
             array[2] = PublicClass.ByteHex2Bcd((byte)(time.Hour        ));//(byte)((((byte)((start.Hour        ) / 10)) << 4) | (((byte)((start.Hour        ) % 10))));
             array[1] = PublicClass.ByteHex2Bcd((byte)(time.Minute      ));//(byte)((((byte)((start.Minute      ) / 10)) << 4) | (((byte)((start.Minute      ) % 10))));
             array[0] = (byte)1;
-            block.ByteArray = client.Read(MeterAddress.Wildcard, dataId, array);
+            block.ByteArray = ClientReadFormTime(MeterAddress.Wildcard, dataId, array);
             block.ByteArrayConvetToItemList();
             return block;
         }

@@ -21,8 +21,6 @@ namespace MeterTest.Source.Freeze
         private Dlt645Client client;
         private MeterAddress address;
         private IReadFreezeData reader;
-        // private string excelSavePath;
-        private Stream stream;
         public bool stopFlg;
         public  List<FreezeDataBlock> FreezeDataBlocks = new List<FreezeDataBlock>();
 
@@ -39,8 +37,7 @@ namespace MeterTest.Source.Freeze
                                  int blockNo, 
                                  IFreezeLog log, 
                                  Dlt645Client client, 
-                                 MeterAddress address,
-                                 Stream s)
+                                 MeterAddress address)
         {
             this.readerName = readerName;
             this.methond = methond;
@@ -52,7 +49,6 @@ namespace MeterTest.Source.Freeze
             this.log = log;
             this.client = client;
             this.address = address;
-            this.stream = s;
             reader = CreateFreezeDataReader(readerName);
         }
 
@@ -77,16 +73,18 @@ namespace MeterTest.Source.Freeze
         private void GetFreezeDataListFormTime()
         {
             FreezeReadMsg msg = new FreezeReadMsg();
-            int total = (int)((end.Ticks - start.Ticks) / TimeSpan.TicksPerMinute);
+            int total = (int)((end.Ticks - start.Ticks) / TimeSpan.TicksPerMinute + 1);
             int tmp = 0;
-            while((start <= end) && (!stopFlg))
+            DateTime timeStart = new DateTime(start.Year, start.Month, start.Day, start.Hour, start.Minute, 0);
+            while((timeStart <= end) && (!stopFlg))
             {
                 FreezeDataBlock block = reader.ReadFreezeDataFromTime(start, blockNo);
-                start.AddMinutes(time);
-                FreezeDataBlocks.Add(block);
+                timeStart = timeStart.AddMinutes(time);
                 tmp += time;
+                FreezeDataBlocks.Add(block);
+                //start.AddMinutes(time);
                 msg.ProgressBar = (int)(tmp * 100 / total);
-                msg.ToolStripStatusLabel = "正读取的时间点：" + start.ToString("YY-MM-DD HH:mm:ss");
+                msg.ToolStripStatusLabel = "正读取的时间点：" + timeStart.ToString("yyyy-MM-dd HH:mm:ss");
                 log.SendMsg(msg);
             }
             msg.ProgressBar = 100;
@@ -134,7 +132,7 @@ namespace MeterTest.Source.Freeze
             msg.ToolStripStatusLabel = "读取完成";
             log.SendMsg(msg);
         }
-        private void SaveFreezeData()
+        public static void SaveFreezeData(string path, List<FreezeDataBlock> blocks)
         {
             IWorkbook workbook = null;
             Stream stream   = null;
@@ -150,14 +148,14 @@ namespace MeterTest.Source.Freeze
                 row = parsingSheet.CreateRow(0);
                 row.CreateCell(0).SetCellValue("编号");
                 row.CreateCell(1).SetCellValue("冻结时间");
-                FreezeDataBlock block = FreezeDataBlocks[0];
+                FreezeDataBlock block = blocks[0];
                 for (int i = 0; i < block.ItemList.Count; i++)
                 {
                     row.CreateCell(2 + i).SetCellValue(block.ItemList[i].Name + block.ItemList[i].Unit);
                 }
-                for (int i = 0; i < FreezeDataBlocks.Count; i++)
+                for (int i = 0; i < blocks.Count; i++)
                 {
-                    block = FreezeDataBlocks[i];
+                    block = blocks[i];
                     row = originalSheet.CreateRow(i + 1);
                     row.CreateCell(0).SetCellValue(i);
                     string dataString = null;
@@ -177,6 +175,7 @@ namespace MeterTest.Source.Freeze
                         row.CreateCell(2 + j).SetCellValue(block.ItemList[j].Value.ToString(format));
                     }
                 }
+                stream = File.OpenWrite(path);
                 workbook.Write(stream);
             }
             catch (System.Exception e)
@@ -188,6 +187,10 @@ namespace MeterTest.Source.Freeze
                 if(workbook != null)
                 {
                     workbook.Close();
+                }
+                if(stream != null)
+                {
+                    stream.Close();
                 }
             }
         }
@@ -214,7 +217,7 @@ namespace MeterTest.Source.Freeze
                 }
                 if(!stopFlg)
                 {
-                    SaveFreezeData();
+                    // SaveFreezeData();
                 }
             }
             catch (ClientException)
@@ -231,7 +234,10 @@ namespace MeterTest.Source.Freeze
                 msg.ProgressBar = 0;
                 log.SendMsg(msg);
             }
-            log.End();
+            finally
+            {
+                log.FreezeReadEnd();
+            }
         }
         public void  GetFreezeDataListStop()
         {

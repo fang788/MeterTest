@@ -547,45 +547,25 @@ namespace MeterTest.Source.WinowsForm
                 {
                     MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
-                }
-                Stream myStream ;
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            
-                saveFileDialog1.Filter = "excel文件 (*.xlsx)|*.xlsx"  ;
-                saveFileDialog1.FilterIndex = 1 ;
-                saveFileDialog1.RestoreDirectory = true ;
-            
-                if(saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    if((myStream = saveFileDialog1.OpenFile()) != null)
-                    {
-                        optLock = true;
-                        optMessage = "正在读取冻结数据";
-                        toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
-                        factory = new FreezeDataFactory(comboBoxProjectSelect.Text,
-                                                        comboBoxFreezeMethon.Text,
-                                                        dateTimePickerFreezeReadStart.Value,
-                                                        dateTimePickerFreezeReadEnd.Value,
-                                                        (int)numericUpDownFreezeTime.Value,
-                                                        Convert.ToInt32(numericUpDownFreezeCnt.Text),
-                                                        Convert.ToInt32(comboBoxFreezeBlkNo.Text),
-                                                        this,
-                                                        client,
-                                                        meterAddress,
-                                                        myStream);
-                        //plotViewFreeze.Model.Series.Clear();  
-                        //freezeLineChart.lineDict.Clear();       
+                }            
+                optLock = true;
+                optMessage = "正在读取冻结数据";
+                toolStripProgressBarFreezeRead.Value = toolStripProgressBarFreezeRead.Minimum;
+                factory = new FreezeDataFactory(comboBoxProjectSelect.Text,
+                                                comboBoxFreezeMethon.Text,
+                                                dateTimePickerFreezeReadStart.Value,
+                                                dateTimePickerFreezeReadEnd.Value,
+                                                (int)numericUpDownFreezeTime.Value,
+                                                Convert.ToInt32(numericUpDownFreezeCnt.Text),
+                                                Convert.ToInt32(comboBoxFreezeBlkNo.Text),
+                                                this,
+                                                client,
+                                                meterAddress);
 
-                        //plotViewFreeze.Model.InvalidatePlot(true);
-
-                        Thread threadFreezeRead = new Thread(factory.GetFreezeDataList);
-                        threadFreezeRead.IsBackground = true;
-                        threadFreezeRead.Start();
-                        buttonFreezeRead.Text = "停止";
-                        myStream.Close();
-                    }
-                }
-                
+                Thread threadFreezeRead = new Thread(factory.GetFreezeDataList);
+                threadFreezeRead.IsBackground = true;
+                threadFreezeRead.Start();
+                buttonFreezeRead.Text = "停止";
             }
             else if(buttonFreezeRead.Text == "停止")
             {
@@ -1076,6 +1056,15 @@ namespace MeterTest.Source.WinowsForm
                 label12.Visible = false;
                 label13.Visible = false;
             }
+        }
+        private void FreezeReadEndDisplay(Object obj)
+        {
+            buttonFreezeRead.Text = "读取";
+            End();
+        }
+        public void FreezeReadEnd()
+        {
+            synchronizationContext.Post(FreezeReadEndDisplay, new object());
         }
     }
 }
