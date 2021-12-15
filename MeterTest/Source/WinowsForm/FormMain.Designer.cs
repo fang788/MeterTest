@@ -624,7 +624,7 @@ namespace MeterTest.Source.WinowsForm
             this.comboBoxFreezeMethon.Name = "comboBoxFreezeMethon";
             this.comboBoxFreezeMethon.Size = new System.Drawing.Size(97, 25);
             this.comboBoxFreezeMethon.TabIndex = 10;
-            this.comboBoxFreezeMethon.Text = "时间";
+            this.comboBoxFreezeMethon.Text = "时间点";
             this.comboBoxFreezeMethon.SelectedIndexChanged += new System.EventHandler(this.comboBoxFreezeMethon_SelectedIndexChanged);
             // 
             // comboBoxProjectSelect

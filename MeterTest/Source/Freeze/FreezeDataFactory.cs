@@ -225,7 +225,7 @@ namespace MeterTest.Source.Freeze
             FreezeReadMsg msg = null;
             try
             {
-                if(methond == "时间")
+                if(methond == "时间点")
                 {
                     GetFreezeDataListFormTime();
                 }

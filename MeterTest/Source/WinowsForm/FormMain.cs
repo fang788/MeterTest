@@ -537,7 +537,8 @@ namespace MeterTest.Source.WinowsForm
         {
             if(buttonFreezeRead.Text == "读取")
             {
-                if(dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeReadStart.Value.Ticks)
+                if((comboBoxFreezeMethon.Text == "时间点")
+                && (dateTimePickerFreezeReadEnd.Value.Ticks < dateTimePickerFreezeReadStart.Value.Ticks))
                 {
                     MessageBox.Show("开始时间：" + dateTimePickerFreezeReadStart.Value.ToString("yy-MM-dd HH:mm") + 
                     "，早于结束时间：" + dateTimePickerFreezeReadEnd.Value.ToString("yy-MM-dd HH:mm"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -992,8 +993,8 @@ namespace MeterTest.Source.WinowsForm
             if(comboBoxProjectSelect.Text == "相变") 
             {
                 comboBoxFreezeMethon.Items.Clear();
-                comboBoxFreezeMethon.Items.Add("时间");
-                comboBoxFreezeMethon.Text = "时间";
+                comboBoxFreezeMethon.Items.Add("时间点");
+                comboBoxFreezeMethon.Text = "时间点";
                 numericUpDownFreezeCnt.Visible = false;
                 labelFreezeCnt.Visible = false;
                 dateTimePickerFreezeReadEnd.Visible = true;
@@ -1010,10 +1011,10 @@ namespace MeterTest.Source.WinowsForm
             else if(comboBoxProjectSelect.Text == "II型终端")
             {
                 comboBoxFreezeMethon.Items.Clear();
-                comboBoxFreezeMethon.Items.Add("时间");
+                comboBoxFreezeMethon.Items.Add("时间点");
                 comboBoxFreezeMethon.Items.Add("次数块");
                 comboBoxFreezeMethon.Items.Add("次数单个");
-                comboBoxFreezeMethon.Text = "时间";
+                comboBoxFreezeMethon.Text = "时间点";
                 numericUpDownFreezeCnt.Visible = false;
                 labelFreezeCnt.Visible = false;
                 dateTimePickerFreezeReadEnd.Visible = true;
@@ -1032,7 +1033,7 @@ namespace MeterTest.Source.WinowsForm
 
         private void comboBoxFreezeMethon_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(comboBoxFreezeMethon.Text == "时间") 
+            if(comboBoxFreezeMethon.Text == "时间点") 
             {
                 numericUpDownFreezeCnt.Visible = false;
                 labelFreezeCnt.Visible = false;
