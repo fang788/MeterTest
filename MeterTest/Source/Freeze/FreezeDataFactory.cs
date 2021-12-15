@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace MeterTest.Source.Freeze
 {
@@ -23,6 +26,21 @@ namespace MeterTest.Source.Freeze
         private IReadFreezeData reader;
         public bool stopFlg;
         public  List<FreezeDataBlock> FreezeDataBlocks = new List<FreezeDataBlock>();
+
+        private static List<string> TypeIILeftList = new List<string>
+        {
+            "电压"       ,    
+            "电流"       ,    
+            "有功功率"   ,
+            "无功功率"   ,
+            "视在功率"   ,
+            "功率因数"   ,
+            "频率"       ,    
+            "正向有功电能",
+            "反向有功电能",
+            "正向无功电能",
+            "反向无功电能",
+        };
 
         public FreezeDataFactory()
         {
@@ -51,6 +69,14 @@ namespace MeterTest.Source.Freeze
             this.address = address;
             reader = CreateFreezeDataReader(readerName);
         }
+        public static List<string> CreateLiftString(string projectName)
+        {
+            if(projectName == "II型终端")
+            {
+                return TypeIILeftList;
+            }
+            return null;
+        }
 
         private IReadFreezeData CreateFreezeDataReader(string readerName)
         {
@@ -61,11 +87,13 @@ namespace MeterTest.Source.Freeze
             }
             else if(readerName == "相变")
             {
-                throw new System.Exception("没有相变项目的冻结数据读取器！");
+                // throw new System.Exception("没有相变项目的冻结数据读取器！");
+                MessageBox.Show("没有相变项目的冻结数据读取器！");
             }
             else
             {
-                throw new System.Exception(readerName + ":没有该项目的冻结数据读取器！");
+                // throw new System.Exception(readerName + ":没有该项目的冻结数据读取器！");
+                MessageBox.Show(readerName + ":没有该项目的冻结数据读取器！");
             }
             return reader;
         }
@@ -78,7 +106,7 @@ namespace MeterTest.Source.Freeze
             DateTime timeStart = new DateTime(start.Year, start.Month, start.Day, start.Hour, start.Minute, 0);
             while((timeStart <= end) && (!stopFlg))
             {
-                FreezeDataBlock block = reader.ReadFreezeDataFromTime(start, blockNo);
+                FreezeDataBlock block = reader.ReadFreezeDataFromTime(timeStart, blockNo);
                 timeStart = timeStart.AddMinutes(time);
                 tmp += time;
                 FreezeDataBlocks.Add(block);
@@ -132,10 +160,9 @@ namespace MeterTest.Source.Freeze
             msg.ToolStripStatusLabel = "读取完成";
             log.SendMsg(msg);
         }
-        public static void SaveFreezeData(string path, List<FreezeDataBlock> blocks)
+        public static void SaveFreezeData(Stream stream, List<FreezeDataBlock> blocks)
         {
             IWorkbook workbook = null;
-            Stream stream   = null;
             try
             {
                 workbook = new XSSFWorkbook();
@@ -168,14 +195,13 @@ namespace MeterTest.Source.Freeze
 
                     row = parsingSheet.CreateRow(i + 1);
                     row.CreateCell(0).SetCellValue(i);
-                    row.CreateCell(1).SetCellValue(block.time.ToString("yyyy-MM-DD HH:mm:ss"));
+                    row.CreateCell(1).SetCellValue(block.time.ToString("yyyy-MM-dd HH:mm:ss"));
                     for (int j = 0; j < block.ItemList.Count; j++)
                     {
                         string format = "F" + block.ItemList[j].Point.ToString();
                         row.CreateCell(2 + j).SetCellValue(block.ItemList[j].Value.ToString(format));
                     }
                 }
-                stream = File.OpenWrite(path);
                 workbook.Write(stream);
             }
             catch (System.Exception e)
@@ -187,10 +213,6 @@ namespace MeterTest.Source.Freeze
                 if(workbook != null)
                 {
                     workbook.Close();
-                }
-                if(stream != null)
-                {
-                    stream.Close();
                 }
             }
         }
@@ -234,6 +256,13 @@ namespace MeterTest.Source.Freeze
                 msg.ProgressBar = 0;
                 log.SendMsg(msg);
             }
+            catch (Exception e)
+            {
+                msg = new FreezeReadMsg();
+                msg.ToolStripStatusLabel = e.Message;
+                msg.ProgressBar = 0;
+                log.SendMsg(msg);
+            }
             finally
             {
                 log.FreezeReadEnd();
@@ -245,6 +274,113 @@ namespace MeterTest.Source.Freeze
             {
                 stopFlg = true;
             }
+        }
+
+        // public List<string> GetCharLeft()
+        // {
+        //     List<string> list = new List<string>();
+            
+        //     foreach (var item in FreezeDataBlocks[0].ItemList)
+        //     {
+        //         for (int i = 0; i < LeftList.Count; i++)
+        //         {
+        //             if(item.Name.Contains(LeftList[i]))
+        //             {
+        //                 list.Add(LeftList[i]);
+        //             }
+        //         }
+        //     }
+        //     return list;
+        // }
+        public bool FreezeDataBlockListDisplay(string projectName, string leftName, ref PlotModel model)
+        {
+            double min = 0, max = 0;
+            Dictionary<int, LineSeries> lines = new Dictionary<int, LineSeries>();
+            LineSeries line = null;
+            bool isFirst = true;
+            List<string> leftList = CreateLiftString(projectName);
+
+            if((FreezeDataBlocks.Count == 0) || (leftList == null) || (!leftList.Contains(leftName)))
+            {
+                MessageBox.Show("没有冻结数据");
+                return false;
+            }
+            FreezeDataBlocks.Sort();
+            foreach (var item in FreezeDataBlocks)
+            {
+                for (int i = 0; i < item.ItemList.Count; i++)
+                {
+                    if(item.ItemList[i].Name.Contains(leftName))
+                    {
+                        if(!lines.TryGetValue(i, out line))
+                        {
+                            line = new LineSeries();
+                            if(item.ItemList[i].Name.Contains("A"))
+                            {
+                                line.Color = OxyColors.DarkOrange;
+                            }
+                            else if(item.ItemList[i].Name.Contains("B"))
+                            {
+                                line.Color = OxyColors.Blue;
+                            }
+                            else if(item.ItemList[i].Name.Contains("C"))
+                            {
+                                line.Color = OxyColors.Red;
+                            }
+                            else if(item.ItemList[i].Name.Contains("总"))
+                            {
+                                line.Color = OxyColors.Black;
+                            }
+                            else
+                            {
+                                line.Color = OxyColors.LightGreen;
+                            }
+                            lines.Add(i, line);
+                        }
+                        line.Points.Add(new DataPoint(DateTimeAxis.ToDouble(item.time), item.ItemList[i].Value));
+                        if(isFirst)
+                        {
+                            min = item.ItemList[i].Value;
+                            max = item.ItemList[i].Value;
+                        }
+                        if(min > item.ItemList[i].Value)
+                        {
+                            min = item.ItemList[i].Value;
+                        }
+                        if(max < item.ItemList[i].Value)
+                        {
+                            max = item.ItemList[i].Value;
+                        }
+                    }
+                }
+            }
+            model = new PlotModel();
+            foreach (var item in lines)
+            {
+                model.Series.Add(item.Value);
+            }
+            LinearAxis left = new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Minimum = min, 
+                Maximum = max, 
+                // StringFormat = item.StringFormat,
+                IsZoomEnabled = false,
+                IsPanEnabled =  false,
+                FractionUnit = 1.0,
+                FractionUnitSymbol = null,
+                FormatAsFractions = false,
+                Title = leftName,
+            };
+            model.Axes.Add(left);
+            DateTimeAxis bottom = new DateTimeAxis
+            {
+                Position = AxisPosition.Bottom,
+                Minimum = DateTimeAxis.ToDouble(FreezeDataBlocks[0].time),
+                Maximum = DateTimeAxis.ToDouble(FreezeDataBlocks[FreezeDataBlocks.Count -1].time),
+            };
+            model.Axes.Add(bottom);
+            return true;
         }
     }
 }

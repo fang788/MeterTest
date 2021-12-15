@@ -115,25 +115,25 @@ namespace MeterTest.Source.WinowsForm
             synchronizationContext = SynchronizationContext.Current;
 
             /* 第一次打开时，加载的折线图 */
-            comboBoxFreezeSelect.Text = comboBoxFreezeSelect.Items[0].ToString();
-            dateTimePickerFreezeReadStart.Value = DateTime.Now.AddHours(-1);
+            // comboBoxFreezeSelect.Text = comboBoxFreezeSelect.Items[0].ToString();
+            // dateTimePickerFreezeReadStart.Value = DateTime.Now.AddHours(-1);
             
-            PlotModel model = new PlotModel { Title = "冻结数据" };
-            dateTimeAxis = new DateTimeAxis
-            {
-                Position = AxisPosition.Bottom, 
-                Minimum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadStart.Value), 
-                Maximum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadEnd.Value), 
-                StringFormat = "M/d HH:mm",
-                IsZoomEnabled = false,
-                IsPanEnabled =  false,  
-            };
-            dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
-            freezeLineChart = new FreezeLineChart(model, 
-                                                  dateTimeAxis,
-                                                  dataAxis,
-                                                  comboBoxFreezeSelect.Text);
-            this.plotViewFreeze.Model = model;
+            // PlotModel model = new PlotModel { Title = "冻结数据" };
+            // dateTimeAxis = new DateTimeAxis
+            // {
+            //     Position = AxisPosition.Bottom, 
+            //     Minimum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadStart.Value), 
+            //     Maximum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadEnd.Value), 
+            //     StringFormat = "M/d HH:mm",
+            //     IsZoomEnabled = false,
+            //     IsPanEnabled =  false,  
+            // };
+            // dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
+            // freezeLineChart = new FreezeLineChart(model, 
+            //                                       dateTimeAxis,
+            //                                       dataAxis,
+            //                                       comboBoxFreezeSelect.Text);
+            // this.plotViewFreeze.Model = model;
 
             using var context = new ParaConfigTableDbContext();
             if(context.ParaConfigTables.Count() > 0)
@@ -566,6 +566,7 @@ namespace MeterTest.Source.WinowsForm
                 threadFreezeRead.IsBackground = true;
                 threadFreezeRead.Start();
                 buttonFreezeRead.Text = "停止";
+                toolStripStatusLabelFreezeProject.Text = "当前项目：" + comboBoxProjectSelect.Text;
             }
             else if(buttonFreezeRead.Text == "停止")
             {
@@ -578,38 +579,38 @@ namespace MeterTest.Source.WinowsForm
             }
         }
         
-        private void comboBoxFreezeSelect_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(plotViewFreeze.Model == null)
-            {
-                return;
-            }
-            plotViewFreeze.Model.Axes.Remove(dataAxis);
-            dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
-            freezeLineChart.left = dataAxis;
-            freezeLineChart.lineDict.Clear();
-            plotViewFreeze.Model.Axes.Add(dataAxis);
-            // plotViewFreeze.Model.Title = comboBoxFreezeSelect.Text;
-            plotViewFreeze.Model.InvalidatePlot(true);
-        }
+        // private void comboBoxFreezeSelect_SelectedIndexChanged(object sender, EventArgs e)
+        // {
+        //     if(plotViewFreeze.Model == null)
+        //     {
+        //         return;
+        //     }
+        //     plotViewFreeze.Model.Axes.Remove(dataAxis);
+        //     dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
+        //     freezeLineChart.left = dataAxis;
+        //     freezeLineChart.lineDict.Clear();
+        //     plotViewFreeze.Model.Axes.Add(dataAxis);
+        //     // plotViewFreeze.Model.Title = comboBoxFreezeSelect.Text;
+        //     plotViewFreeze.Model.InvalidatePlot(true);
+        // }
 
-        private void dateTimePickerFreezeReadStart_ValueChanged(object sender, EventArgs e)
-        {
-            if(dateTimeAxis != null)
-            {
-                freezeLineChart.SetBottomMin(dateTimePickerFreezeReadStart.Value);
-                plotViewFreeze.Model.InvalidatePlot(true);
-            }
-        }
+        // private void dateTimePickerFreezeReadStart_ValueChanged(object sender, EventArgs e)
+        // {
+        //     if(dateTimeAxis != null)
+        //     {
+        //         freezeLineChart.SetBottomMin(dateTimePickerFreezeReadStart.Value);
+        //         plotViewFreeze.Model.InvalidatePlot(true);
+        //     }
+        // }
 
-        private void dateTimePickerFreezeReadEnd_ValueChanged(object sender, EventArgs e)
-        {
-            if(dateTimeAxis != null)
-            {
-                freezeLineChart.SetBottomMax(dateTimePickerFreezeReadEnd.Value);
-                plotViewFreeze.Model.InvalidatePlot(true);
-            }
-        }
+        // private void dateTimePickerFreezeReadEnd_ValueChanged(object sender, EventArgs e)
+        // {
+        //     if(dateTimeAxis != null)
+        //     {
+        //         freezeLineChart.SetBottomMax(dateTimePickerFreezeReadEnd.Value);
+        //         plotViewFreeze.Model.InvalidatePlot(true);
+        //     }
+        // }
 
         public void SendMsg(FreezeReadMsg msg)
         {
@@ -1057,14 +1058,91 @@ namespace MeterTest.Source.WinowsForm
                 label13.Visible = false;
             }
         }
+        // private void ChgMenu_Click(object sender, EventArgs e)
+        // {
+        //     ToolStripMenuItem menu = (ToolStripMenuItem)sender;
+        //     // if(paraConfigTableName != menu.Text)
+        //     // {
+        //     //     using var context = new ParaConfigTableDbContext();
+        //     //     ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == menu.Text);
+        //     //     ParaConfigTableDisplay(table);
+        //     //     paraConfigTableName = menu.Text;
+        //     // }
+        //     PlotModel model = null;
+        //     if(factory.FreezeDataBlockListDisplay(comboBoxProjectSelect.Text, menu.Text, ref model))
+        //     {
+        //         plotViewFreeze.Model = model;
+        //     }
+        // }
+        private void dataGridViewFreezeDisplay(FreezeDataFactory dataFactory)
+        {
+            dataGridViewFreeze.Columns.Clear();
+            dataGridViewFreeze.Columns.Add("No", "编号");
+            dataGridViewFreeze.Columns.Add("Time", "时间");
+            for (int i = 0; i < dataFactory.FreezeDataBlocks[0].ItemList.Count; i++)
+            {
+                dataGridViewFreeze.Columns.Add(i.ToString(), dataFactory.FreezeDataBlocks[0].ItemList[i].Name);
+            }
+            for (int i = 0; i < dataFactory.FreezeDataBlocks.Count; i++)
+            {
+                int index = dataGridViewFreeze.Rows.Add();
+                dataGridViewFreeze.Rows[index].Cells[0].Value = i;
+                dataGridViewFreeze.Rows[index].Cells[1].Value = dataFactory.FreezeDataBlocks[i].time.ToString("yyyy-MM-dd HH:mm:ss");
+                for (int j = 0; j < dataFactory.FreezeDataBlocks[i].ItemList.Count; j++)
+                {
+                    string format = "F" + dataFactory.FreezeDataBlocks[i].ItemList[j].Point.ToString();
+                    dataGridViewFreeze.Rows[index].Cells[2 + j].Value = dataFactory.FreezeDataBlocks[i].ItemList[j].Value.ToString(format);
+                }
+            }
+        }
         private void FreezeReadEndDisplay(Object obj)
         {
             buttonFreezeRead.Text = "读取";
+            if((factory != null) 
+            && (factory.FreezeDataBlocks.Count > 0))
+            {
+                List<string> leftString = FreezeDataFactory.CreateLiftString(comboBoxProjectSelect.Text);
+                // PlotModel model = null;
+                dataGridViewFreezeDisplay(factory);
+                // if(factory.FreezeDataBlockListDisplay(comboBoxProjectSelect.Text, leftString[0], ref model))
+                // {
+                //     // plotViewFreeze.Model = model;
+                //     // ToolStripMenuItem menu = (ToolStripMenuItem)plotViewFreeze.ContextMenuStrip.Items[plotViewFreeze.ContextMenuStrip.Items.IndexOf(toolStripMenuItemSelect)];
+                //     // menu.DropDownItems.Clear();
+                //     // foreach (var item in leftString)
+                //     // {
+                //     //     ToolStripMenuItem addMenu = new ToolStripMenuItem(item);
+                //     //     addMenu.Click += new System.EventHandler(this.ChgMenu_Click);
+                //     //     menu.DropDownItems.Add(addMenu);
+                //     // }
+                // }
+            }
             End();
         }
         public void FreezeReadEnd()
         {
             synchronizationContext.Post(FreezeReadEndDisplay, new object());
+        }
+
+        private void toolStripMenuItemOutput_Click(object sender, EventArgs e)
+        {
+            Stream myStream ;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+        
+            saveFileDialog.Filter = "excel文件 (*.xlsx)|*.xlsx";
+            saveFileDialog.FilterIndex = 1 ;
+            saveFileDialog.RestoreDirectory = true ;
+            saveFileDialog.Title = "请选择冻结数据保存路径";
+            saveFileDialog.FileName = toolStripStatusLabelFreezeProject.Text.Split("：")[1] + "_冻结数据_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+        
+            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    FreezeDataFactory.SaveFreezeData(myStream, factory.FreezeDataBlocks);
+                    myStream.Close();
+                }
+            }
         }
     }
 }

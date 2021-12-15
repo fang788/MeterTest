@@ -30,9 +30,9 @@ namespace MeterTest.Source.Freeze
             {
                 FreezeItem item = ItemList[i];
                 item.Value = 0;
-                for (int j = 0; j < item.Length; j++)
+                for (int j = item.Length - 1; j >= 0; j--)
                 {
-                    item.Value *= 10;
+                    item.Value *= 100;
                     item.Value += PublicClass.ByteBcd2Hex(ByteArray[j + item.Offset]);
                 }
                 for (int j = 0; j < item.Point; j++)
