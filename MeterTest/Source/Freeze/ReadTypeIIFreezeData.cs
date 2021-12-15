@@ -83,6 +83,7 @@ namespace MeterTest.Source.Freeze
             }
             return items;
         }
+
         public byte[] ClientReadFormTime(MeterAddress address, DataId dataId, byte[] dataArray)
         {
             int cnt = 5;
@@ -93,6 +94,29 @@ namespace MeterTest.Source.Freeze
                 try
                 {
                     array = client.Read(address, dataId, dataArray);
+                    break;
+                }
+                catch (TimeoutException)
+                {
+                    cnt--;
+                    if(cnt == 0)
+                    {
+                        throw;
+                    }
+                }
+            }
+            return array;
+        }
+        private byte[] ClientReadFormCnt(MeterAddress address, DataId dataId)
+        {
+            int cnt = 5;
+            byte[] array = null;
+            
+            while(cnt > 0)
+            {
+                try
+                {
+                    array = client.Read(address, dataId);
                     break;
                 }
                 catch (TimeoutException)
@@ -135,17 +159,17 @@ namespace MeterTest.Source.Freeze
         public FreezeDataBlock ReadFreezeDataFromCntBlk(int cnt, int blockNo)
         {
             if((cnt == 0) 
-            || (cnt > FreezeDataBlockCnt) 
-            || (blockNo > FreezeMaxCnt)
+            || (cnt > FreezeMaxCnt) 
+            || (blockNo > FreezeDataBlockCnt)
             || (blockNo == 0))
             {
-                throw new InvalidOperationException("cnt = ${cnt}, blockNo = ${blockNo}");
+                throw new InvalidOperationException("ReadFreezeDataFromCntBlk 参数错误");
             }
             
             DataId dataId = new DataId();
             FreezeDataBlock block = this.CreateFreezeDataBlock(blockNo);
             dataId.Id = (uint)((uint)0xA20000FF + (blockNo << 20) + (cnt << 8));
-            block.ByteArray = client.Read(address, dataId);
+            block.ByteArray = ClientReadFormCnt(address, dataId);
             block.ByteArrayConvetToItemList();
             return block;
         }
@@ -153,20 +177,20 @@ namespace MeterTest.Source.Freeze
         public FreezeDataBlock ReadFreezeDataFromCntOnce(int cnt, int blockNo)
         {
             if((cnt == 0) 
-            || (cnt > FreezeDataBlockCnt) 
-            || (blockNo > FreezeMaxCnt)
+            || (cnt > FreezeMaxCnt) 
+            || (blockNo > FreezeDataBlockCnt)
             || (blockNo == 0))
             {
-                throw new InvalidOperationException("cnt = ${cnt}, blockNo = ${blockNo}");
+                throw new InvalidOperationException("ReadFreezeDataFromCntOnce 参数错误");
             }
             DataId dataId = new DataId();
             FreezeDataBlock block = CreateFreezeDataBlock(blockNo);
             dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (cnt << 8));
-            block.ByteArray = client.Read(address, dataId);
+            block.ByteArray = ClientReadFormCnt(address, dataId);
             for (int j = 0; j < block.ItemList.Count; j++)
             {
                 dataId.Id = (uint)(0xA2000000 + ((uint)blockNo << 20) + (cnt << 8) + (j + 1));
-                byte[] arrayTmp = client.Read(address, dataId);
+                byte[] arrayTmp = ClientReadFormCnt(address, dataId);
                 byte[] decArray = new byte[block.ByteArray.Length + arrayTmp.Length];
                 Array.Copy(block.ByteArray, decArray, block.ByteArray.Length);
                 Array.Copy(arrayTmp, 0, decArray, block.ByteArray.Length, arrayTmp.Length);

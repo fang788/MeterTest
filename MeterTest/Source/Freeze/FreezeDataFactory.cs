@@ -106,14 +106,14 @@ namespace MeterTest.Source.Freeze
             DateTime timeStart = new DateTime(start.Year, start.Month, start.Day, start.Hour, start.Minute, 0);
             while((timeStart <= end) && (!stopFlg))
             {
+                msg.ProgressBar = (int)(tmp * 100 / total);
+                msg.ToolStripStatusLabel = "正读取的时间点：" + timeStart.ToString("yyyy-MM-dd HH:mm:ss");
+                log.SendMsg(msg);
                 FreezeDataBlock block = reader.ReadFreezeDataFromTime(timeStart, blockNo);
                 timeStart = timeStart.AddMinutes(time);
                 tmp += time;
                 FreezeDataBlocks.Add(block);
                 //start.AddMinutes(time);
-                msg.ProgressBar = (int)(tmp * 100 / total);
-                msg.ToolStripStatusLabel = "正读取的时间点：" + timeStart.ToString("yyyy-MM-dd HH:mm:ss");
-                log.SendMsg(msg);
             }
             msg.ProgressBar = 100;
             msg.ToolStripStatusLabel = "读取完成";
@@ -122,15 +122,15 @@ namespace MeterTest.Source.Freeze
         private void GetFreezeDataListFormCntBlock ()
         {
             FreezeReadMsg msg = new FreezeReadMsg();
-            for (int i = 0; i < cnt; i++)
+            for (int i = 1; i <= cnt; i++)
             {
-                FreezeDataBlock block = reader.ReadFreezeDataFromCntBlk(i, blockNo);
-                FreezeDataBlocks.Add(block);
                 msg.ProgressBar = (int)(i * 100 / cnt);
                 msg.ToolStripStatusLabel = "正读取的上" + i.ToString() + "次的冻结数据";
                 log.SendMsg(msg);
-                cnt--;
-                if(!stopFlg)
+                FreezeDataBlock block = reader.ReadFreezeDataFromCntBlk(i, blockNo);
+                FreezeDataBlocks.Add(block);
+                // cnt--;
+                if(stopFlg)
                 {
                     break;
                 }
@@ -143,15 +143,15 @@ namespace MeterTest.Source.Freeze
         private void GetFreezeDataListFromCntOnce()
         {
             FreezeReadMsg msg = new FreezeReadMsg();
-            for (int i = 0; i < cnt; i++)
+            for (int i = 1; i <= cnt; i++)
             {
-                FreezeDataBlock block = reader.ReadFreezeDataFromCntOnce(i, blockNo);
-                FreezeDataBlocks.Add(block);
                 msg.ProgressBar = (int)(i * 100 / cnt);
                 msg.ToolStripStatusLabel = "正读取的上" + i.ToString() + "次的冻结数据";
                 log.SendMsg(msg);
-                cnt--;
-                if(!stopFlg)
+                FreezeDataBlock block = reader.ReadFreezeDataFromCntOnce(i, blockNo);
+                FreezeDataBlocks.Add(block);
+                // cnt--;
+                if(stopFlg)
                 {
                     break;
                 }
@@ -233,7 +233,7 @@ namespace MeterTest.Source.Freeze
                 {
                     GetFreezeDataListFormCntBlock();
                 }
-                else if(methond == "次数单次")
+                else if(methond == "次数单个")
                 {
                     GetFreezeDataListFromCntOnce();
                 }
