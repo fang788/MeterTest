@@ -29,6 +29,12 @@ namespace MeterTest.Source.Freeze
             for (int i = 0; i < ItemList.Count; i++)
             {
                 FreezeItem item = ItemList[i];
+                int smb = 1;
+                if((ByteArray[item.Offset + item.Length - 1] & 0x80) != 0)
+                {
+                    smb = -1;
+                    ByteArray[item.Offset + item.Length - 1] &= 0x7F;
+                }
                 item.Value = 0;
                 for (int j = item.Length - 1; j >= 0; j--)
                 {
@@ -39,6 +45,7 @@ namespace MeterTest.Source.Freeze
                 {
                     item.Value /= 10;
                 }
+                item.Value *= smb;
             }
         }
 

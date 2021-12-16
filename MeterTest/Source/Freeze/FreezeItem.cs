@@ -27,6 +27,16 @@ namespace MeterTest.Source.Freeze
             Unit = unit;
             Point = point;
         }
+        // public FreezeItem(int offset, int length, int point, string format, string unit, string name, bool hasSmb)
+        // {
+        //     Name = name;
+        //     Offset = offset;
+        //     Length = length;
+        //     Format = format;
+        //     Unit = unit;
+        //     Point = point;
+        //     this.HasSmy = hasSmb;
+        // }
         public FreezeItem(string name, double value)
         {
             Name = name;
