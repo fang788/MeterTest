@@ -41,7 +41,7 @@ namespace MeterTest.Source.Freeze
                     new FreezeItem(97 ,  5, 2, "XXXXXXXX.XX  ",   "kvarh ",      "B相第三象限无功电能 "  ),
                     new FreezeItem(102 , 5, 2, "XXXXXXXX.XX  ",   "kvarh ",      "B相第四象限无功电能 "  ),
                     new FreezeItem(107 , 3, 3, "XXX.XXX      ",   "kWh  ",     "B相正向有功需量 "      ),
-                    new FreezeItem(110 , 3, 3, "XXX.XXX      ",   "kWh  ",     "B相反向有功电能 "      ),
+                    new FreezeItem(110 , 3, 3, "XXX.XXX      ",   "kWh  ",     "B相反向有功需量 "      ),
                     new FreezeItem(113 , 5, 2, "XXXXXXXX.XX  ",   "kWh  ",     "C相正向有功电能 "      ),
                     new FreezeItem(118 , 5, 2, "XXXXXXXX.XX  ",   "kWh  ",     "C相反向有功电能 "      ),
                     new FreezeItem(123 , 5, 2, "XXXXXXXX.XX  ",   "kvarh ",      "C相第一象限无功电能 "  ),

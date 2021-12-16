@@ -3,15 +3,15 @@ using System;
 
 namespace MeterTest.Source.Dlt645.Message
 {
-    public class WriteRequset : IDlt645Message
+    public class WriteRequest : IDlt645Message
     {
         private readonly byte minimumFrameSize = 12;
 
-        public WriteRequset()
+        public WriteRequest()
         {
         }
 
-        public WriteRequset(MeterAddress address, byte controlCode, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
+        public WriteRequest(MeterAddress address, byte controlCode, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
             if((Dlt645Password.PosswordBytes + Dlt645OperatorCode.OperatorCodeBytes + DataId.DataIdBytes + dataId.DataBytes) > 200)
             {

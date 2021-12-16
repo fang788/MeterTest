@@ -38,12 +38,12 @@ namespace MeterTest.Source.Dlt645
 
         public void Write(MeterAddress address, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
-            WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, password, operatorCode);
+            WriteRequest requset = new WriteRequest(address, Dlt645ControlCodes.Write, dataId, password, operatorCode);
             WriteResponse response = transport.UnicastMessage<WriteResponse>(requset);
         }
         public void Write(MeterAddress address, DataId dataId)
         {
-            WriteRequset requset = new WriteRequset(address, Dlt645ControlCodes.Write, dataId, new Dlt645Password(), new Dlt645OperatorCode());
+            WriteRequest requset = new WriteRequest(address, Dlt645ControlCodes.Write, dataId, new Dlt645Password(), new Dlt645OperatorCode());
             WriteResponse response = transport.UnicastMessage<WriteResponse>(requset);
         }
         public void MeterClear(MeterAddress address, Dlt645Password password, Dlt645OperatorCode opCode)

@@ -109,11 +109,24 @@ namespace MeterTest.Source.Freeze
                 msg.ProgressBar = (int)(tmp * 100 / total);
                 msg.ToolStripStatusLabel = "正读取的时间点：" + timeStart.ToString("yyyy-MM-dd HH:mm:ss");
                 log.SendMsg(msg);
-                FreezeDataBlock block = reader.ReadFreezeDataFromTime(timeStart, blockNo);
-                timeStart = timeStart.AddMinutes(time);
-                tmp += time;
-                FreezeDataBlocks.Add(block);
-                //start.AddMinutes(time);
+                FreezeDataBlock block = null;
+                try
+                {
+                    block = reader.ReadFreezeDataFromTime(timeStart, blockNo);
+                }
+                catch (ClientException)
+                {
+                    ;
+                }
+                finally
+                {
+                    timeStart = timeStart.AddMinutes(time);
+                    tmp += time;
+                    if(block != null)
+                    {
+                        FreezeDataBlocks.Add(block);
+                    }
+                }
             }
             msg.ProgressBar = 100;
             msg.ToolStripStatusLabel = "读取完成";
