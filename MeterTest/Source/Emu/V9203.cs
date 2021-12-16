@@ -128,25 +128,25 @@ namespace MeterTest.Source.Emu
         // private Dlt645OperatorCode operatorCode = new Dlt645OperatorCode();
         // public void RegDataClr()
         // {
-        //     client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
+        //     client.WriteRepInogreTimeOut(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
         // }
         public override void Reset()
         {
-            client.Write(address, dataIdReset, new Dlt645Password(), new Dlt645OperatorCode());
+            client.WriteRepInogreTimeOut(address, dataIdReset, new Dlt645Password(), new Dlt645OperatorCode());
             // Thread.Sleep(2000);
         }
         public override void RegDataInit()
         {
             foreach (var item in dataIdRegList)
             {
-                client.Write(address, item, new Dlt645Password(), new Dlt645OperatorCode());
+                client.WriteRepInogreTimeOut(address, item, new Dlt645Password(), new Dlt645OperatorCode());
                 Thread.Sleep(500);
             }
         }
         // public MeterAddress ReadMeterAddress()
         // {
         //     DataId readAddress = new DataId(0x04000401);
-        //     byte[] data = client.Read(MeterAddress.Wildcard, readAddress);
+        //     byte[] data = ReadRepInogreTimeOut(MeterAddress.Wildcard, readAddress);
         //     return new MeterAddress(data);
         // }
         public void FactoryIn(MeterAddress addr)
@@ -154,28 +154,28 @@ namespace MeterTest.Source.Emu
             DataId factoryStatusDataId = new DataId(0xA5A01101);
             factoryStatusDataId.DataBytes = 1;
             factoryStatusDataId.DataArray = new byte[]{0x55};
-            client.Write(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+            client.WriteRepInogreTimeOut(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         }
         // public void FactoryIn()
         // {
         //     DataId factoryStatusDataId = new DataId(0xA5A01101);
         //     factoryStatusDataId.DataBytes = 1;
         //     factoryStatusDataId.DataArray = new byte[]{0x55};
-        //     client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        //     client.WriteRepInogreTimeOut(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         // }
         // public void FactoryOut()
         // {
         //     DataId factoryStatusDataId = new DataId(0xA5A01101);
         //     factoryStatusDataId.DataBytes = 1;
         //     factoryStatusDataId.DataArray = new byte[]{0xAA};
-        //     client.Write(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        //     client.WriteRepInogreTimeOut(address, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         // }
         // public void FactoryOut(MeterAddress addr)
         // {
         //     DataId factoryStatusDataId = new DataId(0xA5A01101);
         //     factoryStatusDataId.DataBytes = 1;
         //     factoryStatusDataId.DataArray = new byte[]{0xAA};
-        //     client.Write(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        //     client.WriteRepInogreTimeOut(addr, factoryStatusDataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         // }
         private double GetVariableError(V9203VariableType type)
         {
@@ -190,25 +190,25 @@ namespace MeterTest.Source.Emu
             {
                 for (i = 0; i < 5; i++)
                 {
-                    Thread.Sleep(3000);
+                    Thread.Sleep(1000);
                     status = this.kpTableBody.KpTableBodyRead();
                     status = status.Split(',')[v9203AdjList[(int)type].VariableIndex].Trim(new char[]{'V','A','W','v','a','r','w','+','-'});
                     double tb = Convert.ToDouble(status);
-                    data = client.Read(address, dataId);
+                    data = client.ReadRepInogreTimeOut(address, dataId);
                     tmp = 0;
                     for (int j = data.Length - 1; j >= 0; j--)
                     {
                         tmp = tmp * 100 + (data[j] >> 4) * 10 + (data[j] & 0x0F);
                     }
-                    zdPA += tmp;
-                    zdPA /= v9203AdjList[(int)type].VariablePoint;
-                    zdPA = (zdPA - tb) / tb;
+                    //zdPA += tmp;
+                    tmp /= v9203AdjList[(int)type].VariablePoint;
+                    zdPA = (tmp - tb) / tb;
                     error +=  zdPA;
                 }
                 error /= 5;
                 // logger.IAdjMeterLog(type.ToString() + "误差：" + (error * 100).ToString("F2") + "%");
                 //Thread.Sleep(5000);
-                if ((error > 0.2) || (error < -0.2))
+                if ((error > 0.1) || (error < -0.1))
                 {
                     throw new InvalidOperationException(type.ToString() + "-误差为" + (error * 100).ToString("F2") + "%，已超过10% ");
                 } 
@@ -239,7 +239,7 @@ namespace MeterTest.Source.Emu
                         string s = status.Split(',')[v9203AdjList[(int)type].VariableIndex].Trim(new char[]{'V','A','W','v','a','r','w','+','-'});
                         tb[k] = Convert.ToDouble(s);
                         DataId dataId = new DataId(v9203AdjList[(int)type].VariableDataId);
-                        data = client.Read(address, dataId);
+                        data = client.ReadRepInogreTimeOut(address, dataId);
                         tmp = 0;
                         for (int j = data.Length - 1; j >= 0; j--)
                         {
@@ -280,14 +280,14 @@ namespace MeterTest.Source.Emu
             {
                 dataId.DataArray[i] = (byte)(adj >> (i * 8));
             }
-            client.Write(address, dataId);
+            client.WriteRepInogreTimeOut(address, dataId);
         }
         private void AdjAngleError(V9203VariableType type, byte adj)
         {
             // double error = GetVariableError(type);
             // byte adj = (byte)(3011 / 2 * error);
             DataId dataId = new DataId(v9203AdjList[(int)type].RegDataId);
-            byte[] data = client.Read(address, dataId);
+            byte[] data = client.ReadRepInogreTimeOut(address, dataId);
             dataId.DataBytes = 4;
             dataId.DataArray = data;
             if(type == V9203VariableType.ANGLE_A)
@@ -302,7 +302,7 @@ namespace MeterTest.Source.Emu
             {
                 dataId.DataArray[2] = adj;
             }
-            client.Write(address, dataId);
+            client.WriteRepInogreTimeOut(address, dataId);
         }
         private void AdjMeterA()
         {
@@ -412,6 +412,16 @@ namespace MeterTest.Source.Emu
             AdjVariableError(V9203VariableType.QC, error.GetQAdj());
             AdjAngleError(V9203VariableType.ANGLE_C, error.GetAngleAdj());
         }
+        private void AdjMeterN()
+        {
+            TableBodyError error = new TableBodyError();
+            kpTableBody.IABC = "ABC";
+            kpTableBody.CosP = "1.0";
+            kpTableBody.PowerOn();
+            Thread.Sleep(3000);
+            error.I = GetVariableError(V9203VariableType.IL);
+            AdjVariableError(V9203VariableType.IL, error.GetIAdj());
+        }
         public override void AdjMeter()
         {
             try
@@ -435,11 +445,12 @@ namespace MeterTest.Source.Emu
                 logger.IAdjMeterLog("7.B相校准完成");
                 AdjMeterC();
                 logger.IAdjMeterLog("8.C相校准完成");
+                AdjMeterN();
+                logger.IAdjMeterLog("9.剩余电流/零线电流校准完成");
                 Reset();
-                // Thread.Sleep(1000);
                 FactoryOut();
-                logger.IAdjMeterLog("9.已切换至厂外状态");
-                logger.IAdjMeterLog("校表完成。");
+                logger.IAdjMeterLog("10.已切换至厂外状态");
+                logger.IAdjMeterLog("11.校表完成。");
             }
             catch (System.Exception e)
             {
@@ -475,7 +486,7 @@ namespace MeterTest.Source.Emu
 
         public override void AdjDataClr()
         {
-            client.Write(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
+            client.WriteRepInogreTimeOut(address, dataIdClrReg, new Dlt645Password(), new Dlt645OperatorCode());
         }
 
         // public override void RegDataInit()

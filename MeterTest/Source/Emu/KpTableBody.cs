@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading;
 
 namespace MeterTest.Source.Emu
 {
@@ -77,9 +78,24 @@ namespace MeterTest.Source.Emu
         }
         public string KpTableBodyRead()
         {
-            StringBuilder SData = new StringBuilder(1024);
-            Class_kpdev.StdMeter_Read(ref SData, "", Dev_Port);
-            return SData.ToString();
+            int cnt = 10;
+            string rst = null;
+            while(cnt > 0)
+            {
+                StringBuilder SData = new StringBuilder(1024);
+                Class_kpdev.StdMeter_Read(ref SData, "", Dev_Port);
+                rst = SData.ToString();
+                if(rst.Trim().Length < 5)
+                {
+                    cnt--;
+                }
+                else
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
+            return rst;
         }
     }
 }

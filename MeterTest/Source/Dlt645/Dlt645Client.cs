@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.IO.Ports;
 using MeterTest.Source.Dlt645;
@@ -8,6 +9,7 @@ namespace MeterTest.Source.Dlt645
     public class Dlt645Client
     {
         private readonly Dlt645Transport transport;
+        private const int OPT_MAX_CNT = 5;
         
         private Dlt645Client()
         {
@@ -50,6 +52,55 @@ namespace MeterTest.Source.Dlt645
         {
             MeterClearRequset request = new MeterClearRequset(address, password, opCode);
             transport.UnicastMessage<WriteResponse>(request);
+        }
+        public byte[] ReadRepInogreTimeOut(MeterAddress address, DataId dataId)
+        {
+            byte[] rst = null;
+            for (int i = 0; i < OPT_MAX_CNT; i++)
+            {
+                try
+                {
+                    rst = Read(address, dataId);
+                    break;
+                }
+                catch (TimeoutException)
+                {
+                    ;
+                }
+            }
+            return rst;
+        }
+
+        public void WriteRepInogreTimeOut(MeterAddress address, DataId dataId)
+        {
+            for (int i = 0; i < OPT_MAX_CNT; i++)
+            {
+                try
+                {
+                    Write(address, dataId);
+                    break;
+                }
+                catch (TimeoutException)
+                {
+                    ;
+                }
+            }
+        }
+
+        public void WriteRepInogreTimeOut(MeterAddress address, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
+        {
+            for (int i = 0; i < OPT_MAX_CNT; i++)
+            {
+                try
+                {
+                    Write(address, dataId, password, operatorCode);
+                    break;
+                }
+                catch (TimeoutException)
+                {
+                    ;
+                }
+            }
         }
     }
 }
