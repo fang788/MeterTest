@@ -45,16 +45,16 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageRead = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonStop = new System.Windows.Forms.Button();
-            this.buttonReadCycle = new System.Windows.Forms.Button();
-            this.buttonReadOne = new System.Windows.Forms.Button();
             this.dataGridViewReadList = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStripRead = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.取消选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选择所有ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.取消所有选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清除所有数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.单次读取ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.循环读取ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.停止ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageWrite = new System.Windows.Forms.TabPage();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.button3 = new System.Windows.Forms.Button();
@@ -122,7 +122,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageRead.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReadList)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStripRead.SuspendLayout();
             this.tabPageWrite.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).BeginInit();
             this.tabPageEmuAdj.SuspendLayout();
@@ -247,14 +247,11 @@ namespace MeterTest.Source.WinowsForm
             this.tabControlMainForm.SelectedIndex = 0;
             this.tabControlMainForm.Size = new System.Drawing.Size(1578, 730);
             this.tabControlMainForm.TabIndex = 1;
-            this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
+            // this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
             // tabPageRead
             // 
             this.tabPageRead.Controls.Add(this.statusStrip1);
-            this.tabPageRead.Controls.Add(this.buttonStop);
-            this.tabPageRead.Controls.Add(this.buttonReadCycle);
-            this.tabPageRead.Controls.Add(this.buttonReadOne);
             this.tabPageRead.Controls.Add(this.dataGridViewReadList);
             this.tabPageRead.Location = new System.Drawing.Point(4, 33);
             this.tabPageRead.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -283,45 +280,6 @@ namespace MeterTest.Source.WinowsForm
             this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(64, 24);
             this.toolStripStatusLabelStatus.Text = "状态栏";
             // 
-            // buttonStop
-            // 
-            this.buttonStop.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonStop.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonStop.Location = new System.Drawing.Point(879, 579);
-            this.buttonStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(135, 45);
-            this.buttonStop.TabIndex = 8;
-            this.buttonStop.Text = "停止";
-            this.buttonStop.UseVisualStyleBackColor = true;
-            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
-            // 
-            // buttonReadCycle
-            // 
-            this.buttonReadCycle.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReadCycle.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonReadCycle.Location = new System.Drawing.Point(458, 579);
-            this.buttonReadCycle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonReadCycle.Name = "buttonReadCycle";
-            this.buttonReadCycle.Size = new System.Drawing.Size(135, 45);
-            this.buttonReadCycle.TabIndex = 9;
-            this.buttonReadCycle.Text = "循环读取";
-            this.buttonReadCycle.UseVisualStyleBackColor = true;
-            this.buttonReadCycle.Click += new System.EventHandler(this.buttonReadCycle_Click);
-            // 
-            // buttonReadOne
-            // 
-            this.buttonReadOne.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReadOne.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonReadOne.Location = new System.Drawing.Point(36, 576);
-            this.buttonReadOne.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonReadOne.Name = "buttonReadOne";
-            this.buttonReadOne.Size = new System.Drawing.Size(135, 45);
-            this.buttonReadOne.TabIndex = 10;
-            this.buttonReadOne.Text = "单次读取";
-            this.buttonReadOne.UseVisualStyleBackColor = true;
-            this.buttonReadOne.Click += new System.EventHandler(this.buttonReadOne_Click);
-            // 
             // dataGridViewReadList
             // 
             this.dataGridViewReadList.AllowUserToAddRows = false;
@@ -330,27 +288,30 @@ namespace MeterTest.Source.WinowsForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewReadList.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewReadList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewReadList.ContextMenuStrip = this.contextMenuStrip1;
+            this.dataGridViewReadList.ContextMenuStrip = this.contextMenuStripRead;
             this.dataGridViewReadList.Location = new System.Drawing.Point(8, 9);
-            this.dataGridViewReadList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewReadList.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewReadList.Name = "dataGridViewReadList";
             this.dataGridViewReadList.RowHeadersWidth = 51;
             this.dataGridViewReadList.RowTemplate.Height = 25;
             this.dataGridViewReadList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewReadList.Size = new System.Drawing.Size(1539, 561);
+            this.dataGridViewReadList.Size = new System.Drawing.Size(1539, 645);
             this.dataGridViewReadList.TabIndex = 7;
             // 
-            // contextMenuStrip1
+            // contextMenuStripRead
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStripRead.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripRead.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.选择ToolStripMenuItem,
             this.取消选择ToolStripMenuItem,
             this.选择所有ToolStripMenuItem,
             this.取消所有选择ToolStripMenuItem,
-            this.清除所有数据ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 154);
+            this.清除所有数据ToolStripMenuItem,
+            this.单次读取ToolStripMenuItem,
+            this.循环读取ToolStripMenuItem,
+            this.停止ToolStripMenuItem1});
+            this.contextMenuStripRead.Name = "contextMenuStrip1";
+            this.contextMenuStripRead.Size = new System.Drawing.Size(189, 244);
             // 
             // 选择ToolStripMenuItem
             // 
@@ -387,6 +348,27 @@ namespace MeterTest.Source.WinowsForm
             this.清除所有数据ToolStripMenuItem.Text = "清除所有数据";
             this.清除所有数据ToolStripMenuItem.Click += new System.EventHandler(this.清除所有数据ToolStripMenuItem_Click);
             // 
+            // 单次读取ToolStripMenuItem
+            // 
+            this.单次读取ToolStripMenuItem.Name = "单次读取ToolStripMenuItem";
+            this.单次读取ToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.单次读取ToolStripMenuItem.Text = "读取";
+            this.单次读取ToolStripMenuItem.Click += new System.EventHandler(this.单次读取ToolStripMenuItem_Click);
+            // 
+            // 循环读取ToolStripMenuItem
+            // 
+            this.循环读取ToolStripMenuItem.Name = "循环读取ToolStripMenuItem";
+            this.循环读取ToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.循环读取ToolStripMenuItem.Text = "循环读取";
+            this.循环读取ToolStripMenuItem.Click += new System.EventHandler(this.循环读取ToolStripMenuItem_Click);
+            // 
+            // 停止ToolStripMenuItem1
+            // 
+            this.停止ToolStripMenuItem1.Name = "停止ToolStripMenuItem1";
+            this.停止ToolStripMenuItem1.Size = new System.Drawing.Size(240, 30);
+            this.停止ToolStripMenuItem1.Text = "停止";
+            this.停止ToolStripMenuItem1.Click += new System.EventHandler(this.停止ToolStripMenuItem1_Click);
+            // 
             // tabPageWrite
             // 
             this.tabPageWrite.Controls.Add(this.statusStrip2);
@@ -415,7 +397,7 @@ namespace MeterTest.Source.WinowsForm
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button3.Location = new System.Drawing.Point(693, 600);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(135, 45);
             this.button3.TabIndex = 6;
@@ -427,7 +409,7 @@ namespace MeterTest.Source.WinowsForm
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button2.Location = new System.Drawing.Point(423, 600);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(135, 45);
             this.button2.TabIndex = 6;
@@ -439,7 +421,7 @@ namespace MeterTest.Source.WinowsForm
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button1.Location = new System.Drawing.Point(153, 600);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(135, 45);
             this.button1.TabIndex = 6;
@@ -456,7 +438,7 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewWrite.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewWrite.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewWrite.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewWrite.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewWrite.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewWrite.Name = "dataGridViewWrite";
             this.dataGridViewWrite.RowHeadersWidth = 51;
             this.dataGridViewWrite.RowTemplate.Height = 25;
@@ -487,7 +469,7 @@ namespace MeterTest.Source.WinowsForm
             "II型终端-V9203",
             "相变-HT7036"});
             this.comboBoxTypeSelect.Location = new System.Drawing.Point(112, 51);
-            this.comboBoxTypeSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxTypeSelect.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxTypeSelect.Name = "comboBoxTypeSelect";
             this.comboBoxTypeSelect.Size = new System.Drawing.Size(180, 32);
             this.comboBoxTypeSelect.TabIndex = 4;
@@ -509,7 +491,7 @@ namespace MeterTest.Source.WinowsForm
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxAdjMeterStatus.Location = new System.Drawing.Point(38, 178);
-            this.richTextBoxAdjMeterStatus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.richTextBoxAdjMeterStatus.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBoxAdjMeterStatus.Name = "richTextBoxAdjMeterStatus";
             this.richTextBoxAdjMeterStatus.Size = new System.Drawing.Size(1514, 475);
             this.richTextBoxAdjMeterStatus.TabIndex = 2;
@@ -528,7 +510,7 @@ namespace MeterTest.Source.WinowsForm
             // buttonStartAdjMeter
             // 
             this.buttonStartAdjMeter.Location = new System.Drawing.Point(399, 50);
-            this.buttonStartAdjMeter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonStartAdjMeter.Margin = new System.Windows.Forms.Padding(4);
             this.buttonStartAdjMeter.Name = "buttonStartAdjMeter";
             this.buttonStartAdjMeter.Size = new System.Drawing.Size(123, 39);
             this.buttonStartAdjMeter.TabIndex = 0;
@@ -557,7 +539,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageFreeze.Controls.Add(this.label3);
             this.tabPageFreeze.Controls.Add(this.dateTimePickerFreezeReadStart);
             this.tabPageFreeze.Location = new System.Drawing.Point(4, 33);
-            this.tabPageFreeze.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFreeze.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageFreeze.Name = "tabPageFreeze";
             this.tabPageFreeze.Size = new System.Drawing.Size(1570, 693);
             this.tabPageFreeze.TabIndex = 4;
@@ -572,7 +554,7 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewFreeze.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFreeze.ContextMenuStrip = contextMenuStripFreeze;
             this.dataGridViewFreeze.Location = new System.Drawing.Point(4, 136);
-            this.dataGridViewFreeze.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewFreeze.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewFreeze.Name = "dataGridViewFreeze";
             this.dataGridViewFreeze.RowHeadersWidth = 62;
             this.dataGridViewFreeze.RowTemplate.Height = 25;
@@ -582,7 +564,7 @@ namespace MeterTest.Source.WinowsForm
             // numericUpDownFreezeTime
             // 
             this.numericUpDownFreezeTime.Location = new System.Drawing.Point(804, 82);
-            this.numericUpDownFreezeTime.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownFreezeTime.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownFreezeTime.Maximum = new decimal(new int[] {
             60,
             0,
@@ -605,7 +587,7 @@ namespace MeterTest.Source.WinowsForm
             // numericUpDownFreezeCnt
             // 
             this.numericUpDownFreezeCnt.Location = new System.Drawing.Point(416, 27);
-            this.numericUpDownFreezeCnt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownFreezeCnt.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownFreezeCnt.Maximum = new decimal(new int[] {
             672,
             0,
@@ -676,7 +658,7 @@ namespace MeterTest.Source.WinowsForm
             // buttonFreezeRead
             // 
             this.buttonFreezeRead.Location = new System.Drawing.Point(1052, 16);
-            this.buttonFreezeRead.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonFreezeRead.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFreezeRead.Name = "buttonFreezeRead";
             this.buttonFreezeRead.Size = new System.Drawing.Size(166, 99);
             this.buttonFreezeRead.TabIndex = 8;
@@ -767,7 +749,7 @@ namespace MeterTest.Source.WinowsForm
             this.dateTimePickerFreezeReadEnd.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePickerFreezeReadEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerFreezeReadEnd.Location = new System.Drawing.Point(450, 81);
-            this.dateTimePickerFreezeReadEnd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePickerFreezeReadEnd.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePickerFreezeReadEnd.Name = "dateTimePickerFreezeReadEnd";
             this.dateTimePickerFreezeReadEnd.Size = new System.Drawing.Size(216, 30);
             this.dateTimePickerFreezeReadEnd.TabIndex = 4;
@@ -807,7 +789,7 @@ namespace MeterTest.Source.WinowsForm
             this.dateTimePickerFreezeReadStart.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePickerFreezeReadStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerFreezeReadStart.Location = new System.Drawing.Point(450, 27);
-            this.dateTimePickerFreezeReadStart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePickerFreezeReadStart.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePickerFreezeReadStart.Name = "dateTimePickerFreezeReadStart";
             this.dateTimePickerFreezeReadStart.Size = new System.Drawing.Size(216, 30);
             this.dateTimePickerFreezeReadStart.TabIndex = 4;
@@ -946,7 +928,7 @@ namespace MeterTest.Source.WinowsForm
             this.tabPageParaConfig.Controls.Add(this.statusStrip3);
             this.tabPageParaConfig.Controls.Add(this.dataGridViewParaConfig);
             this.tabPageParaConfig.Location = new System.Drawing.Point(4, 33);
-            this.tabPageParaConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageParaConfig.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageParaConfig.Name = "tabPageParaConfig";
             this.tabPageParaConfig.Size = new System.Drawing.Size(1570, 693);
             this.tabPageParaConfig.TabIndex = 6;
@@ -994,7 +976,7 @@ namespace MeterTest.Source.WinowsForm
             this.dataGridViewParaConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewParaConfig.ContextMenuStrip = this.contextMenuStripParaConfig;
             this.dataGridViewParaConfig.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewParaConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewParaConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewParaConfig.Name = "dataGridViewParaConfig";
             this.dataGridViewParaConfig.RowHeadersWidth = 62;
             this.dataGridViewParaConfig.RowTemplate.Height = 25;
@@ -1065,7 +1047,7 @@ namespace MeterTest.Source.WinowsForm
             this.Name = "FormMain";
             this.Text = "MeterTest";
             this.Load += new System.EventHandler(this.FormMain_Load);
-            this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
+            // this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             contextMenuStripFreeze.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -1075,7 +1057,7 @@ namespace MeterTest.Source.WinowsForm
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReadList)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStripRead.ResumeLayout(false);
             this.tabPageWrite.ResumeLayout(false);
             this.tabPageWrite.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).EndInit();
@@ -1115,7 +1097,7 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.TabPage tabPageRead;
         private System.Windows.Forms.ToolStripMenuItem 日志ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 管理数据标识表ToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripRead;
         private System.Windows.Forms.ToolStripMenuItem 选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 取消选择ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 选择所有ToolStripMenuItem;
@@ -1136,9 +1118,6 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.Button buttonStartAdjMeter;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
-        private System.Windows.Forms.Button buttonStop;
-        private System.Windows.Forms.Button buttonReadCycle;
-        private System.Windows.Forms.Button buttonReadOne;
         private System.Windows.Forms.DataGridView dataGridViewReadList;
         private System.Windows.Forms.DateTimePicker dateTimePickerFreezeReadStart;
         private System.Windows.Forms.Label label3;
@@ -1191,5 +1170,8 @@ namespace MeterTest.Source.WinowsForm
         private System.Windows.Forms.DataGridView dataGridViewFreeze;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFreezeProject;
+        private System.Windows.Forms.ToolStripMenuItem 单次读取ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 循环读取ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 停止ToolStripMenuItem1;
     }
 }

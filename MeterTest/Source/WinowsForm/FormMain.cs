@@ -380,30 +380,7 @@ namespace MeterTest.Source.WinowsForm
         }
         private void buttonReadCycle_Click(object sender, EventArgs e)
         {
-            if(optLock)
-            {
-                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            optLock = true;
-            optMessage = "正在循环读取";
-            DataId dataId = null;
-            List<DataId> dataIdList = new List<DataId>();
-            using var context = new DataIdDbContext();
-            DataId[] dataIdArray = context.DataIds.ToArray();
-            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
-            {
-                if((dataGridViewReadList.Rows[i].Cells[0].Value != null) 
-                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
-                {
-                    dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];  
-                    dataIdList.Add(dataId);
-                }
-            }
-            readData = new ReadData(this.client, this, meterAddress);
-            Thread readCycleThr = new Thread(readData.ReadCycle);
-            readCycleThr.IsBackground = true;
-            readCycleThr.Start(dataIdList);
+            
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -416,31 +393,31 @@ namespace MeterTest.Source.WinowsForm
         
         private void ReadTabPageSizeZoom()
         {
-            dataGridViewReadList.Left = tabControlMainForm.Left;
-            dataGridViewReadList.Top = tabControlMainForm.Top;
-            dataGridViewReadList.Width = (int)(tabControlMainForm.Width * 0.96);
-            buttonReadOne.Left = tabControlMainForm.Left + 10;
-            buttonReadCycle.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
-            buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
-            if (tabControlMainForm.Height > 150)
-            {
-                dataGridViewReadList.Height = tabControlMainForm.Height - 150;
-                buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-                buttonReadCycle.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-                buttonStop.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-            }
-            else
-            {
-                dataGridViewReadList.Height = 10;
-            }
+            //dataGridViewReadList.Left = tabControlMainForm.Left;
+            //dataGridViewReadList.Top = tabControlMainForm.Top;
+            //dataGridViewReadList.Width = (int)(tabControlMainForm.Width * 0.96);
+            //buttonReadOne.Left = tabControlMainForm.Left + 10;
+            //buttonReadCycle.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
+            //buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
+            //if (tabControlMainForm.Height > 150)
+            //{
+            //    dataGridViewReadList.Height = tabControlMainForm.Height - 150;
+            //    buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+            //    buttonReadCycle.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+            //    buttonStop.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
+            //}
+            //else
+            //{
+            //    dataGridViewReadList.Height = 10;
+            //}
         }
-        private void FormMain_SizeChanged(object sender, EventArgs e)
-        {
-            if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
-            {
-                ReadTabPageSizeZoom();
-            }
-        }
+        // private void FormMain_SizeChanged(object sender, EventArgs e)
+        // {
+        //     if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
+        //     {
+        //         ReadTabPageSizeZoom();
+        //     }
+        // }
         private void DataGridViewWriteDisplayUpdate()
         {
             using var context = new DataIdDbContext();
@@ -707,14 +684,14 @@ namespace MeterTest.Source.WinowsForm
             });
         }
 
-        private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
-            {
-                ReadTabPageSizeZoom();
-            }
+        // private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
+        // {
+        //     if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
+        //     {
+        //         ReadTabPageSizeZoom();
+        //     }
             
-        }
+        // }
 
         private void 管理参数配置表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1143,6 +1120,70 @@ namespace MeterTest.Source.WinowsForm
                     FreezeDataFactory.SaveFreezeData(myStream, factory.FreezeDataBlocks);
                     myStream.Close();
                 }
+            }
+        }
+
+        private void 单次读取ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在单次读取";
+            DataId dataId = null;
+            List<DataId> dataIdList = new List<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
+            {
+                if ((dataGridViewReadList.Rows[i].Cells[0].Value != null)
+                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
+                {
+                    dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];
+                    dataIdList.Add(dataId);
+                }
+            }
+            readData = new ReadData(this.client, this, meterAddress);
+            Thread readOnceThr = new Thread(readData.ReadOnce);
+            readOnceThr.IsBackground = true;
+            readOnceThr.Start(dataIdList);
+        }
+
+        private void 循环读取ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在循环读取";
+            DataId dataId = null;
+            List<DataId> dataIdList = new List<DataId>();
+            using var context = new DataIdDbContext();
+            DataId[] dataIdArray = context.DataIds.ToArray();
+            for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
+            {
+                if ((dataGridViewReadList.Rows[i].Cells[0].Value != null)
+                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
+                {
+                    dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];
+                    dataIdList.Add(dataId);
+                }
+            }
+            readData = new ReadData(this.client, this, meterAddress);
+            Thread readCycleThr = new Thread(readData.ReadCycle);
+            readCycleThr.IsBackground = true;
+            readCycleThr.Start(dataIdList);
+        }
+
+        private void 停止ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (readData != null)
+            {
+                readData.EndRead();
             }
         }
     }
