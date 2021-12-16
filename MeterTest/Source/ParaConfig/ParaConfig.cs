@@ -241,6 +241,7 @@ namespace MeterTest.Source.Write
                 catch (TimeoutException)
                 {
                     msg.ErrorLog = "响应超时";
+                    break;
                 }
                 catch(Exception e)
                 {
@@ -305,6 +306,7 @@ namespace MeterTest.Source.Write
                 catch (TimeoutException)
                 {
                     msg.ErrorLog = "响应超时";
+                    break;
                 }
                 catch(Exception e)
                 {
