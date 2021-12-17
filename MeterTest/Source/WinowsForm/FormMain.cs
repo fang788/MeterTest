@@ -15,7 +15,7 @@ using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
 using MeterTest.Source.Freeze;
 using MeterTest.Source.Emu;
-using MeterTest.Source.WinowsForm;
+using MeterTest.Source.WindowsForm;
 using Newtonsoft.Json;
 using OxyPlot.Axes;
 using OxyPlot;
@@ -26,7 +26,7 @@ using MeterTest.Source.SQLite.ParaConfig;
 using Microsoft.EntityFrameworkCore;
 using MeterTest.Source.Write;
 
-namespace MeterTest.Source.WinowsForm
+namespace MeterTest.Source.WindowsForm
 {
     public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog, IParaConfigLog
     {

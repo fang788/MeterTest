@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeterTest.Source.WinowsForm
+namespace MeterTest.Source.WindowsForm
 {
     public partial class FormLogger : Form
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace MeterTest.Source.WinowsForm
+namespace MeterTest.Source.WindowsForm
 {
     partial class FormOptions
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeterTest.Source.WinowsForm
+namespace MeterTest.Source.WindowsForm
 {
     public partial class FormVersion : Form
     {

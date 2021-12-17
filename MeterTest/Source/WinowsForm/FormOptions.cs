@@ -12,7 +12,7 @@ using System.IO;
 using Newtonsoft.Json;
 using MeterTest.Source.Config;
 
-namespace MeterTest.Source.WinowsForm
+namespace MeterTest.Source.WindowsForm
 {
     public partial class FormOptions : Form
     {

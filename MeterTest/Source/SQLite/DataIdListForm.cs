@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
-using MeterTest.Source.WinowsForm;
+using MeterTest.Source.WindowsForm;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeterTest.Source.SQLite
