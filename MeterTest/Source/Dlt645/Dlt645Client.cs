@@ -50,7 +50,7 @@ namespace MeterTest.Source.Dlt645
         }
         public void MeterClear(MeterAddress address, Dlt645Password password, Dlt645OperatorCode opCode)
         {
-            MeterClearRequset request = new MeterClearRequset(address, password, opCode);
+            MeterClearRequest request = new MeterClearRequest(address, password, opCode);
             transport.UnicastMessage<WriteResponse>(request);
         }
         public byte[] ReadRepInogreTimeOut(MeterAddress address, DataId dataId)

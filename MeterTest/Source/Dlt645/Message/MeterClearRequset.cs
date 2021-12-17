@@ -2,11 +2,11 @@ using System.IO;
 
 namespace MeterTest.Source.Dlt645.Message
 {
-    public class MeterClearRequset : IDlt645Request
+    public class MeterClearRequest : IDlt645Request
     {
         private byte minimumFrameSize = 12;
 
-        public MeterClearRequset(MeterAddress address, Dlt645Password password, Dlt645OperatorCode operatorCode)
+        public MeterClearRequest(MeterAddress address, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
             ControlCode = 0x1A;
             Address = address;
