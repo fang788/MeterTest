@@ -72,5 +72,10 @@ namespace MeterTest.Source.Device
                 log.DeviceOptEnd();
             }
         }
+        public void ExcuteSpecialOrderThread(Object obj)
+        {
+            String[] arg = (string[]) obj;
+            this.ExcuteSpecialOrder(arg[0], arg[1]);
+        }
     }
 }

@@ -25,10 +25,11 @@ using MeterTest.Source.Read;
 using MeterTest.Source.SQLite.ParaConfig;
 using Microsoft.EntityFrameworkCore;
 using MeterTest.Source.Write;
+using MeterTest.Source.Device;
 
 namespace MeterTest.Source.WindowsForm
 {
-    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog, IParaConfigLog
+    public partial class FormMain : Form, IAdjMeterLogger, IFreezeLog, IReadLog, IParaConfigLog, IDeviceLog
     {
         private FormLogger formLogger = new FormLogger();
         private SerialPort serialPort;
@@ -41,9 +42,9 @@ namespace MeterTest.Source.WindowsForm
         private String optMessage = null;
         private Dlt645Password password = null;
         private Dlt645OperatorCode operatorCode = null;
-        private FreezeLineChart freezeLineChart = null;
-        private DateTimeAxis    dateTimeAxis    = null; // y轴
-        private LinearAxis      dataAxis = null; // x轴
+        //private FreezeLineChart freezeLineChart = null;
+        //private DateTimeAxis    dateTimeAxis    = null; // y轴
+        //private LinearAxis      dataAxis = null; // x轴
         //private FreezeDataRead freezeDataRead;
         private ReadData readData;
         private string  paraConfigTableName;
@@ -503,89 +504,6 @@ namespace MeterTest.Source.WindowsForm
         }
 
        
-        private void MeterClearDisplay(Object obj)
-        {
-            toolStripStatusLabelMeterClear.Text = obj.ToString();
-        }
-        private void buttonMeterClear_Click(object sender, EventArgs e)
-        {
-            toolStripStatusLabelMeterClear.Text = "清零中....";
-            if(!comboBoxMeterClearPassword.Items.Contains(comboBoxMeterClearPassword.Text))
-            {
-                toolStripStatusLabelMeterClear.Text = "请选择密级";
-                return;
-            }
-            if(textBoxMeterClearPassword.Text.Length != 6)
-            {
-                toolStripStatusLabelMeterClear.Text = "密码长度不正确";
-                return;
-            }
-            if(textBoxMeterClearAddr.Text.Length != 12)
-            {
-                toolStripStatusLabelMeterClear.Text = "通讯地址长度不为12";
-                return;
-            }
-            if(textBoxMeterClearOptCode.Text.Length != 8)
-            {
-                toolStripStatusLabelMeterClear.Text = "操作者代码长度不为8";
-                return;
-            }
-            Dlt645Password password = null;
-            try
-            {
-                password = new Dlt645Password(comboBoxMeterClearPassword.Text + textBoxMeterClearPassword.Text);
-            }
-            catch (System.Exception)
-            {
-                toolStripStatusLabelMeterClear.Text = "密码格式不正确";
-                return;
-            }
-            MeterAddress addr = null;
-            try
-            {
-                addr = new MeterAddress(textBoxMeterClearAddr.Text); 
-            }
-            catch (System.Exception)
-            {
-                toolStripStatusLabelMeterClear.Text = "通讯地址格式不正确";
-                return;
-            }
-            Dlt645OperatorCode optCode = null;
-            try
-            {
-                optCode = new Dlt645OperatorCode(textBoxMeterClearOptCode.Text);
-            }
-            catch (TimeoutException)
-            {
-                toolStripStatusLabelMeterClear.Text = "响应超时";
-            }
-            catch (System.Exception)
-            {
-                toolStripStatusLabelMeterClear.Text = "操作者代码格式不正确";
-                return;
-            }
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    client.MeterClear(addr, password, optCode);
-                }
-                catch (TimeoutException)
-                {
-                    // toolStripStatusLabelMeterClear.Text = "响应超时";
-                    synchronizationContext.Post(MeterClearDisplay, "响应超时");
-                    return;
-                }   
-                catch (Exception exc)
-                {
-                    // toolStripStatusLabelMeterClear.Text = "其他错误" + exc.Message;
-                    synchronizationContext.Post(MeterClearDisplay, "其他错误" + exc.Message);
-                    return;
-                }      
-                synchronizationContext.Post(MeterClearDisplay, "清零完成");
-            });
-        }
-
         private void 管理参数配置表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParaConfigManageForm form = new ParaConfigManageForm();
@@ -1040,6 +958,42 @@ namespace MeterTest.Source.WindowsForm
             {
                 readData.EndRead();
             }
+        }
+
+        private void buttonOptExectu_Click(object sender, EventArgs e)
+        {
+            if(optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            optLock = true;
+            optMessage = "正在执行" + comboBoxOpt.Text + "操作";
+            DeviceFactory deviceFactory = null;
+            deviceFactory = new DeviceFactory(client, meterAddress, password, operatorCode, this);
+            Thread thread = new Thread(deviceFactory.ExcuteSpecialOrderThread);
+            string[] arg = new string[2];
+            arg[0] = "II型终端";
+            arg[1] = comboBoxOpt.Text;
+            thread.IsBackground = true;
+            thread.Start((Object)arg);
+        }
+        private void SpecialOrderDisplay(Object obj)
+        {
+            toolStripStatusLabelOpt.Text = obj.ToString();
+        }
+        private void SpecialOrderEnd(object obj)
+        {
+            End();
+        }
+        public void SendDeviceLog(string msg)
+        {
+            synchronizationContext.Post(SpecialOrderDisplay, (Object)msg);
+        }
+
+        public void DeviceOptEnd()
+        {
+            synchronizationContext.Post(SpecialOrderEnd, new Object());
         }
     }
 }

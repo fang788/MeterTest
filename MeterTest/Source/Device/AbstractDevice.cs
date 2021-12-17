@@ -66,12 +66,25 @@ namespace MeterTest.Source.Device
 
         public MeterAddress GetMeterAddress()
         {
-            throw new System.NotImplementedException();
+            DataId readAddress = new DataId(0x04000401);
+            byte[] data = client.Read(MeterAddress.Wildcard, readAddress);
+            return new MeterAddress(data);
         }
 
         public void SetFactoryStatus(FactoryStatus status)
         {
-            throw new System.NotImplementedException();
+            DataId dataId = new DataId(0xA5A01101);
+            dataId.DataBytes = 1;
+            dataId.DataArray = new byte[1];
+            if(status == FactoryStatus.FactoryOut)
+            {
+                dataId.DataArray[0] = 0x55;
+            }
+            else
+            {
+                dataId.DataArray[0] = 0xAA;
+            }
+            client.WriteRepInogreTimeOut(GetMeterAddress(), dataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         }
 
         public void SetMeterAddress(MeterAddress address)
