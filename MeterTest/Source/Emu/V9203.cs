@@ -10,6 +10,7 @@ namespace MeterTest.Source.Emu
 {
     public class V9203 : EmuAdj
     {
+        private const int ERROR_MAX_CNT = 5;
         public readonly List<DataId> dataIdRegList = new List<DataId>()
         {
             new DataId("起动/潜动门限值上限寄存器"        , 0xA0000000, 0x00000444),
@@ -39,7 +40,8 @@ namespace MeterTest.Source.Emu
             // new DataId("C相全波电流有效值二次补偿寄存器"  , 0xA0000018, 0x00000000),
             // new DataId("全波零线电流有效值二次补偿寄存器" , 0xA0000019, 0x00000000),
             // new DataId("能量累加门限值寄存器高位"         , 0xA000001A, 0x00000000),
-            new DataId("能量累加门限值寄存器低位"         , 0xA000001B,  0xE258C4),
+            // new DataId("能量累加门限值寄存器低位"         , 0xA000001B,  0xE258C4),
+            new DataId("能量累加门限值寄存器低位"         , 0xA000001B,  0x1538155),
             new DataId("模拟控制寄存器0"                  , 0xA000001C, 0x00070000),
             new DataId("计量控制寄存器2"                  , 0xA000001D, 0x0302A033),
         };  
@@ -188,9 +190,9 @@ namespace MeterTest.Source.Emu
             int i;
             try
             {
-                for (i = 0; i < 5; i++)
+                for (i = 0; i < ERROR_MAX_CNT; i++)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(3000);
                     status = this.kpTableBody.KpTableBodyRead();
                     status = status.Split(',')[v9203AdjList[(int)type].VariableIndex].Trim(new char[]{'V','A','W','v','a','r','w','+','-'});
                     double tb = Convert.ToDouble(status);
@@ -200,14 +202,11 @@ namespace MeterTest.Source.Emu
                     {
                         tmp = tmp * 100 + (data[j] >> 4) * 10 + (data[j] & 0x0F);
                     }
-                    //zdPA += tmp;
                     tmp /= v9203AdjList[(int)type].VariablePoint;
                     zdPA = (tmp - tb) / tb;
                     error +=  zdPA;
                 }
-                error /= 5;
-                // logger.IAdjMeterLog(type.ToString() + "误差：" + (error * 100).ToString("F2") + "%");
-                //Thread.Sleep(5000);
+                error /= ERROR_MAX_CNT;
                 if ((error > 0.1) || (error < -0.1))
                 {
                     throw new InvalidOperationException(type.ToString() + "-误差为" + (error * 100).ToString("F2") + "%，已超过10% ");
