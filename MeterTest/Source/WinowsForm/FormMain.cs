@@ -114,27 +114,6 @@ namespace MeterTest.Source.WindowsForm
             DataGridViewWriteDisplayUpdate();
             synchronizationContext = SynchronizationContext.Current;
 
-            /* 第一次打开时，加载的折线图 */
-            // comboBoxFreezeSelect.Text = comboBoxFreezeSelect.Items[0].ToString();
-            // dateTimePickerFreezeReadStart.Value = DateTime.Now.AddHours(-1);
-            
-            // PlotModel model = new PlotModel { Title = "冻结数据" };
-            // dateTimeAxis = new DateTimeAxis
-            // {
-            //     Position = AxisPosition.Bottom, 
-            //     Minimum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadStart.Value), 
-            //     Maximum = DateTimeAxis.ToDouble(dateTimePickerFreezeReadEnd.Value), 
-            //     StringFormat = "M/d HH:mm",
-            //     IsZoomEnabled = false,
-            //     IsPanEnabled =  false,  
-            // };
-            // dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
-            // freezeLineChart = new FreezeLineChart(model, 
-            //                                       dateTimeAxis,
-            //                                       dataAxis,
-            //                                       comboBoxFreezeSelect.Text);
-            // this.plotViewFreeze.Model = model;
-
             using var context = new ParaConfigTableDbContext();
             if(context.ParaConfigTables.Count() > 0)
             {
@@ -378,46 +357,7 @@ namespace MeterTest.Source.WindowsForm
             readOnceThr.IsBackground = true;
             readOnceThr.Start(dataIdList);
         }
-        private void buttonReadCycle_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void buttonStop_Click(object sender, EventArgs e)
-        {
-            if(readData != null)
-            {
-                readData.EndRead();
-            }
-        }
         
-        private void ReadTabPageSizeZoom()
-        {
-            //dataGridViewReadList.Left = tabControlMainForm.Left;
-            //dataGridViewReadList.Top = tabControlMainForm.Top;
-            //dataGridViewReadList.Width = (int)(tabControlMainForm.Width * 0.96);
-            //buttonReadOne.Left = tabControlMainForm.Left + 10;
-            //buttonReadCycle.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4;
-            //buttonStop.Left = tabControlMainForm.Left + 10 + tabControlMainForm.Width / 4 * 2;
-            //if (tabControlMainForm.Height > 150)
-            //{
-            //    dataGridViewReadList.Height = tabControlMainForm.Height - 150;
-            //    buttonReadOne.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-            //    buttonReadCycle.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-            //    buttonStop.Top = tabControlMainForm.Top + tabControlMainForm.Height - 135;
-            //}
-            //else
-            //{
-            //    dataGridViewReadList.Height = 10;
-            //}
-        }
-        // private void FormMain_SizeChanged(object sender, EventArgs e)
-        // {
-        //     if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
-        //     {
-        //         ReadTabPageSizeZoom();
-        //     }
-        // }
         private void DataGridViewWriteDisplayUpdate()
         {
             using var context = new DataIdDbContext();
@@ -503,11 +443,6 @@ namespace MeterTest.Source.WindowsForm
             FreezeReadMsg msg = (FreezeReadMsg)obj;
             toolStripStatusLabelFreeze.Text = msg.ToolStripStatusLabel;
             toolStripProgressBarFreezeRead.Value = msg.ProgressBar;
-            // if(msg.freezeData != null)
-            // {
-            //     freezeLineChart.DisplayFreezeData(comboBoxFreezeSelect.Text, msg.freezeData);
-            //     plotViewFreeze.Model.InvalidatePlot(true);
-            // }
         }
         FreezeDataFactory factory = null;
         private void buttonFreezeRead_Click(object sender, EventArgs e)
@@ -556,39 +491,6 @@ namespace MeterTest.Source.WindowsForm
                 buttonFreezeRead.Text = "读取";
             }
         }
-        
-        // private void comboBoxFreezeSelect_SelectedIndexChanged(object sender, EventArgs e)
-        // {
-        //     if(plotViewFreeze.Model == null)
-        //     {
-        //         return;
-        //     }
-        //     plotViewFreeze.Model.Axes.Remove(dataAxis);
-        //     dataAxis = FreezeLineChart.GetLinearAxis(comboBoxFreezeSelect.Text);
-        //     freezeLineChart.left = dataAxis;
-        //     freezeLineChart.lineDict.Clear();
-        //     plotViewFreeze.Model.Axes.Add(dataAxis);
-        //     // plotViewFreeze.Model.Title = comboBoxFreezeSelect.Text;
-        //     plotViewFreeze.Model.InvalidatePlot(true);
-        // }
-
-        // private void dateTimePickerFreezeReadStart_ValueChanged(object sender, EventArgs e)
-        // {
-        //     if(dateTimeAxis != null)
-        //     {
-        //         freezeLineChart.SetBottomMin(dateTimePickerFreezeReadStart.Value);
-        //         plotViewFreeze.Model.InvalidatePlot(true);
-        //     }
-        // }
-
-        // private void dateTimePickerFreezeReadEnd_ValueChanged(object sender, EventArgs e)
-        // {
-        //     if(dateTimeAxis != null)
-        //     {
-        //         freezeLineChart.SetBottomMax(dateTimePickerFreezeReadEnd.Value);
-        //         plotViewFreeze.Model.InvalidatePlot(true);
-        //     }
-        // }
 
         public void SendMsg(FreezeReadMsg msg)
         {
@@ -684,25 +586,12 @@ namespace MeterTest.Source.WindowsForm
             });
         }
 
-        // private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
-        // {
-        //     if(tabControlMainForm.SelectedIndex == tabControlMainForm.TabPages.IndexOf(tabPageRead))
-        //     {
-        //         ReadTabPageSizeZoom();
-        //     }
-            
-        // }
-
         private void 管理参数配置表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParaConfigManageForm form = new ParaConfigManageForm();
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;
             form.ShowDialog();
-            // if (form.IsChg)
-            // {
-            //     DataIdListDisplayAll();
-            // }
         }
         private void ParaConfigTableDisplay(ParaConfigTable table)
         {
@@ -833,11 +722,6 @@ namespace MeterTest.Source.WindowsForm
             Thread thread = new Thread(paraConfig.ParaCompare);
             thread.IsBackground = true;
             thread.Start(dataIds);
-        }
-
-        private void 自动加1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void 停止ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1036,22 +920,6 @@ namespace MeterTest.Source.WindowsForm
                 label13.Visible = false;
             }
         }
-        // private void ChgMenu_Click(object sender, EventArgs e)
-        // {
-        //     ToolStripMenuItem menu = (ToolStripMenuItem)sender;
-        //     // if(paraConfigTableName != menu.Text)
-        //     // {
-        //     //     using var context = new ParaConfigTableDbContext();
-        //     //     ParaConfigTable table = context.ParaConfigTables.Include(e => e.DataIds).AsNoTracking().Single(e => e.Name == menu.Text);
-        //     //     ParaConfigTableDisplay(table);
-        //     //     paraConfigTableName = menu.Text;
-        //     // }
-        //     PlotModel model = null;
-        //     if(factory.FreezeDataBlockListDisplay(comboBoxProjectSelect.Text, menu.Text, ref model))
-        //     {
-        //         plotViewFreeze.Model = model;
-        //     }
-        // }
         private void dataGridViewFreezeDisplay(FreezeDataFactory dataFactory)
         {
             dataGridViewFreeze.Columns.Clear();
@@ -1080,20 +948,7 @@ namespace MeterTest.Source.WindowsForm
             && (factory.FreezeDataBlocks.Count > 0))
             {
                 List<string> leftString = FreezeDataFactory.CreateLiftString(comboBoxProjectSelect.Text);
-                // PlotModel model = null;
                 dataGridViewFreezeDisplay(factory);
-                // if(factory.FreezeDataBlockListDisplay(comboBoxProjectSelect.Text, leftString[0], ref model))
-                // {
-                //     // plotViewFreeze.Model = model;
-                //     // ToolStripMenuItem menu = (ToolStripMenuItem)plotViewFreeze.ContextMenuStrip.Items[plotViewFreeze.ContextMenuStrip.Items.IndexOf(toolStripMenuItemSelect)];
-                //     // menu.DropDownItems.Clear();
-                //     // foreach (var item in leftString)
-                //     // {
-                //     //     ToolStripMenuItem addMenu = new ToolStripMenuItem(item);
-                //     //     addMenu.Click += new System.EventHandler(this.ChgMenu_Click);
-                //     //     menu.DropDownItems.Add(addMenu);
-                //     // }
-                // }
             }
             End();
         }
