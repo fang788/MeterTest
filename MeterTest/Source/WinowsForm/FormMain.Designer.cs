@@ -767,7 +767,7 @@ namespace MeterTest.Source.WindowsForm
             // 
             // buttonOptExectu
             // 
-            this.buttonOptExectu.Location = new System.Drawing.Point(224, 85);
+            this.buttonOptExectu.Location = new System.Drawing.Point(247, 84);
             this.buttonOptExectu.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOptExectu.Name = "buttonOptExectu";
             this.buttonOptExectu.Size = new System.Drawing.Size(89, 35);
@@ -783,10 +783,10 @@ namespace MeterTest.Source.WindowsForm
             "清零",
             "切换工厂状态",
             "广播校时"});
-            this.comboBoxOpt.Location = new System.Drawing.Point(104, 90);
+            this.comboBoxOpt.Location = new System.Drawing.Point(81, 90);
             this.comboBoxOpt.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOpt.Name = "comboBoxOpt";
-            this.comboBoxOpt.Size = new System.Drawing.Size(93, 25);
+            this.comboBoxOpt.Size = new System.Drawing.Size(116, 25);
             this.comboBoxOpt.TabIndex = 2;
             this.comboBoxOpt.Text = "清零";
             // 
