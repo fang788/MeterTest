@@ -250,6 +250,7 @@ namespace MeterTest.Source.Freeze
                 {
                     GetFreezeDataListFromCntOnce();
                 }
+                FreezeDataBlocks.Sort();
                 if(!stopFlg)
                 {
                     // SaveFreezeData();
