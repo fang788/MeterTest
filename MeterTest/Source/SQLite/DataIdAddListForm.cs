@@ -22,7 +22,7 @@ namespace MeterTest.Source.SQLite
 
         public bool IsChg = false;
 
-        List<DataId> dataIdList = new List<DataId>();
+        // List<DataId> dataIdList = new List<DataId>();
         public DataIdAddListForm()
         {
             InitializeComponent();
@@ -49,6 +49,7 @@ namespace MeterTest.Source.SQLite
             dataGridViewDataIdList.Columns.Add("Name", "数据项名称");
             dataGridViewDataIdList.Columns.Add("GroupName", "分组");
             dataGridViewDataIdList.Columns[3].Width = 160;
+            DisplayAll();
         }
         public List<DataId> GetDataIdList(string excelFilePath)
         {
@@ -102,8 +103,9 @@ namespace MeterTest.Source.SQLite
         }
         private void DisplayAll()
         {
-            // dataGridViewDataIdList.BeginEdit();
             dataGridViewDataIdList.Rows.Clear();
+            using var context = new DataIdDbContext();
+            List<DataId> dataIdList = context.DataIds.ToList();
             dataIdList.Sort();
             DataId[] dataIdArray = dataIdList.ToArray<DataId>();
             for (int i = 0; i < dataIdArray.Length; i++)
@@ -142,8 +144,8 @@ namespace MeterTest.Source.SQLite
                         IsChg = true;
                     }
                 }
-                DisplayAll();
                 context.SaveChanges();
+                DisplayAll();
             }
         }
 
@@ -157,7 +159,6 @@ namespace MeterTest.Source.SQLite
                 using var context = new DataIdDbContext();
                 context.DataIds.Add(form.DataId);
                 context.SaveChanges();
-                dataIdList.Add(form.DataId);
                 DisplayAll();
                 IsChg = true;
             }
