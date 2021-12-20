@@ -5,10 +5,10 @@ namespace MeterTest.Source.Device
 {
     public class AbstractDevice : IDevice
     {
-        private Dlt645Client client;
-        private MeterAddress address;
-        private Dlt645Password password;
-        private Dlt645OperatorCode operatorCode;
+        public Dlt645Client client;
+        public MeterAddress address;
+        public Dlt645Password password;
+        public Dlt645OperatorCode operatorCode;
         public AbstractDevice()
         {
         }
@@ -78,11 +78,11 @@ namespace MeterTest.Source.Device
             dataId.DataArray = new byte[1];
             if(status == FactoryStatus.FactoryOut)
             {
-                dataId.DataArray[0] = 0x55;
+                dataId.DataArray[0] = 0xAA;
             }
             else
             {
-                dataId.DataArray[0] = 0xAA;
+                dataId.DataArray[0] = 0x55;
             }
             client.WriteRepInogreTimeOut(GetMeterAddress(), dataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
         }

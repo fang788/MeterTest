@@ -5,10 +5,6 @@ namespace MeterTest.Source.Device
 {
     public class TypeIITerminal : AbstractDevice
     {
-        private Dlt645Client client;
-        private MeterAddress address;
-        private Dlt645Password password;
-        private Dlt645OperatorCode operatorCode;
 
         public TypeIITerminal()
         {

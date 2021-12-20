@@ -29,7 +29,7 @@ namespace MeterTest.Source.Device
             }
             return device;
         }
-        public void ExcuteSpecialOrder(string specialOrderName, string deviceName)
+        public void ExcuteSpecialOrder(string deviceName, string specialOrderName)
         {
             IDevice device = CreateDevice(deviceName);
             try
@@ -49,7 +49,7 @@ namespace MeterTest.Source.Device
                     }
                     else
                     {
-                        device.SetFactoryStatus(FactoryStatus.FactoryIn);
+                        device.SetFactoryStatus(FactoryStatus.FactoryOut);
                         log.SendDeviceLog("已切换至厂外状态");
                     }
                 }
