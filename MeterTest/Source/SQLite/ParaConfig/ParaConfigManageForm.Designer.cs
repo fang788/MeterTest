@@ -34,7 +34,6 @@
             this.contextMenuStripProject = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.添加ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label_para_config_table_name = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -63,10 +62,9 @@
             // 
             this.contextMenuStripProject.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.添加ToolStripMenuItem,
-            this.删除ToolStripMenuItem,
-            this.导出ToolStripMenuItem});
+            this.删除ToolStripMenuItem});
             this.contextMenuStripProject.Name = "contextMenuStripProject";
-            this.contextMenuStripProject.Size = new System.Drawing.Size(101, 70);
+            this.contextMenuStripProject.Size = new System.Drawing.Size(101, 48);
             // 
             // 添加ToolStripMenuItem
             // 
@@ -81,13 +79,6 @@
             this.删除ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
-            // 
-            // 导出ToolStripMenuItem
-            // 
-            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.导出ToolStripMenuItem.Text = "导出";
-            this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItem_Click);
             // 
             // label_para_config_table_name
             // 
@@ -157,6 +148,5 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripProject;
         private System.Windows.Forms.ToolStripMenuItem 添加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
     }
 }
