@@ -3,12 +3,13 @@ using MeterTest.Source.Dlt645;
 
 namespace MeterTest.Source.Device
 {
-    public class AbstractDevice : IDevice
+    public abstract class AbstractDevice : IDevice
     {
         public Dlt645Client client;
-        public MeterAddress address;
-        public Dlt645Password password;
-        public Dlt645OperatorCode operatorCode;
+        public MeterAddress Address;
+        public Dlt645Password Password;
+        public Dlt645OperatorCode OperatorCode;
+        public IDeviceLog Log;
         public AbstractDevice()
         {
         }
@@ -16,9 +17,9 @@ namespace MeterTest.Source.Device
         public AbstractDevice(Dlt645Client client, MeterAddress address, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
             this.client = client;
-            this.address = address;
-            this.password = password;
-            this.operatorCode = operatorCode;
+            this.Address = address;
+            this.Password = password;
+            this.OperatorCode = operatorCode;
         }
 
         public void Broadcast()
@@ -33,7 +34,7 @@ namespace MeterTest.Source.Device
             {
                 try
                 {
-                    client.MeterClear(address, password, operatorCode);
+                    client.MeterClear(Address, Password, OperatorCode);
                     break;
                 }
                 catch (TimeoutException)
@@ -51,7 +52,7 @@ namespace MeterTest.Source.Device
         {
             FactoryStatus factoryStatus = FactoryStatus.FactoryIn;
             DataId dataId = new DataId(0xA5A01101);
-            byte[] status = client.ReadRepInogreTimeOut(address, dataId);
+            byte[] status = client.ReadRepInogreTimeOut(Address, dataId);
             dataId.DataBytes = 1;
             if(status[0] == 0xAA)
             {
@@ -91,5 +92,7 @@ namespace MeterTest.Source.Device
         {
             throw new System.NotImplementedException();
         }
+
+        public abstract void SoftwareUpdate(string updateFilePath);
     }
 }

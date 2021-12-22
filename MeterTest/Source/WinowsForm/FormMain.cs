@@ -962,6 +962,11 @@ namespace MeterTest.Source.WindowsForm
 
         private void buttonOptExectu_Click(object sender, EventArgs e)
         {
+            if((textBoxUpdateSoftware.Text.Trim().Length < 2) && (comboBoxOpt.Text == "升级"))
+            {
+                MessageBox.Show("请选择升级文件！", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);;
+                return;
+            }
             if(optLock)
             {
                 MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -972,9 +977,10 @@ namespace MeterTest.Source.WindowsForm
             DeviceFactory deviceFactory = null;
             deviceFactory = new DeviceFactory(client, meterAddress, password, operatorCode, this);
             Thread thread = new Thread(deviceFactory.ExcuteSpecialOrderThread);
-            string[] arg = new string[2];
+            string[] arg = new string[3];
             arg[0] = "II型终端";
             arg[1] = comboBoxOpt.Text;
+            arg[2] = textBoxUpdateSoftware.Text.Trim();
             thread.IsBackground = true;
             thread.Start((Object)arg);
         }
@@ -994,6 +1000,34 @@ namespace MeterTest.Source.WindowsForm
         public void DeviceOptEnd()
         {
             synchronizationContext.Post(SpecialOrderEnd, new Object());
+        }
+
+        private void comboBoxOpt_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBoxOpt.Text == "升级")
+            {
+                labelUpdateSoftware.Visible = true;
+                textBoxUpdateSoftware.Visible = true;
+                buttonSelectUpdateSoftware.Visible = true;
+            }
+            else
+            {
+                labelUpdateSoftware.Visible = false;
+                textBoxUpdateSoftware.Visible = false;
+                buttonSelectUpdateSoftware.Visible = false;
+            }
+        }
+
+        private void buttonSelectUpdateSoftware_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Title = "请选择文件";
+            fileDialog.Filter = "bin文件(*.bin)|*.bin"; ;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                textBoxUpdateSoftware.Text = fileDialog.FileName;
+            }
         }
     }
 }

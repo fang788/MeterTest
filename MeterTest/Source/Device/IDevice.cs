@@ -10,5 +10,6 @@ namespace MeterTest.Source.Device
         void Broadcast();
         MeterAddress GetMeterAddress();
         void SetMeterAddress(MeterAddress address);
+        void SoftwareUpdate(string updateFilePath);
     }
 }

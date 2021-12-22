@@ -13,7 +13,7 @@ namespace MeterTest.Source.Dlt645.Message
 
         public WriteRequest(MeterAddress address, byte controlCode, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
-            if((Dlt645Password.PosswordBytes + Dlt645OperatorCode.OperatorCodeBytes + DataId.DataIdBytes + dataId.DataBytes) > 200)
+            if((Dlt645Password.PosswordBytes + Dlt645OperatorCode.OperatorCodeBytes + DataId.DataIdBytes + dataId.DataBytes) > 253)
             {
                 throw new Exception("dataFieldLen error");
             }

@@ -88,9 +88,12 @@ namespace MeterTest.Source.WindowsForm
             this.label3 = new System.Windows.Forms.Label();
             this.dateTimePickerFreezeReadStart = new System.Windows.Forms.DateTimePicker();
             this.tabPageCmd = new System.Windows.Forms.TabPage();
+            this.textBoxUpdateSoftware = new System.Windows.Forms.TextBox();
+            this.labelUpdateSoftware = new System.Windows.Forms.Label();
             this.statusStrip5 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelOpt = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelOpt = new System.Windows.Forms.Label();
+            this.buttonSelectUpdateSoftware = new System.Windows.Forms.Button();
             this.buttonOptExectu = new System.Windows.Forms.Button();
             this.comboBoxOpt = new System.Windows.Forms.ComboBox();
             this.tabPageParaConfig = new System.Windows.Forms.TabPage();
@@ -725,8 +728,11 @@ namespace MeterTest.Source.WindowsForm
             // 
             // tabPageCmd
             // 
+            this.tabPageCmd.Controls.Add(this.textBoxUpdateSoftware);
+            this.tabPageCmd.Controls.Add(this.labelUpdateSoftware);
             this.tabPageCmd.Controls.Add(this.statusStrip5);
             this.tabPageCmd.Controls.Add(this.labelOpt);
+            this.tabPageCmd.Controls.Add(this.buttonSelectUpdateSoftware);
             this.tabPageCmd.Controls.Add(this.buttonOptExectu);
             this.tabPageCmd.Controls.Add(this.comboBoxOpt);
             this.tabPageCmd.Location = new System.Drawing.Point(4, 26);
@@ -736,6 +742,27 @@ namespace MeterTest.Source.WindowsForm
             this.tabPageCmd.TabIndex = 5;
             this.tabPageCmd.Text = "特殊命令";
             this.tabPageCmd.UseVisualStyleBackColor = true;
+            // 
+            // textBoxUpdateSoftware
+            // 
+            this.textBoxUpdateSoftware.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textBoxUpdateSoftware.Location = new System.Drawing.Point(125, 133);
+            this.textBoxUpdateSoftware.MaxLength = 12;
+            this.textBoxUpdateSoftware.Name = "textBoxUpdateSoftware";
+            this.textBoxUpdateSoftware.ReadOnly = true;
+            this.textBoxUpdateSoftware.Size = new System.Drawing.Size(462, 23);
+            this.textBoxUpdateSoftware.TabIndex = 5;
+            this.textBoxUpdateSoftware.Visible = false;
+            // 
+            // labelUpdateSoftware
+            // 
+            this.labelUpdateSoftware.AutoSize = true;
+            this.labelUpdateSoftware.Location = new System.Drawing.Point(44, 136);
+            this.labelUpdateSoftware.Name = "labelUpdateSoftware";
+            this.labelUpdateSoftware.Size = new System.Drawing.Size(68, 17);
+            this.labelUpdateSoftware.TabIndex = 4;
+            this.labelUpdateSoftware.Text = "文件路径：";
+            this.labelUpdateSoftware.Visible = false;
             // 
             // statusStrip5
             // 
@@ -758,16 +785,28 @@ namespace MeterTest.Source.WindowsForm
             // labelOpt
             // 
             this.labelOpt.AutoSize = true;
-            this.labelOpt.Location = new System.Drawing.Point(33, 94);
+            this.labelOpt.Location = new System.Drawing.Point(44, 93);
             this.labelOpt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelOpt.Name = "labelOpt";
             this.labelOpt.Size = new System.Drawing.Size(44, 17);
             this.labelOpt.TabIndex = 2;
             this.labelOpt.Text = "命令：";
             // 
+            // buttonSelectUpdateSoftware
+            // 
+            this.buttonSelectUpdateSoftware.Location = new System.Drawing.Point(620, 127);
+            this.buttonSelectUpdateSoftware.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSelectUpdateSoftware.Name = "buttonSelectUpdateSoftware";
+            this.buttonSelectUpdateSoftware.Size = new System.Drawing.Size(89, 35);
+            this.buttonSelectUpdateSoftware.TabIndex = 1;
+            this.buttonSelectUpdateSoftware.Text = "选择";
+            this.buttonSelectUpdateSoftware.UseVisualStyleBackColor = true;
+            this.buttonSelectUpdateSoftware.Visible = false;
+            this.buttonSelectUpdateSoftware.Click += new System.EventHandler(this.buttonSelectUpdateSoftware_Click);
+            // 
             // buttonOptExectu
             // 
-            this.buttonOptExectu.Location = new System.Drawing.Point(247, 84);
+            this.buttonOptExectu.Location = new System.Drawing.Point(354, 83);
             this.buttonOptExectu.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOptExectu.Name = "buttonOptExectu";
             this.buttonOptExectu.Size = new System.Drawing.Size(89, 35);
@@ -781,13 +820,15 @@ namespace MeterTest.Source.WindowsForm
             this.comboBoxOpt.FormattingEnabled = true;
             this.comboBoxOpt.Items.AddRange(new object[] {
             "清零",
-            "切换工厂状态"});
-            this.comboBoxOpt.Location = new System.Drawing.Point(81, 90);
+            "切换工厂状态",
+            "升级"});
+            this.comboBoxOpt.Location = new System.Drawing.Point(125, 89);
             this.comboBoxOpt.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOpt.Name = "comboBoxOpt";
-            this.comboBoxOpt.Size = new System.Drawing.Size(116, 25);
+            this.comboBoxOpt.Size = new System.Drawing.Size(183, 25);
             this.comboBoxOpt.TabIndex = 2;
             this.comboBoxOpt.Text = "清零";
+            this.comboBoxOpt.SelectedIndexChanged += new System.EventHandler(this.comboBoxOpt_SelectedIndexChanged);
             // 
             // tabPageParaConfig
             // 
@@ -1024,5 +1065,8 @@ namespace MeterTest.Source.WindowsForm
         private System.Windows.Forms.Label labelOpt;
         private System.Windows.Forms.Button buttonOptExectu;
         private System.Windows.Forms.ComboBox comboBoxOpt;
+        private System.Windows.Forms.Label labelUpdateSoftware;
+        private System.Windows.Forms.TextBox textBoxUpdateSoftware;
+        private System.Windows.Forms.Button buttonSelectUpdateSoftware;
     }
 }

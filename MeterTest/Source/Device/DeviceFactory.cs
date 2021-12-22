@@ -25,11 +25,11 @@ namespace MeterTest.Source.Device
             IDevice device = null;
             if(deviceName == "II型终端")
             {
-                device = new TypeIITerminal(client, address, password, operatorCode);
+                device = new TypeIITerminal(client, address, password, operatorCode, log);
             }
             return device;
         }
-        public void ExcuteSpecialOrder(string deviceName, string specialOrderName)
+        public void ExcuteSpecialOrder(string deviceName, string specialOrderName, Object obj)
         {
             IDevice device = CreateDevice(deviceName);
             try
@@ -58,6 +58,11 @@ namespace MeterTest.Source.Device
                     device.Broadcast();
                     log.SendDeviceLog("广播校时完成");
                 }
+                else if(specialOrderName == "升级")
+                {
+                    device.SoftwareUpdate((string)obj);
+                    //log.SendDeviceLog("升级完成");
+                }
             }
             catch (TimeoutException)
             {
@@ -75,7 +80,7 @@ namespace MeterTest.Source.Device
         public void ExcuteSpecialOrderThread(Object obj)
         {
             String[] arg = (string[]) obj;
-            this.ExcuteSpecialOrder(arg[0], arg[1]);
+            this.ExcuteSpecialOrder(arg[0], arg[1], arg[2]);
         }
     }
 }

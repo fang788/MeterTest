@@ -56,7 +56,8 @@ namespace MeterTest.Source.Dlt645
         public byte[] ReadRepInogreTimeOut(MeterAddress address, DataId dataId)
         {
             byte[] rst = null;
-            for (int i = 0; i < OPT_MAX_CNT; i++)
+            int cnt = 0;
+            while (cnt < OPT_MAX_CNT)
             {
                 try
                 {
@@ -65,15 +66,20 @@ namespace MeterTest.Source.Dlt645
                 }
                 catch (TimeoutException)
                 {
-                    ;
+                    cnt++;
                 }
+            }
+            if(cnt >= OPT_MAX_CNT)
+            {
+                throw new TimeoutException();
             }
             return rst;
         }
 
         public void WriteRepInogreTimeOut(MeterAddress address, DataId dataId)
         {
-            for (int i = 0; i < OPT_MAX_CNT; i++)
+            int cnt = 0;
+            while (cnt < OPT_MAX_CNT)
             {
                 try
                 {
@@ -82,14 +88,19 @@ namespace MeterTest.Source.Dlt645
                 }
                 catch (TimeoutException)
                 {
-                    ;
+                    cnt++;
                 }
+            }
+            if(cnt >= OPT_MAX_CNT)
+            {
+                throw new TimeoutException();
             }
         }
 
         public void WriteRepInogreTimeOut(MeterAddress address, DataId dataId, Dlt645Password password, Dlt645OperatorCode operatorCode)
         {
-            for (int i = 0; i < OPT_MAX_CNT; i++)
+            int cnt = 0;
+            while (cnt < OPT_MAX_CNT)
             {
                 try
                 {
@@ -98,8 +109,12 @@ namespace MeterTest.Source.Dlt645
                 }
                 catch (TimeoutException)
                 {
-                    ;
+                    cnt++;
                 }
+            }
+            if(cnt >= OPT_MAX_CNT)
+            {
+                throw new TimeoutException();
             }
         }
     }
