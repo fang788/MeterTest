@@ -575,7 +575,7 @@ namespace MeterTest.Source.WindowsForm
             this.comboBoxFreezeMethon.FormattingEnabled = true;
             this.comboBoxFreezeMethon.Items.AddRange(new object[] {
             "时间点",
-            "次数快",
+            "次数块",
             "次数单个"});
             this.comboBoxFreezeMethon.Location = new System.Drawing.Point(76, 51);
             this.comboBoxFreezeMethon.Margin = new System.Windows.Forms.Padding(2);
