@@ -74,6 +74,15 @@ namespace MeterTest.Source.WindowsForm
             checkbox.Width = 50;
             //列大小不改变
             checkbox.Resizable = DataGridViewTriState.False;
+            //  column.HeaderText = ColumnName.OutOfOffice.ToString();
+            // column.Name = ColumnName.OutOfOffice.ToString();
+            // column.AutoSizeMode = 
+            //     DataGridViewAutoSizeColumnMode.DisplayedCells;
+            checkbox.FlatStyle = FlatStyle.Standard;
+            // checkbox.ThreeState = true;
+            checkbox.CellTemplate = new DataGridViewCheckBoxCell();
+            checkbox.CellTemplate.Value = false;
+            // checkbox.CellTemplate.Style.BackColor = Color.Beige;
             //添加的checkbox在dgv第一列
             this.dataGridViewReadList.Columns.Insert(0, checkbox);
             dataGridViewReadList.Columns.Add("No", "编号");
@@ -212,6 +221,7 @@ namespace MeterTest.Source.WindowsForm
             for (int i = 0; i < dataGridViewReadList.SelectedRows.Count; i++)
             {
                 dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0].Value = true;
+                ((DataGridViewCheckBoxCell)dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0]).EditingCellFormattedValue = true;
             }
         }
 
@@ -220,6 +230,7 @@ namespace MeterTest.Source.WindowsForm
             for (int i = 0; i < dataGridViewReadList.SelectedRows.Count; i++)
             {
                 dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0].Value = false;
+                ((DataGridViewCheckBoxCell)dataGridViewReadList.Rows[dataGridViewReadList.SelectedRows[i].Index].Cells[0]).EditingCellFormattedValue = false;
             }
         }
 
@@ -228,6 +239,7 @@ namespace MeterTest.Source.WindowsForm
             for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
                 dataGridViewReadList.Rows[i].Cells[0].Value = true;
+                ((DataGridViewCheckBoxCell)dataGridViewReadList.Rows[i].Cells[0]).EditingCellFormattedValue = true;
             }
         }
 
@@ -236,6 +248,7 @@ namespace MeterTest.Source.WindowsForm
             for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
                 dataGridViewReadList.Rows[i].Cells[0].Value = false;
+                ((DataGridViewCheckBoxCell)dataGridViewReadList.Rows[i].Cells[0]).EditingCellFormattedValue = false;
             }
         }
         private void 清除所有数据ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -911,8 +924,10 @@ namespace MeterTest.Source.WindowsForm
             DataId[] dataIdArray = context.DataIds.ToArray();
             for (int i = 0; i < dataGridViewReadList.Rows.Count; i++)
             {
-                if ((dataGridViewReadList.Rows[i].Cells[0].Value != null)
-                && (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
+                DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridViewReadList.Rows[i].Cells[0];
+                //if ((dataGridViewReadList.Rows[i].Cells[0].Value != null)
+                //&& (bool)dataGridViewReadList.Rows[i].Cells[0].Value == true)
+                if ((bool)cell.EditingCellFormattedValue == true)
                 {
                     dataId = dataIdArray[Convert.ToInt32(dataGridViewReadList.Rows[i].Cells[1].Value)];
                     dataIdList.Add(dataId);
@@ -960,7 +975,7 @@ namespace MeterTest.Source.WindowsForm
             }
         }
 
-        private void buttonOptExectu_Click(object sender, EventArgs e)
+        private void buttonOptExecute_Click(object sender, EventArgs e)
         {
             if((textBoxUpdateSoftware.Text.Trim().Length < 2) && (comboBoxOpt.Text == "升级"))
             {

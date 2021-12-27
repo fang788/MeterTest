@@ -813,7 +813,7 @@ namespace MeterTest.Source.WindowsForm
             this.buttonOptExectu.TabIndex = 1;
             this.buttonOptExectu.Text = "执行";
             this.buttonOptExectu.UseVisualStyleBackColor = true;
-            this.buttonOptExectu.Click += new System.EventHandler(this.buttonOptExectu_Click);
+            this.buttonOptExectu.Click += new System.EventHandler(this.buttonOptExecute_Click);
             // 
             // comboBoxOpt
             // 
