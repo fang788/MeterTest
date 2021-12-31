@@ -54,7 +54,11 @@ namespace MeterTest.Source.Device
             DataId dataId = new DataId(0xA5A01101);
             byte[] status = client.ReadRepInogreTimeOut(Address, dataId);
             dataId.DataBytes = 1;
-            if(status[0] == 0xAA)
+            if(status == null)
+            {
+                throw new Exception("读取工厂状态失败");
+            }
+            else if(status[0] == 0xAA)
             {
                 factoryStatus = FactoryStatus.FactoryOut;
             }
