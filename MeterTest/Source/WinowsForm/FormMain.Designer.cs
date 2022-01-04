@@ -746,7 +746,7 @@ namespace MeterTest.Source.WindowsForm
             // textBoxUpdateSoftware
             // 
             this.textBoxUpdateSoftware.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textBoxUpdateSoftware.Location = new System.Drawing.Point(125, 133);
+            this.textBoxUpdateSoftware.Location = new System.Drawing.Point(122, 39);
             this.textBoxUpdateSoftware.MaxLength = 12;
             this.textBoxUpdateSoftware.Name = "textBoxUpdateSoftware";
             this.textBoxUpdateSoftware.ReadOnly = true;
@@ -757,7 +757,7 @@ namespace MeterTest.Source.WindowsForm
             // labelUpdateSoftware
             // 
             this.labelUpdateSoftware.AutoSize = true;
-            this.labelUpdateSoftware.Location = new System.Drawing.Point(44, 136);
+            this.labelUpdateSoftware.Location = new System.Drawing.Point(45, 42);
             this.labelUpdateSoftware.Name = "labelUpdateSoftware";
             this.labelUpdateSoftware.Size = new System.Drawing.Size(68, 17);
             this.labelUpdateSoftware.TabIndex = 4;
@@ -785,7 +785,7 @@ namespace MeterTest.Source.WindowsForm
             // labelOpt
             // 
             this.labelOpt.AutoSize = true;
-            this.labelOpt.Location = new System.Drawing.Point(44, 93);
+            this.labelOpt.Location = new System.Drawing.Point(45, 110);
             this.labelOpt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelOpt.Name = "labelOpt";
             this.labelOpt.Size = new System.Drawing.Size(44, 17);
@@ -794,7 +794,7 @@ namespace MeterTest.Source.WindowsForm
             // 
             // buttonSelectUpdateSoftware
             // 
-            this.buttonSelectUpdateSoftware.Location = new System.Drawing.Point(620, 127);
+            this.buttonSelectUpdateSoftware.Location = new System.Drawing.Point(626, 33);
             this.buttonSelectUpdateSoftware.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSelectUpdateSoftware.Name = "buttonSelectUpdateSoftware";
             this.buttonSelectUpdateSoftware.Size = new System.Drawing.Size(89, 35);
@@ -806,7 +806,7 @@ namespace MeterTest.Source.WindowsForm
             // 
             // buttonOptExectu
             // 
-            this.buttonOptExectu.Location = new System.Drawing.Point(354, 83);
+            this.buttonOptExectu.Location = new System.Drawing.Point(122, 168);
             this.buttonOptExectu.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOptExectu.Name = "buttonOptExectu";
             this.buttonOptExectu.Size = new System.Drawing.Size(89, 35);
@@ -822,7 +822,7 @@ namespace MeterTest.Source.WindowsForm
             "清零",
             "切换工厂状态",
             "升级"});
-            this.comboBoxOpt.Location = new System.Drawing.Point(125, 89);
+            this.comboBoxOpt.Location = new System.Drawing.Point(122, 106);
             this.comboBoxOpt.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOpt.Name = "comboBoxOpt";
             this.comboBoxOpt.Size = new System.Drawing.Size(183, 25);
