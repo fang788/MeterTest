@@ -417,7 +417,8 @@ namespace MeterTest.Source.WindowsForm
             this.comboBoxTypeSelect.FormattingEnabled = true;
             this.comboBoxTypeSelect.Items.AddRange(new object[] {
             "II型终端-V9203",
-            "相变-HT7036"});
+            "相变-HT7036",
+            "相变-HT7022E"});
             this.comboBoxTypeSelect.Location = new System.Drawing.Point(75, 34);
             this.comboBoxTypeSelect.Name = "comboBoxTypeSelect";
             this.comboBoxTypeSelect.Size = new System.Drawing.Size(121, 25);

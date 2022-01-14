@@ -148,7 +148,7 @@ namespace MeterTest.Source.Emu
 
         public override void AdjDataClr()
         {
-            client.Write(address, new DataId(0xA0120001, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
+            client.Write(address, new DataId(0xA01A0001, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
         }
 
         public override void AdjMeter()
@@ -385,7 +385,7 @@ namespace MeterTest.Source.Emu
 
         public override void Reset()
         {
-            client.Write(address, new DataId(0xA0120000, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
+            client.Write(address, new DataId(0xA01A0000, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
         }
 
         public override string ToString()
