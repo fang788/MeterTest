@@ -190,6 +190,7 @@ namespace MeterTest.Source.Emu
                 logger.CloseLock();
             }
         }
+
         
         private void AdjMeter1_0()
         {
@@ -208,6 +209,7 @@ namespace MeterTest.Source.Emu
             client.Write(address, new DataId(0xA0180019, CalGain(GetVariableError(EmuVariableType.IA))));
             client.Write(address, new DataId(0xA018001A, CalGain(GetVariableError(EmuVariableType.IB))));
             client.Write(address, new DataId(0xA018001B, CalGain(GetVariableError(EmuVariableType.IC))));
+            client.Write(address, new DataId(0xA0180023, CalNGain()));
             Reset();
             Thread.Sleep(1000);
 
@@ -341,6 +343,36 @@ namespace MeterTest.Source.Emu
                 value = (short)(Math.Pow(2, 16) + error * Math.Pow(2, 15));
             }
             return value;
+        }
+        private short CalNGain()
+        {
+            double table = 0, emu = 0;
+            const int MAX_CNT = 3;
+            try
+            {
+                for (int i = 0; i < MAX_CNT; i++)
+                {
+                    Thread.Sleep(3000);
+                    table += GetTableVariable(EmuVariableType.IL);
+                    byte[] regbytes = client.Read(address, new DataId((uint)(0xA0190000 + 0x3f)));
+                    int regValue = 0;
+                    for (int j = regbytes.Length - 1; j >= 0; j--)
+                    {
+                        regValue = (regValue * 256) + regbytes[j];
+                    }
+                    if((regValue & 0x800000) != 0)
+                    {
+                        regValue = regValue - 0x1000000;
+                    }
+                    emu += regValue;
+                }
+            }
+            catch (System.Exception e)
+            {
+                string s = e.ToString();
+                throw;
+            }
+            return (short)(emu / table);
         }
         private short CalPhase(double error)
         {
