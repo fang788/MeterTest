@@ -429,6 +429,10 @@ namespace MeterTest.Source.WindowsForm
             {
                 emuAdj = new V9203(this.client, this);
             }
+            else if(comboBoxTypeSelect.Text == "相变-HT7022E")
+            {
+                emuAdj = new Ht7022e(this.client, this);
+            }
             else
             {
                 richTextBoxAdjMeterStatus.AppendText("校表方案错误\n");
