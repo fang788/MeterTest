@@ -53,7 +53,7 @@ namespace MeterTest.Source.WindowsForm
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 17);
             this.label2.TabIndex = 1;
-            this.label2.Text = "V1.2.0";
+            this.label2.Text = "V1.3.0";
             // 
             // label3
             // 

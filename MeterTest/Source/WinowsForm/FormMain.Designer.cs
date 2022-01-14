@@ -821,7 +821,11 @@ namespace MeterTest.Source.WindowsForm
             this.comboBoxOpt.Items.AddRange(new object[] {
             "清零",
             "切换工厂状态",
-            "升级"});
+            "升级",
+            "广播校时",
+            "关闭打印",
+            "打开打印",
+            "获取打印开关状态"});
             this.comboBoxOpt.Location = new System.Drawing.Point(122, 106);
             this.comboBoxOpt.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOpt.Name = "comboBoxOpt";

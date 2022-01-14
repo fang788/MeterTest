@@ -76,6 +76,17 @@ namespace MeterTest.Source.Device
             return new MeterAddress(data);
         }
 
+        public bool GetPrintfStatus()
+        {
+            DataId readAddress = new DataId(0xA5A01104);
+            byte[] data = client.ReadRepInogreTimeOut(MeterAddress.Wildcard, readAddress);
+            if(data.Length != 1)
+            {
+                throw new Exception("返回长度不正确！");
+            }
+            return (data[0] == 0)? false : true;
+        }
+
         public void SetFactoryStatus(FactoryStatus status)
         {
             DataId dataId = new DataId(0xA5A01101);
@@ -97,6 +108,14 @@ namespace MeterTest.Source.Device
             throw new System.NotImplementedException();
         }
 
+        public void SetPrintfStatus(bool status)
+        {
+            DataId dataId = new DataId(0xA5A01104);
+            dataId.DataBytes = 1;
+            dataId.DataArray = new byte[1];
+            dataId.DataArray[0] = (status == false)? (byte)0 : (byte)1;
+            client.WriteRepInogreTimeOut(GetMeterAddress(), dataId, new Dlt645Password(0x02, 0x123456), new Dlt645OperatorCode());
+        }
         public abstract void SoftwareUpdate(string updateFilePath);
     }
 }

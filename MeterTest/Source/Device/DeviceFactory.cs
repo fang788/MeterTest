@@ -61,7 +61,27 @@ namespace MeterTest.Source.Device
                 else if(specialOrderName == "升级")
                 {
                     device.SoftwareUpdate((string)obj);
-                    //log.SendDeviceLog("升级完成");
+                }
+                else if(specialOrderName == "获取打印开关状态")
+                {
+                    if(device.GetPrintfStatus())
+                    {
+                        log.SendDeviceLog("当前打印开关状态：打开");
+                    }
+                    else
+                    {
+                        log.SendDeviceLog("当前打印开关状态：关闭");
+                    }
+                }
+                else if(specialOrderName == "关闭打印")
+                {
+                    device.SetPrintfStatus(false);
+                    log.SendDeviceLog("已关闭打印");
+                }
+                else if(specialOrderName == "打开打印")
+                {
+                    device.SetPrintfStatus(true);
+                    log.SendDeviceLog("已打开打印");
                 }
             }
             catch (TimeoutException)

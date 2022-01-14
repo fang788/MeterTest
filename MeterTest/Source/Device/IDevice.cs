@@ -6,6 +6,8 @@ namespace MeterTest.Source.Device
     {
         void SetFactoryStatus(FactoryStatus status);
         FactoryStatus GetFactoryStatus();
+        void SetPrintfStatus(bool status);
+        bool GetPrintfStatus();
         void Clear();
         void Broadcast();
         MeterAddress GetMeterAddress();
