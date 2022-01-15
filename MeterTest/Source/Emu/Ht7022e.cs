@@ -31,31 +31,32 @@ namespace MeterTest.Source.Emu
     }
     public class Ht7022e : EmuAdj
     {
-        private const short HFCONST_VALUE = 0x79;
+        private const short HFCONST_VALUE = 0x60;
         private const short PSTARTUP_VALUE = 0x81;
         private const int   EC_VALUE = 200;
         private readonly List<Ht7022eVariable> VariableList = new List<Ht7022eVariable>()
         {
-            new Ht7022eVariable(EmuVariableType.IA, 0x10, 8192,     true), /* A相电流 */
-            new Ht7022eVariable(EmuVariableType.IB, 0x11, 8192,     true), /* B相电流 */
-            new Ht7022eVariable(EmuVariableType.IC, 0x12, 8192,     true), /* C相电流 */
+            new Ht7022eVariable(EmuVariableType.IA, 0x10, 8192 * 0.9,     true), /* A相电流 */
+            new Ht7022eVariable(EmuVariableType.IB, 0x11, 8192 * 0.9,     true), /* B相电流 */
+            new Ht7022eVariable(EmuVariableType.IC, 0x12, 8192 * 0.9,     true), /* C相电流 */
+            new Ht7022eVariable(EmuVariableType.IL, 0x29, 8192 * 1.1,     true), /* 零线电流 */
     
-            new Ht7022eVariable(EmuVariableType.VA, 0x0D, 8192,     true), /* A相电压 */
-            new Ht7022eVariable(EmuVariableType.VB, 0x0E, 8192,     true), /* B相电压 */
-            new Ht7022eVariable(EmuVariableType.VC, 0x0F, 8192,     true), /* C相电压 */
+            new Ht7022eVariable(EmuVariableType.VA, 0x0D, 8192 * 0.9,     true), /* A相电压 */
+            new Ht7022eVariable(EmuVariableType.VB, 0x0E, 8192 * 0.9,     true), /* B相电压 */
+            new Ht7022eVariable(EmuVariableType.VC, 0x0F, 8192 * 0.9,     true), /* C相电压 */
 
-            new Ht7022eVariable(EmuVariableType.PA, 0x01, 0.128746, false), /* A相有功功率 */
-            new Ht7022eVariable(EmuVariableType.PB, 0x02, 0.128746, false), /* B相有功功率 */
-            new Ht7022eVariable(EmuVariableType.PC, 0x03, 0.128746, false), /* C相有功功率 */
+            new Ht7022eVariable(EmuVariableType.PA, 0x01, 0.16093254, false), /* A相有功功率 */
+            new Ht7022eVariable(EmuVariableType.PB, 0x02, 0.16093254, false), /* B相有功功率 */
+            new Ht7022eVariable(EmuVariableType.PC, 0x03, 0.16093254, false), /* C相有功功率 */
 
-            new Ht7022eVariable(EmuVariableType.QA, 0x05, 0.128746, false), /* A相有功功率 */
-            new Ht7022eVariable(EmuVariableType.QB, 0x06, 0.128746, false), /* B相有功功率 */
-            new Ht7022eVariable(EmuVariableType.QC, 0x07, 0.128746, false), /* C相有功功率 */
+            new Ht7022eVariable(EmuVariableType.QA, 0x05, 0.16093254, false), /* A相有功功率 */
+            new Ht7022eVariable(EmuVariableType.QB, 0x06, 0.16093254, false), /* B相有功功率 */
+            new Ht7022eVariable(EmuVariableType.QC, 0x07, 0.16093254, false), /* C相有功功率 */
         };
         private static readonly List<DataId> AdjDataInitList = new List<DataId>()
         {
             new DataId(0xA0180000, HFCONST_VALUE), /* 高频脉冲输出设置  */
-            new DataId(0xA0180001, new byte[]{0x7E, 0xB9}), /* 模式相关控制      */
+            new DataId(0xA0180001, new byte[]{0x7F, 0xB9}), /* 模式相关控制      */
             new DataId(0xA0180002, new byte[]{0x00, 0x00}), /* ADC增益选择       */
             new DataId(0xA0180003, new byte[]{0x84, 0xF8}), /* EMU模块配置寄存器 */
             new DataId(0xA018001c, PSTARTUP_VALUE), /* 起动功率阈值设置  */
@@ -148,7 +149,7 @@ namespace MeterTest.Source.Emu
 
         public override void AdjDataClr()
         {
-            client.Write(address, new DataId(0xA01A0001, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
+            client.WriteRepInogreTimeOut(address, new DataId(0xA01A0001, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
         }
 
         public override void AdjMeter()
@@ -202,31 +203,32 @@ namespace MeterTest.Source.Emu
             kpTableBody.PowerOn();
             Thread.Sleep(3000);
             // logger.IAdjMeterLog("1.0 校准前。。。");
-            client.Write(address, new DataId(0xA0180016, CalGain(GetVariableError(EmuVariableType.VA))));
-            client.Write(address, new DataId(0xA0180017, CalGain(GetVariableError(EmuVariableType.VB))));
-            client.Write(address, new DataId(0xA0180018, CalGain(GetVariableError(EmuVariableType.VC))));
+            
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180023, CalGain(GetVariableError(EmuVariableType.IL))));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180016, CalGain(GetVariableError(EmuVariableType.VA))));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180017, CalGain(GetVariableError(EmuVariableType.VB))));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180018, CalGain(GetVariableError(EmuVariableType.VC))));
 
-            client.Write(address, new DataId(0xA0180019, CalGain(GetVariableError(EmuVariableType.IA))));
-            client.Write(address, new DataId(0xA018001A, CalGain(GetVariableError(EmuVariableType.IB))));
-            client.Write(address, new DataId(0xA018001B, CalGain(GetVariableError(EmuVariableType.IC))));
-            client.Write(address, new DataId(0xA0180023, CalNGain()));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180019, CalGain(GetVariableError(EmuVariableType.IA))));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018001A, CalGain(GetVariableError(EmuVariableType.IB))));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018001B, CalGain(GetVariableError(EmuVariableType.IC))));
             Reset();
             Thread.Sleep(1000);
 
             short pGain = CalGain(GetVariableError(EmuVariableType.PA));
-            client.Write(address, new DataId(0xA0180004, pGain));
-            client.Write(address, new DataId(0xA0180007, pGain));
-            client.Write(address, new DataId(0xA018000A, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180004, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180007, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000A, pGain));
 
             pGain = CalGain(GetVariableError(EmuVariableType.PB));
-            client.Write(address, new DataId(0xA0180005, pGain));
-            client.Write(address, new DataId(0xA0180008, pGain));
-            client.Write(address, new DataId(0xA018000B, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180005, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180008, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000B, pGain));
 
             pGain = CalGain(GetVariableError(EmuVariableType.PC));
-            client.Write(address, new DataId(0xA0180006, pGain));
-            client.Write(address, new DataId(0xA0180009, pGain));
-            client.Write(address, new DataId(0xA018000C, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180006, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180009, pGain));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000C, pGain));
             Reset();
             // Thread.Sleep(1000);
             // logger.IAdjMeterLog("1.0 校准后。。。");
@@ -249,19 +251,19 @@ namespace MeterTest.Source.Emu
             Thread.Sleep(5000);
             // logger.IAdjMeterLog("0.5L 校准前。。。");
             short phase = CalPhase(GetVariableError(EmuVariableType.PA));
-            client.Write(address, new DataId(0xA018000D, phase));
-            client.Write(address, new DataId(0xA0180010, phase));
-            client.Write(address, new DataId(0xA0180020, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000D, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180010, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180020, phase));
 
             phase = CalPhase(GetVariableError(EmuVariableType.PB));
-            client.Write(address, new DataId(0xA018000E, phase));
-            client.Write(address, new DataId(0xA0180011, phase));
-            client.Write(address, new DataId(0xA0180021, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000E, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180011, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180021, phase));
 
             phase = CalPhase(GetVariableError(EmuVariableType.PC));
-            client.Write(address, new DataId(0xA018000F, phase));
-            client.Write(address, new DataId(0xA0180012, phase));
-            client.Write(address, new DataId(0xA0180022, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018000F, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180012, phase));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180022, phase));
             
             // Reset();
             // Thread.Sleep(1000);
@@ -292,18 +294,18 @@ namespace MeterTest.Source.Emu
             logger.IAdjMeterLog("5% Ib 校准前。。。");
             int offset = GetOffset(GetVariableError(EmuVariableType.PA));
             short data = (short)((offset & 0xFFFF000) >> 16);
-            client.Write(address, new DataId(0xA0180013, data));
-            client.Write(address, new DataId(0xA018001d, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180013, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018001d, data));
 
             offset = GetOffset(GetVariableError(EmuVariableType.PB));
             data = (short)((offset & 0xFFFF000) >> 16);
-            client.Write(address, new DataId(0xA0180014, data));
-            client.Write(address, new DataId(0xA018001E, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180014, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018001E, data));
 
             offset = GetOffset(GetVariableError(EmuVariableType.PC));
             data = (short)((offset & 0xFFFF000) >> 16);
-            client.Write(address, new DataId(0xA0180015, data));
-            client.Write(address, new DataId(0xA018001F, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA0180015, data));
+            client.WriteRepInogreTimeOut(address, new DataId(0xA018001F, data));
             Reset();
             Thread.Sleep(1000);
             logger.IAdjMeterLog("5% Ib 校准后。。。");
@@ -354,7 +356,7 @@ namespace MeterTest.Source.Emu
                 {
                     Thread.Sleep(3000);
                     table += GetTableVariable(EmuVariableType.IL);
-                    byte[] regbytes = client.Read(address, new DataId((uint)(0xA0190000 + 0x3f)));
+                    byte[] regbytes = client.ReadRepInogreTimeOut(address, new DataId((uint)(0xA0190000 + 0x3f)));
                     int regValue = 0;
                     for (int j = regbytes.Length - 1; j >= 0; j--)
                     {
@@ -410,14 +412,14 @@ namespace MeterTest.Source.Emu
         {
             foreach (var item in AdjDataInitList)
             {
-                client.Write(address, item, new Dlt645Password(), new Dlt645OperatorCode());
+                client.WriteRepInogreTimeOut(address, item, new Dlt645Password(), new Dlt645OperatorCode());
                 Thread.Sleep(500);
             }
         }
 
         public override void Reset()
         {
-            client.Write(address, new DataId(0xA01A0000, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
+            client.WriteRepInogreTimeOut(address, new DataId(0xA01A0000, 0x00), new Dlt645Password(), new Dlt645OperatorCode());
         }
 
         public override string ToString()
@@ -440,7 +442,7 @@ namespace MeterTest.Source.Emu
                 throw new InvalidOperationException(type + " is not a variable");
             }
             double value = 0;
-            byte[] regbytes = client.Read(address, new DataId((uint)(0xA0190000 + VariableList[i].RegAddress)));
+            byte[] regbytes = client.ReadRepInogreTimeOut(address, new DataId((uint)(0xA0190000 + VariableList[i].RegAddress)));
             int regValue = 0;
             for (int j = regbytes.Length - 1; j >= 0; j--)
             {
