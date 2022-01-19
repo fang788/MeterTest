@@ -554,6 +554,7 @@ namespace MeterTest.Source.WindowsForm
             if(table.DataIds != null)
             {
                 int no = 0;
+                dataGridViewParaConfig.Rows.Clear();
                 foreach (var item in table.DataIds)
                 {
                     int index = dataGridViewParaConfig.Rows.Add();
