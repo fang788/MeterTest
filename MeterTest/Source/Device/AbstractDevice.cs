@@ -47,6 +47,34 @@ namespace MeterTest.Source.Device
                 }
             }
         }
+        public int Dlt645DynamicPasswordCal(byte[] puff, int len)
+        {
+            uint i, j, dynamicPassword = 0;
+
+            for (i = 0; i < len; i++)
+            {
+                dynamicPassword = dynamicPassword ^ puff[i];
+                for (j = 8; j > 0; --j)
+                {
+                    dynamicPassword = (uint)((dynamicPassword >> 1) ^ (0xEDB88323 & (-(dynamicPassword & 1))));
+                }
+                i++;
+            }
+            return (int)(dynamicPassword & 0x00FFFFFF);
+        }
+        public void DateTimeSet()
+        {
+            DataId dataId = new DataId(0xA5A01106);
+            dataId.DataBytes = 6;
+            dataId.DataArray = new byte[dataId.DataBytes];
+            dataId.DataArray[5] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Year - 2000));
+            dataId.DataArray[4] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Month)      );
+            dataId.DataArray[3] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Day)        );
+            dataId.DataArray[2] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Hour)       );
+            dataId.DataArray[1] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Minute)     );
+            dataId.DataArray[0] = PublicClass.ByteHex2Bcd((byte)(DateTime.Now.Second)     );
+            client.WriteRepInogreTimeOut(GetMeterAddress(), dataId, new Dlt645Password(0x66, Dlt645DynamicPasswordCal(dataId.DataArray, dataId.DataArray.Length)), new Dlt645OperatorCode());
+        }
 
         public FactoryStatus GetFactoryStatus()
         {

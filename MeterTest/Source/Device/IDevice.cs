@@ -13,5 +13,6 @@ namespace MeterTest.Source.Device
         MeterAddress GetMeterAddress();
         void SetMeterAddress(MeterAddress address);
         void SoftwareUpdate(string updateFilePath);
+        void DateTimeSet();
     }
 }

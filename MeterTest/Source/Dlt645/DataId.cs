@@ -316,6 +316,25 @@ namespace MeterTest.Source.Dlt645
             }
             return s;
         }
+        private string GetDataBytesString(byte[] data, int offset, int len, bool sort)
+        {
+            string s = null;
+            if(sort)
+            {
+                for (int i = offset; i < len; i++)
+                {
+                    s += data[i].ToString("X2");
+                }
+            }
+            else
+            {
+                for (int i = len - 1 + offset; i >= offset; i--)
+                {
+                    s += data[i].ToString("X2");
+                }
+            }
+            return s;
+        }
         public String GetDataString(byte[] dataBytes)
         {
             String rst = null;
@@ -433,6 +452,11 @@ namespace MeterTest.Source.Dlt645
                     if(this.Format == "hhmmss")
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, ":").Insert(5, ":");
+                    }
+                    if(this.Format == "YYMMDDhhmmss")
+                    {
+                        rst  = GetDataBytesString(dataBytes, 3, 3, false).Insert(2, "-").Insert(5, "-").Insert(8, " ") + " ";
+                        rst += GetDataBytesString(dataBytes, 0, 3, false).Insert(2, ":").Insert(5, ":");
                     }
                     if(this.Format == "ASC")
                     {

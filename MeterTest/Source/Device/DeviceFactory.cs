@@ -83,6 +83,11 @@ namespace MeterTest.Source.Device
                     device.SetPrintfStatus(true);
                     log.SendDeviceLog("已打开打印");
                 }
+                else if(specialOrderName == "日期时间设置")
+                {
+                    device.DateTimeSet();
+                    log.SendDeviceLog("日期时间设置成功");
+                }
             }
             catch (TimeoutException)
             {

@@ -826,7 +826,8 @@ namespace MeterTest.Source.WindowsForm
             "广播校时",
             "关闭打印",
             "打开打印",
-            "获取打印开关状态"});
+            "获取打印开关状态",
+            "日期时间设置"});
             this.comboBoxOpt.Location = new System.Drawing.Point(122, 106);
             this.comboBoxOpt.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxOpt.Name = "comboBoxOpt";
