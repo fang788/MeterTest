@@ -36,7 +36,6 @@ namespace MeterTest.Source.WinForm
                 config.Parity = (Parity)Enum.Parse(typeof(Parity), ComboBoxCheckBit.Text);
                 config.StopBits = (StopBits)Enum.Parse(typeof(StopBits), ComboBoxStopBit.Text);
                 config.ReadTimeout = Convert.ToInt32(numericUpDownReadTimeOut.Text);
-                config.TableBodySerialPortName = comboBoxTTPort.Text;
 
                 Dlt645Server service = context.Dlt645Servers.FirstOrDefault();
                 service.MeterAddress = new MeterAddress(textBoxServerAddress.Text);
@@ -59,7 +58,6 @@ namespace MeterTest.Source.WinForm
             ComboBoxCheckBit.Text = config.Parity.ToString();
             ComboBoxStopBit.Text = config.StopBits.ToString();
             numericUpDownReadTimeOut.Text = config.ReadTimeout.ToString();
-            comboBoxTTPort.Text = config.TableBodySerialPortName;
 
             Dlt645Server service = MeterTestDbContext.GetDlt645Server();
             comboBoxAuthority.Text = service.Dlt645Password.Authority.ToString("X2"); 
@@ -118,33 +116,6 @@ namespace MeterTest.Source.WinForm
                 e.Handled = true; 
             }
         }
-
-        private void comboBoxTTPort_DropDown(object sender, EventArgs e)
-        {
-            comboBoxTTPort.Items.Clear();
-            foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
-            {
-                comboBoxTTPort.Items.Add(s);
-            }
-        }
-
-        // private void buttonRWManage_Click(object sender, EventArgs e)
-        // {
-        //     DataIdListForm form = new DataIdListForm();
-        //     this.AddOwnedForm(form);
-        //     form.StartPosition = FormStartPosition.CenterParent;
-        //     form.ShowDialog();
-        //     List<DataIdTable> RwDataIdTables = MeterTestDbContext.GetRwDataIdTables(textBoxProjectName.Text);
-        //     if(RwDataIdTables != null)
-        //     {
-        //         textBoxRwTableCnt.Text = RwDataIdTables.Count.ToString();
-        //     }
-        //     else
-        //     {
-        //         textBoxRwTableCnt.Text = "0";
-        //     }
-        // }
-
         private void 添加ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormAddName form = new FormAddName("请输入项目名称", "项目名称：", "项目");
