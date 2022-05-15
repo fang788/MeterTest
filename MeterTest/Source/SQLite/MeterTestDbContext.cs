@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite.DataIdConfig;
 using Microsoft.EntityFrameworkCore;

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MeterTest.Source.Config;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,6 @@ namespace MeterTest.Source.WinForm
         private bool optLock = false; /* 操作锁，true：正在进行某项操作 */
         private String optMessage = null;
         private bool stopFlag = false;
-        // private DeviceFactory deviceFactory = null;
         public FormMain()
         {
             InitializeComponent();
@@ -44,15 +42,6 @@ namespace MeterTest.Source.WinForm
         private void 关于MeterTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormVersion form = new FormVersion();
-
-            this.AddOwnedForm(form);
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
-        }
-        
-        private void 激活ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormLicense form = new FormLicense();
 
             this.AddOwnedForm(form);
             form.StartPosition = FormStartPosition.CenterParent;

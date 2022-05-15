@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json;
-using MeterTest.Source.Config;
 using MeterTest.Source.SQLite;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.WinForm;
