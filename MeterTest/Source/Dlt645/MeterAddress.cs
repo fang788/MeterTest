@@ -14,7 +14,7 @@ namespace MeterTest.Source.Dlt645
         internal const long MaxValue = 0xFFFFFFFFFFFF;
         internal const byte AbbreviatedByte = 0xAA;
         
-        public long address
+        public long Address
         {
             get
             {

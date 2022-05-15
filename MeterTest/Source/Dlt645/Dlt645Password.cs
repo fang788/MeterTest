@@ -32,7 +32,7 @@ namespace MeterTest.Source.Dlt645
             {
                 throw new ArgumentException($"password{password} length error! ");
             }
-            authority = Convert.ToByte(password.Substring(0, 2), 10);
+            authority = Convert.ToByte(password.Substring(0, 2), 16);
             this.password = 0;
             for (int i = 0; i < PosswordBytes - 1; i++)
             {
@@ -48,6 +48,21 @@ namespace MeterTest.Source.Dlt645
                 bytes[i] = (byte)(password >> (8 * (i - 1)));
             }
             return bytes;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return this.authority.ToString("X2") + password.ToString("X6");;
         }
     }
 }

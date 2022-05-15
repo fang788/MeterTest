@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using MeterTest.Source.SQLite;
 
 namespace MeterTest.Source.Dlt645
 {
@@ -10,6 +11,7 @@ namespace MeterTest.Source.Dlt645
     public class DataId : IComparable
     {
         public const int DataIdBytes = 4;
+        // public Project Project{get; set;}
         public static readonly List<uint> SymbolList = new List<uint>
         {
             0x02020100, //	A相电流
@@ -35,6 +37,7 @@ namespace MeterTest.Source.Dlt645
             0x02800005, //  当前无功需量
             0x02800006, //  当前视在需量
             0x02800007, //  （表箱）表内温度
+            0x02800003, //  一分钟有功总平均功率
             0xA3030000, //  瞬时总有功功率
             0xA3030100, //  瞬时A相有功功率
             0xA3030200, //  瞬时B相有功功率
@@ -144,6 +147,17 @@ namespace MeterTest.Source.Dlt645
             IsWritable = isWritable;
         }
         public DataId(string name, uint id, int data)
+        {
+            Name = name;
+            Id = id;
+            DataBytes = 4;
+            DataArray = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                DataArray[i] = (byte)(data >> (8 * i));
+            }
+        }
+        public DataId(string name, uint id, uint data)
         {
             Name = name;
             Id = id;
@@ -316,25 +330,6 @@ namespace MeterTest.Source.Dlt645
             }
             return s;
         }
-        private string GetDataBytesString(byte[] data, int offset, int len, bool sort)
-        {
-            string s = null;
-            if(sort)
-            {
-                for (int i = offset; i < len; i++)
-                {
-                    s += data[i].ToString("X2");
-                }
-            }
-            else
-            {
-                for (int i = len - 1 + offset; i >= offset; i--)
-                {
-                    s += data[i].ToString("X2");
-                }
-            }
-            return s;
-        }
         public String GetDataString(byte[] dataBytes)
         {
             String rst = null;
@@ -405,7 +400,48 @@ namespace MeterTest.Source.Dlt645
                             rst = GetDataBytesString(dataBytes, false);;
                         }
                     }
-                    if(this.Format.Contains('N'))
+                    else if(this.Format == "EVENT_RCD")
+                    {
+                        rst =  "事件标识码:0x" + dataBytes[0].ToString("X2") + "\n\r";
+                        rst += "事件标志:  0x" + dataBytes[1].ToString("X2") + "\n\r";
+                        rst += "事件计数器:" + ((((((dataBytes[2] * 256) + dataBytes[3]) * 256) + dataBytes[4]) * 256) + dataBytes[5]).ToString() + "\n\r";
+                        rst += "开始时间：" + dataBytes[6].ToString("X2") + "-" + dataBytes[7].ToString("X2") + "-" + dataBytes[8].ToString("X2") + " ";
+                        rst += dataBytes[9].ToString("X2") + ":" + dataBytes[10].ToString("X2") + ":" + dataBytes[11].ToString("X2") + "\n\r";
+                        rst += "结束时间：" + dataBytes[12].ToString("X2") + "-" + dataBytes[13].ToString("X2") + "-" + dataBytes[14].ToString("X2") + " ";
+                        rst += dataBytes[15].ToString("X2") + ":" + dataBytes[16].ToString("X2") + ":" + dataBytes[17].ToString("X2") + "\n\r";
+                        
+                        MeterTestConfig meterTestConfig = MeterTestDbContext.GetMeterTestConfig();
+                        for (int i = 0; i < dataBytes[18]; i++)
+                        {
+                            int offset = 0;
+                            uint dataId = (uint)((((((dataBytes[19 + offset] * 256) + dataBytes[20 + offset]) * 256) + dataBytes[21 + offset]) * 256) + dataBytes[22 + offset]);
+                            DataId dataIdTmp = MeterTestDbContext.GetDataId(meterTestConfig.SelectRwProjectName, meterTestConfig.SelectRwTableName, false, dataId);
+                            dataIdTmp.DataArray = new byte[dataIdTmp.DataBytes];
+                            for (int j = 0; j < dataIdTmp.DataBytes; j++)
+                            {
+                                dataIdTmp.DataArray[j] = dataBytes[23 + offset + j];
+                            }
+                            rst += dataIdTmp.Name + "-" + dataIdTmp.Id.ToString("X8") + ": " + dataIdTmp.GetDataString(dataIdTmp.DataArray);
+                            if(i < (dataBytes[18] - 1))
+                            {
+                                rst += "\n\r";
+                            }
+                            offset += 4 + dataIdTmp.DataBytes;
+                        }
+                    }
+                    else if(this.Format == "EVENT_STATUS_CNT")
+                    {
+                        rst = "主动上报状态字：0x" + ((((((dataBytes[0] * 256) + dataBytes[1]) * 256) + dataBytes[2]) * 256) + dataBytes[3]).ToString("X8") + "\n\r";
+                        for (int i = 0; i < dataBytes.Length - 4; i++)
+                        {
+                            rst += "事件" + (i + 1).ToString() + "新增次数:" + dataBytes[4 + i].ToString();
+                            if(i < dataBytes.Length - 5)
+                            {
+                                rst += "\n\r";
+                            }
+                        }
+                    }
+                    else if(this.Format.Contains('N'))
                     {
                         if(string.IsNullOrEmpty(this.Format.TrimEnd('N')))
                         {
@@ -441,24 +477,19 @@ namespace MeterTest.Source.Dlt645
                             rst = GetDataBytesString(dataBytes, false);;
                         }
                     }
-                    if(this.Format == "YYMMDDhhmm")
+                    else if(this.Format == "YYMMDDhhmm")
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":");
                     }
-                    if(this.Format == "YYMMDDWW")
+                    else if(this.Format == "YYMMDDWW")
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ");
                     }
-                    if(this.Format == "hhmmss")
+                    else if(this.Format == "hhmmss")
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, ":").Insert(5, ":");
                     }
-                    if(this.Format == "YYMMDDhhmmss")
-                    {
-                        rst  = GetDataBytesString(dataBytes, 3, 3, false).Insert(2, "-").Insert(5, "-").Insert(8, " ") + " ";
-                        rst += GetDataBytesString(dataBytes, 0, 3, false).Insert(2, ":").Insert(5, ":");
-                    }
-                    if(this.Format == "ASC")
+                    else if(this.Format == "ASC")
                     {
                         for (int i = 0; i < dataBytes.Length / 2; i++)
                         {
@@ -467,6 +498,10 @@ namespace MeterTest.Source.Dlt645
                             dataBytes[dataBytes.Length - 1 - i] = tmp;
                         }
                         rst = System.Text.Encoding.Default.GetString (dataBytes);
+                    }
+                    else if(this.Format == "YYMMDDhhmmss")
+                    {
+                        rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":").Insert(14, ":");
                     }
                 }
                 else
@@ -502,10 +537,11 @@ namespace MeterTest.Source.Dlt645
                             byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
                         }
                     }
-                     
+                    
                     if((this.Format == "YYMMDDWW") 
                     || (this.Format == "hhmmss")
-                    || (this.Format == "YYMMDDhhmm"))
+                    || (this.Format == "YYMMDDhhmm")
+                    || (this.Format == "YYMMDDhhmmss"))
                     {
                         byteArray = new byte[(s.Length + 1) / 2];
                         if(s.Contains('A'))
@@ -557,6 +593,90 @@ namespace MeterTest.Source.Dlt645
                 byteArray[byteArray.Length - 1 - i] = tmp;
             }
             return byteArray;
+        }
+        public bool DataCompare(byte[] dataArray)
+        {
+            bool rst = false;
+            int i = 0;
+            
+            if((dataArray == null) || (dataArray == null) || (DataArray == null) || (dataArray.Length != DataArray.Length))
+            {
+                return false;
+            }
+            if(Id == 0x04000102)
+            {
+                for (i = 0; i < DataArray.Length; i++)
+                {
+                    if(DataArray[i] != 0xAA)
+                    {
+                        break;
+                    }
+                }
+                if(i >= DataArray.Length)
+                {
+                    int hour, minute, second;
+                    
+                    byte tmp = dataArray[2];
+                    hour = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    tmp = dataArray[1];
+                    minute = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    tmp = dataArray[0];
+                    second = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    DateTime dateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, second);
+                    long de = Math.Abs(DateTime.Now.Ticks - dateTime.Ticks);
+                    if(de < 5 * TimeSpan.TicksPerSecond)
+                    {
+                        return true;
+                    }
+                }
+            }
+            if(Id == 0x04000101)
+            {
+                for (i = 0; i < DataArray.Length; i++)
+                {
+                    if(DataArray[i] != 0xAA)
+                    {
+                        break;
+                    }
+                }
+                if(i >= DataArray.Length)
+                {
+                    int year, month, day, dayOfWeek;
+                    
+                    byte tmp = dataArray[3];
+                    year = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)) + 2000);
+
+                    tmp = dataArray[2];
+                    month = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    tmp = dataArray[1];
+                    day = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    tmp = dataArray[0];
+                    dayOfWeek = (int)((((((tmp) & 0xF0) >> 4) * 10) + ((tmp) & 0x0F)));
+
+                    if((year == DateTime.Now.Year) 
+                    && (month == DateTime.Now.Month)
+                    && (day == DateTime.Now.Day)
+                    && (dayOfWeek == (int)DateTime.Now.DayOfWeek))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            for (i = 0; i < DataArray.Length; i++)
+            {
+                if(DataArray[i] != dataArray[i])
+                {
+                    break;
+                }
+            }
+            rst = (i >= DataArray.Length);
+            return rst;
         }
     }
 }

@@ -1,12 +1,25 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Windows.Forms;
+using MeterTest.Source.SQLite;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeterTest.Source.Config
 {
     public class RegistrationCode
     {
         public static string Mask = "QECVEXGf";
+        private static List<string> SuperCodeList = new List<string>()
+        {
+            "BFEBFBFF000706E5A280C445", // 方兵
+            "BFEBFBFF000906EAC6CA574F", // 方兵
+            "BFEBFBFF000906EAEECFD45C", // 胡茂祥
+            "BFEBFBFF000806ECA890FD10", // 冯易仕
+            "BFEBFBFF000806ECE2073FBB", // 郭杰
+            "BFEBFBFF000906EAD0A33A96", // 陆旭青
+        };
         public static string getCpu()
         {
             string strCpu = null;
@@ -128,6 +141,42 @@ namespace MeterTest.Source.Config
             }
 
             return rst;
+        }
+        public static bool Check()
+        {
+            string mCode = GetMachineCode();
+            if(SuperCodeList.Contains(mCode))
+            {
+                return true;
+            }
+            else
+            {
+                MeterTestConfig config = MeterTestDbContext.GetMeterTestConfig();
+                return GetResistText(GetMachineCode()) == config.ActivationCode;
+            }
+        }
+        public static string GetActivationCode()
+        {
+            MeterTestConfig config;
+            using (var context = new MeterTestDbContext())
+            {
+                config = context.MeterTestConfigs.FirstOrDefault();
+                if(config == null)
+                {
+                    config = new MeterTestConfig();
+                }
+            }
+            return config.ActivationCode;
+        }
+        public static void SetActivationCode(string code)
+        {
+            using (var context = new MeterTestDbContext())
+            {
+                MeterTestConfig config = context.MeterTestConfigs.FirstOrDefault();
+                config.ActivationCode = code;
+                config.MachineCode = GetMachineCode();
+                context.SaveChanges();
+            }
         }
     }
 }

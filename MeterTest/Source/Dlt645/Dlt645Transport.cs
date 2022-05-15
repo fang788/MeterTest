@@ -11,11 +11,11 @@ namespace MeterTest.Source.Dlt645
     public class Dlt645Transport
     {
         private readonly SerialPort port;
-        private readonly ConsoleLogger logger;
+        private readonly IDlt645CommLog logger;
         private object syncLock = new object();
         public const int ResponseFrameStartLength = 10;
 
-        public Dlt645Transport(SerialPort port, ConsoleLogger log)
+        public Dlt645Transport(SerialPort port, IDlt645CommLog log)
         {
             this.port = port;
             this.logger = log;

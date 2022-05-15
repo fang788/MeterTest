@@ -22,6 +22,10 @@ namespace MeterTest.Source.Dlt645
                 this.operatorCode = this.operatorCode * 256 + Convert.ToByte(operatorCode.Substring((i * 2), 2), 16);
             }
         }
+        public Dlt645OperatorCode(int code)
+        {
+            operatorCode = code;
+        }
 
         public int OperatorCode
         {
@@ -34,6 +38,17 @@ namespace MeterTest.Source.Dlt645
                 operatorCode = value;
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return this.operatorCode.Equals(((Dlt645OperatorCode)obj).operatorCode);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.operatorCode.GetHashCode();
+        }
+
         public byte[] GetOperatorCodeBytes()
         {
             byte[] bytes = new byte[OperatorCodeBytes];
@@ -42,6 +57,11 @@ namespace MeterTest.Source.Dlt645
                 bytes[i] = (byte)(operatorCode >> (8 * i));
             }
             return bytes;
+        }
+
+        public override string ToString()
+        {
+            return operatorCode.ToString("X6");
         }
     }
 }

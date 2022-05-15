@@ -20,7 +20,7 @@ namespace MeterTest.Source.Config
         private void FormLicense_Load(object sender, EventArgs e)
         {
             textBoxLog.Text = RegistrationCode.GetMachineCode();
-            if(RegistrationCode.LicFileChk())
+            if(RegistrationCode.Check())
             {
                 toolStripStatusLabelRegistration.Text = "软件已激活";
                 textBoxAuthorization.Text = RegistrationCode.GetResistText(textBoxLog.Text.TrimEnd());
@@ -35,10 +35,8 @@ namespace MeterTest.Source.Config
             {
                 if (textBoxAuthorization.Text.TrimEnd().Equals(RegistrationCode.GetResistText(textBoxLog.Text.TrimEnd())))
                 {
-                    if (RegistrationCode.LicFileSave(textBoxAuthorization.Text.TrimEnd()) == true)
-                    {
-                        toolStripStatusLabelRegistration.Text = "注册成功, 请重启！";
-                    }
+                    RegistrationCode.SetActivationCode(textBoxAuthorization.Text.TrimEnd());
+                    toolStripStatusLabelRegistration.Text = "注册成功, 请重启软件！";
                 }
                 else
                 {
