@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
-using MeterTest.Source.WindowsForm;
+using MeterTest.Source.WinForm;
 using Microsoft.EntityFrameworkCore;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
-namespace MeterTest.Source.WindowsForm
+namespace MeterTest.Source.WinForm
 {
     public partial class ParaConfigManageForm : Form
     {

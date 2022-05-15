@@ -5,7 +5,7 @@ using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeterTest.Source.WindowsForm
+namespace MeterTest.Source.WinForm
 {
     public class DataGridViewWrite
     {

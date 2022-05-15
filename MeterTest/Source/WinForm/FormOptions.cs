@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 using MeterTest.Source.Config;
 using MeterTest.Source.SQLite;
 using MeterTest.Source.Dlt645;
-using MeterTest.Source.WindowsForm;
+using MeterTest.Source.WinForm;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeterTest.Source.WindowsForm
+namespace MeterTest.Source.WinForm
 {
     public partial class FormOptions : Form
     {

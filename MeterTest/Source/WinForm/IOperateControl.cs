@@ -1,4 +1,4 @@
-namespace MeterTest.Source.WindowsForm
+namespace MeterTest.Source.WinForm
 {
     public interface IOperateStop
     {

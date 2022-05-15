@@ -1,4 +1,4 @@
-using MeterTest.Source.WindowsForm;
+using MeterTest.Source.WinForm;
 
 namespace MeterTest.Source.Dlt645
 {

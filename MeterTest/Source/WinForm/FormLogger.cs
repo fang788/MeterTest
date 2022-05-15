@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
 
-namespace MeterTest.Source.WindowsForm
+namespace MeterTest.Source.WinForm
 {
     public partial class FormLogger : Form, IDlt645CommLog
     {

@@ -1,5 +1,5 @@
 ﻿using MeterTest.Source.Dlt645;
-using MeterTest.Source.WindowsForm;
+using MeterTest.Source.WinForm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
