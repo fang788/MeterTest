@@ -190,6 +190,7 @@ namespace MeterTest.Source.WinForm
                         break;
                     }
                 }
+                optLock = false;
             });
         }
 
@@ -256,6 +257,7 @@ namespace MeterTest.Source.WinForm
                         break;
                     }
                 }
+                optLock = false;
             });
         }
 
@@ -314,7 +316,6 @@ namespace MeterTest.Source.WinForm
                 DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridViewRead.Rows[i].Cells[0];
                 if ((bool)cell.EditingCellFormattedValue == true)
                 {
-                    // DataId dataId = new DataId(Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
                     DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName, MeterTestDbContext.GetMeterTestConfig().SelectRwTableName, false, Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
                     dataIds.Add(dataId);
                 }
@@ -323,12 +324,9 @@ namespace MeterTest.Source.WinForm
             {
                 optLock = true;
                 optMessage = "正在单次读取";
-                // deviceFactory = new DeviceFactory(client, server, this);
-                // Thread thread = new Thread(deviceFactory.ReadOnce);
-                // thread.IsBackground = true;
-                // thread.Start((object)dataIds);
                 stopFlag = false;
-                Task.Factory.StartNew(() => {
+                Task.Factory.StartNew(() => 
+                {
                     for (int i = 0; i < dataIds.Count; i++)
                     {
                         string[] msg = new string[3];
@@ -362,6 +360,7 @@ namespace MeterTest.Source.WinForm
                             break;
                         }
                     }
+                    optLock = false;
                 });
             }
         }
@@ -387,10 +386,6 @@ namespace MeterTest.Source.WinForm
             {
                 optLock = true;
                 optMessage = "正在循环读取";
-                // deviceFactory = new DeviceFactory(client, server, this);
-                // Thread thread = new Thread(deviceFactory.ReadCycle);
-                // thread.IsBackground = true;
-                // thread.Start((object)dataIds);
                 stopFlag = false;
                 Task.Factory.StartNew(() => {
                     while(true)
@@ -433,6 +428,7 @@ namespace MeterTest.Source.WinForm
                             }
                         }
                     }
+                    optLock = false;
                 });
             }
         }
@@ -449,7 +445,7 @@ namespace MeterTest.Source.WinForm
                 if(dataGridViewRead.Rows[j].Cells[2].Value.ToString() == logs[0])
                 {
                     dataGridViewRead.CurrentCell = dataGridViewRead.Rows[j].Cells[7];
-                    dataGridViewRead.Rows[j].Cells[7].Value = logs[3];
+                    dataGridViewRead.Rows[j].Cells[7].Value = logs[2];
                     if(logs[2] == true.ToString())
                     {
                         toolStripStatusLabelStatus.Text = "已读取数据标识：" + logs[0];
