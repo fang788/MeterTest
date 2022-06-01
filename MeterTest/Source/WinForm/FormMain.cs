@@ -35,7 +35,7 @@ namespace MeterTest.Source.WinForm
             DataGridViewWrite.FormLoad(dataGridViewWrite);
             DataGridViewPara.FormLoad(dataGridViewPara);
             toolStripStatusLabelParaConfigTable.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
-            toolStripStatusLabelRead.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
+            toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
             synchronizationContext = SynchronizationContext.Current;
         }
 
@@ -78,37 +78,79 @@ namespace MeterTest.Source.WinForm
         }
         private void 选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewRead.SelectedRows.Count; i++)
+            DataGridView dataGridView = null;
+            if(sender == 选择ToolStripMenuItem1)
             {
-                dataGridViewRead.Rows[dataGridViewRead.SelectedRows[i].Index].Cells[0].Value = true;
-                ((DataGridViewCheckBoxCell)dataGridViewRead.Rows[dataGridViewRead.SelectedRows[i].Index].Cells[0]).EditingCellFormattedValue = true;
+                dataGridView = dataGridViewWrite;
             }
+            else
+            {
+                dataGridView = dataGridViewRead;
+            }
+            foreach (DataGridViewRow item in dataGridView.SelectedRows)
+            {
+                item.Cells[0].Value = true;
+                ((DataGridViewCheckBoxCell)item.Cells[0]).EditingCellFormattedValue = true;
+            }
+            //int count = dataGridViewRead.SelectedRows.Count;
+            // for (int i = 0; i < dataGridViewRead.SelectedRows.Count; i++)
+            // {
+            //     dataGridView.SelectedRows[i].Cells[0].Value = true;
+            //     ((DataGridViewCheckBoxCell)dataGridView.SelectedRows[i].Cells[0]).EditingCellFormattedValue = true;
+            // }
         }
 
         private void 取消选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewRead.SelectedRows.Count; i++)
+            DataGridView dataGridView = null;
+            if(sender == 取消选择ToolStripMenuItem1)
             {
-                dataGridViewRead.Rows[dataGridViewRead.SelectedRows[i].Index].Cells[0].Value = false;
-                ((DataGridViewCheckBoxCell)dataGridViewRead.Rows[dataGridViewRead.SelectedRows[i].Index].Cells[0]).EditingCellFormattedValue = false;
+                dataGridView = dataGridViewWrite;
+            }
+            else
+            {
+                dataGridView = dataGridViewRead;
+            }
+            for (int i = 0; i < dataGridView.SelectedRows.Count; i++)
+            {
+                dataGridView.Rows[dataGridView.SelectedRows[i].Index].Cells[0].Value = false;
+                ((DataGridViewCheckBoxCell)dataGridView.Rows[dataGridView.SelectedRows[i].Index].Cells[0]).EditingCellFormattedValue = false;
             }
         }
 
         private void 选择所有ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewRead.Rows.Count; i++)
+            DataGridView dataGridView = null;
+            if(sender == 选择所有ToolStripMenuItem1)
             {
-                dataGridViewRead.Rows[i].Cells[0].Value = true;
-                ((DataGridViewCheckBoxCell)dataGridViewRead.Rows[i].Cells[0]).EditingCellFormattedValue = true;
+                dataGridView = dataGridViewWrite;
+            }
+            else
+            {
+                dataGridView = dataGridViewRead;
+            }
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+                dataGridView.Rows[i].Cells[0].Value = true;
+                ((DataGridViewCheckBoxCell)dataGridView.Rows[i].Cells[0]).EditingCellFormattedValue = true;
             }
         }
 
         private void 取消所有选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewRead.Rows.Count; i++)
+            DataGridView dataGridView = null;
+            if(sender == 取消所有选择ToolStripMenuItem)
             {
-                dataGridViewRead.Rows[i].Cells[0].Value = false;
-                ((DataGridViewCheckBoxCell)dataGridViewRead.Rows[i].Cells[0]).EditingCellFormattedValue = false;
+                dataGridView = dataGridViewRead;
+            }
+            else
+            {
+                dataGridView = dataGridViewWrite;
+            }
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+                dataGridView.Rows[i].Cells[0].Value = false;
+                ((DataGridViewCheckBoxCell)dataGridView.Rows[i].Cells[0]).EditingCellFormattedValue = false;
             }
         }
         private void 清除所有数据ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -154,7 +196,6 @@ namespace MeterTest.Source.WinForm
                     {
                         client.Write(dlt645Server.MeterAddress, dataIds[i], dlt645Server.Dlt645Password, dlt645Server.Dlt645OperatorCode);
                         msg[1] = true.ToString();
-                        // msg[2] = dataIds[i].GetDataString(byteArray);
                     }
                     catch (TimeoutException exception)
                     {
@@ -348,6 +389,7 @@ namespace MeterTest.Source.WinForm
                         {
                             break;
                         }
+                        Thread.Sleep(500);
                     }
                     optLock = false;
                 });
@@ -415,6 +457,7 @@ namespace MeterTest.Source.WinForm
                             {
                                 break;
                             }
+                            Thread.Sleep(500);
                         }
                     }
                     optLock = false;
@@ -437,11 +480,11 @@ namespace MeterTest.Source.WinForm
                     dataGridViewRead.Rows[j].Cells[7].Value = logs[2];
                     if(logs[2] == true.ToString())
                     {
-                        toolStripStatusLabelStatus.Text = "已读取数据标识：" + logs[0];
+                        toolStripStatusLabelRead.Text = "已读取数据标识：" + logs[0];
                     }
                     else
                     {
-                        toolStripStatusLabelStatus.Text = "读取数据标识：" + logs[0] + " 失败";
+                        toolStripStatusLabelRead.Text = "读取数据标识：" + logs[0] + " 失败";
                     }
                     break;
                 }
@@ -477,7 +520,7 @@ namespace MeterTest.Source.WinForm
                 meterTestConfig.SelectRwTableName   = menu.Text;
                 context.SaveChanges();
                 DataGridViewRead.DisplayProject(dataGridViewRead, meterTestConfig.SelectRwProjectName, meterTestConfig.SelectRwTableName);
-                toolStripStatusLabelRead.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
+                toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
             }
         }
         
@@ -525,6 +568,115 @@ namespace MeterTest.Source.WinForm
                     dataGridViewPara.CurrentCell = dataGridViewPara.Rows[j].Cells[8];
                     break;
                 }
+            }
+        }
+        private void dataGridViewWrite_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridView dataGridView = (DataGridView)sender;
+                DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName,
+                                                            MeterTestDbContext.GetMeterTestConfig().SelectRwTableName,
+                                                            false,
+                                                            Convert.ToUInt32(dataGridView.SelectedRows[0].Cells[2].Value.ToString(), 16));
+                FormWrite form = FormWrite.GetFormWrite(dataId);
+                form.StartPosition = FormStartPosition.CenterParent;
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    dataGridView.SelectedRows[0].Cells[7].Value = form.WriteString;
+                    dataGridView.SelectedRows[0].Cells[9].Value = dataId.GetDataString(dataId.GetByteArray(form.WriteString));
+                }
+            }
+        }
+        private void LogShowWrite(Object obj) 
+        {
+            string[] logs = (string[])obj;
+            for (int j = 0; j < dataGridViewRead.RowCount; j++)
+            {
+                if(dataGridViewWrite.Rows[j].Cells[2].Value.ToString() == logs[0])
+                {
+                    dataGridViewWrite.CurrentCell = dataGridViewWrite.Rows[j].Cells[7];
+                    if(logs[1] == true.ToString())
+                    {
+                        dataGridViewWrite.Rows[j].Cells[8].Value = "成功";
+                        toolStripStatusLabelWrite.Text = "已写入数据标识：" + logs[0];
+                    }
+                    else
+                    {
+                        dataGridViewWrite.Rows[j].Cells[8].Value = logs[2];
+                        toolStripStatusLabelWrite.Text = "写入数据标识：" + logs[0] + " 失败";
+                    }
+                    break;
+                }
+            }
+        }
+        private void 写入ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (optLock)
+            {
+                MessageBox.Show(optMessage.ToString(), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            List<DataId> dataIds = new List<DataId>();
+            DataGridView dataGridView = (DataGridView)dataGridViewWrite;
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+                DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridView.Rows[i].Cells[0];
+                if ((bool)cell.EditingCellFormattedValue == true)
+                {
+                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName, MeterTestDbContext.GetMeterTestConfig().SelectRwTableName, false, Convert.ToUInt32(dataGridView.Rows[i].Cells[2].Value.ToString(), 16));
+                    if(dataGridView.Rows[i].Cells[7].Value == null)
+                    {
+                        MessageBox.Show("数据标识：" + dataId.Id.ToString("X8") + "\r未输入数据", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    dataId.DataArray = dataId.GetByteArray(dataGridView.Rows[i].Cells[7].Value.ToString());
+                    dataIds.Add(dataId);
+                }
+            }
+            if(dataIds.Count > 0)
+            {
+                optLock = true;
+                optMessage = "正在写入";
+                stopFlag = false;
+                Task.Factory.StartNew(() => 
+                {
+                    Dlt645Server dlt645Server = MeterTestDbContext.GetDlt645Server();
+                    for (int i = 0; i < dataIds.Count; i++)
+                    {
+                        string[] msg = new string[3];
+                        msg[0] = dataIds[i].Id.ToString("X8");
+                        try
+                        {
+                            client.Write(dlt645Server.MeterAddress, dataIds[i], dlt645Server.Dlt645Password, dlt645Server.Dlt645OperatorCode);
+                            msg[1] = true.ToString();
+                        }
+                        catch (TimeoutException exception)
+                        {
+                            msg[1] = false.ToString();
+                            msg[2] = exception.Message;
+                        }
+                        catch (Exception exception)
+                        {
+                            msg[1] = false.ToString();
+                            msg[2] = exception.Message;
+                            //lock (this)
+                            //{
+                            //    stopFlag = true;
+                            //}
+                        }
+                        finally
+                        {
+                            synchronizationContext.Post(LogShowWrite, msg);
+                        }
+                        if(stopFlag)
+                        {
+                            break;
+                        }
+                        Thread.Sleep(500);
+                    }
+                    optLock = false;
+                });
             }
         }
     }

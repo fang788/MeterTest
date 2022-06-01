@@ -565,7 +565,7 @@ namespace MeterTest.Source.Dlt645
                         byte[] tmp = System.Text.Encoding.Default.GetBytes(s);
                         if(tmp.Length > DataBytes)
                         {
-                            throw new Exception(Name + Id.ToString("X8") + "-数据长度不争取");
+                            throw new Exception(Name + Id.ToString("X8") + "-数据长度不正确");
                         }
                         else
                         {

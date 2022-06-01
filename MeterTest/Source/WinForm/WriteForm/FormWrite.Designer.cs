@@ -32,20 +32,21 @@ namespace MeterTest.Source.WinForm
             this.labelDataIdName = new System.Windows.Forms.Label();
             this.buttonConfirm = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.textBoxDataIdData = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // labelDataIdName
             // 
             this.labelDataIdName.AutoSize = true;
-            this.labelDataIdName.Location = new System.Drawing.Point(51, 34);
+            this.labelDataIdName.Location = new System.Drawing.Point(87, 43);
             this.labelDataIdName.Name = "labelDataIdName";
-            this.labelDataIdName.Size = new System.Drawing.Size(43, 17);
+            this.labelDataIdName.Size = new System.Drawing.Size(80, 17);
             this.labelDataIdName.TabIndex = 1;
-            this.labelDataIdName.Text = "label1";
+            this.labelDataIdName.Text = "数据标识名称";
             // 
             // buttonConfirm
             // 
-            this.buttonConfirm.Location = new System.Drawing.Point(87, 188);
+            this.buttonConfirm.Location = new System.Drawing.Point(87, 157);
             this.buttonConfirm.Name = "buttonConfirm";
             this.buttonConfirm.Size = new System.Drawing.Size(75, 23);
             this.buttonConfirm.TabIndex = 2;
@@ -55,7 +56,7 @@ namespace MeterTest.Source.WinForm
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(243, 187);
+            this.buttonCancel.Location = new System.Drawing.Point(243, 156);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -63,11 +64,21 @@ namespace MeterTest.Source.WinForm
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // textBoxDataIdData
+            // 
+            this.textBoxDataIdData.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxDataIdData.Location = new System.Drawing.Point(87, 89);
+            this.textBoxDataIdData.Name = "textBoxDataIdData";
+            this.textBoxDataIdData.Size = new System.Drawing.Size(231, 23);
+            this.textBoxDataIdData.TabIndex = 4;
+            this.textBoxDataIdData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDataIdData_KeyPress);
+            // 
             // FormWrite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(483, 254);
+            this.ClientSize = new System.Drawing.Size(427, 250);
+            this.Controls.Add(this.textBoxDataIdData);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonConfirm);
             this.Controls.Add(this.labelDataIdName);
@@ -75,6 +86,7 @@ namespace MeterTest.Source.WinForm
             this.MinimizeBox = false;
             this.Name = "FormWrite";
             this.Text = "FormWrite";
+            this.Load += new System.EventHandler(this.FormWrite_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -84,5 +96,6 @@ namespace MeterTest.Source.WinForm
         private System.Windows.Forms.Label labelDataIdName;
         private System.Windows.Forms.Button buttonConfirm;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.TextBox textBoxDataIdData;
     }
 }

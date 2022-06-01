@@ -30,9 +30,13 @@ namespace MeterTest.Source.WinForm
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ContextMenuStrip contextMenuStripFreeze;
+            System.Windows.Forms.ContextMenuStrip contextMenuStripWrite;
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.toolStripMenuItemOutput = new System.Windows.Forms.ToolStripMenuItem();
+            this.选择ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.取消选择ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.选择所有ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.清除所有选择 = new System.Windows.Forms.ToolStripMenuItem();
+            this.写入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选项ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,16 +68,19 @@ namespace MeterTest.Source.WinForm
             this.dataGridViewPara = new System.Windows.Forms.DataGridView();
             this.tabPageWrite = new System.Windows.Forms.TabPage();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelWrite = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelWriteTabName = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewWrite = new System.Windows.Forms.DataGridView();
             this.tabPageRead = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelRead = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelRwTab = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewRead = new System.Windows.Forms.DataGridView();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
-            contextMenuStripFreeze = new System.Windows.Forms.ContextMenuStrip(this.components);
-            contextMenuStripFreeze.SuspendLayout();
+            contextMenuStripWrite = new System.Windows.Forms.ContextMenuStrip(this.components);
+            contextMenuStripWrite.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStripRead.SuspendLayout();
             this.contextMenuStripParaConfig.SuspendLayout();
@@ -81,6 +88,7 @@ namespace MeterTest.Source.WinForm
             this.statusStrip3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPara)).BeginInit();
             this.tabPageWrite.SuspendLayout();
+            this.statusStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).BeginInit();
             this.tabPageRead.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -88,18 +96,52 @@ namespace MeterTest.Source.WinForm
             this.tabControlMainForm.SuspendLayout();
             this.SuspendLayout();
             // 
-            // contextMenuStripFreeze
+            // contextMenuStripWrite
             // 
-            contextMenuStripFreeze.ImageScalingSize = new System.Drawing.Size(24, 24);
-            contextMenuStripFreeze.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemOutput});
-            contextMenuStripFreeze.Name = "contextMenuStripFreeze";
-            contextMenuStripFreeze.Size = new System.Drawing.Size(69, 26);
+            contextMenuStripWrite.ImageScalingSize = new System.Drawing.Size(24, 24);
+            contextMenuStripWrite.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.选择ToolStripMenuItem1,
+            this.取消选择ToolStripMenuItem1,
+            this.选择所有ToolStripMenuItem1,
+            this.清除所有选择,
+            this.写入ToolStripMenuItem});
+            contextMenuStripWrite.Name = "contextMenuStripFreeze";
+            contextMenuStripWrite.Size = new System.Drawing.Size(149, 114);
             // 
-            // toolStripMenuItemOutput
+            // 选择ToolStripMenuItem1
             // 
-            this.toolStripMenuItemOutput.Name = "toolStripMenuItemOutput";
-            this.toolStripMenuItemOutput.Size = new System.Drawing.Size(68, 22);
+            this.选择ToolStripMenuItem1.Name = "选择ToolStripMenuItem1";
+            this.选择ToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.选择ToolStripMenuItem1.Text = "选择";
+            this.选择ToolStripMenuItem1.Click += new System.EventHandler(this.选择ToolStripMenuItem_Click);
+            // 
+            // 取消选择ToolStripMenuItem1
+            // 
+            this.取消选择ToolStripMenuItem1.Name = "取消选择ToolStripMenuItem1";
+            this.取消选择ToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.取消选择ToolStripMenuItem1.Text = "取消选择";
+            this.取消选择ToolStripMenuItem1.Click += new System.EventHandler(this.取消选择ToolStripMenuItem_Click);
+            // 
+            // 选择所有ToolStripMenuItem1
+            // 
+            this.选择所有ToolStripMenuItem1.Name = "选择所有ToolStripMenuItem1";
+            this.选择所有ToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.选择所有ToolStripMenuItem1.Text = "选择所有";
+            this.选择所有ToolStripMenuItem1.Click += new System.EventHandler(this.选择所有ToolStripMenuItem_Click);
+            // 
+            // 清除所有选择
+            // 
+            this.清除所有选择.Name = "清除所有选择";
+            this.清除所有选择.Size = new System.Drawing.Size(148, 22);
+            this.清除所有选择.Text = "清除所有选择";
+            this.清除所有选择.Click += new System.EventHandler(this.取消所有选择ToolStripMenuItem_Click);
+            // 
+            // 写入ToolStripMenuItem
+            // 
+            this.写入ToolStripMenuItem.Name = "写入ToolStripMenuItem";
+            this.写入ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.写入ToolStripMenuItem.Text = "写入";
+            this.写入ToolStripMenuItem.Click += new System.EventHandler(this.写入ToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -148,7 +190,7 @@ namespace MeterTest.Source.WinForm
             // 关于MeterTestToolStripMenuItem
             // 
             this.关于MeterTestToolStripMenuItem.Name = "关于MeterTestToolStripMenuItem";
-            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.关于MeterTestToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.关于MeterTestToolStripMenuItem.Text = "关于 MeterTest";
             this.关于MeterTestToolStripMenuItem.Click += new System.EventHandler(this.关于MeterTestToolStripMenuItem_Click);
             // 
@@ -354,10 +396,33 @@ namespace MeterTest.Source.WinForm
             // statusStrip2
             // 
             this.statusStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelWrite,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabelWriteTabName});
             this.statusStrip2.Location = new System.Drawing.Point(0, 435);
             this.statusStrip2.Name = "statusStrip2";
             this.statusStrip2.Size = new System.Drawing.Size(1044, 22);
             this.statusStrip2.TabIndex = 7;
+            // 
+            // toolStripStatusLabelWrite
+            // 
+            this.toolStripStatusLabelWrite.Name = "toolStripStatusLabelWrite";
+            this.toolStripStatusLabelWrite.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabelWrite.Text = "状态";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(867, 17);
+            this.toolStripStatusLabel3.Spring = true;
+            this.toolStripStatusLabel3.Text = " ";
+            // 
+            // toolStripStatusLabelWriteTabName
+            // 
+            this.toolStripStatusLabelWriteTabName.Name = "toolStripStatusLabelWriteTabName";
+            this.toolStripStatusLabelWriteTabName.Size = new System.Drawing.Size(130, 17);
+            this.toolStripStatusLabelWriteTabName.Text = "当前项目：- 读写表：-";
             // 
             // dataGridViewWrite
             // 
@@ -368,6 +433,7 @@ namespace MeterTest.Source.WinForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewWrite.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewWrite.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewWrite.ContextMenuStrip = contextMenuStripWrite;
             this.dataGridViewWrite.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewWrite.Name = "dataGridViewWrite";
             this.dataGridViewWrite.RowHeadersWidth = 51;
@@ -375,7 +441,7 @@ namespace MeterTest.Source.WinForm
             this.dataGridViewWrite.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewWrite.Size = new System.Drawing.Size(1034, 429);
             this.dataGridViewWrite.TabIndex = 3;
-            this.dataGridViewWrite.Visible = false;
+            this.dataGridViewWrite.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewWrite_CellDoubleClick);
             // 
             // tabPageRead
             // 
@@ -394,20 +460,20 @@ namespace MeterTest.Source.WinForm
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelStatus,
+            this.toolStripStatusLabelRead,
             this.toolStripStatusLabel4,
-            this.toolStripStatusLabelRead});
+            this.toolStripStatusLabelRwTab});
             this.statusStrip1.Location = new System.Drawing.Point(2, 432);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1040, 22);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabelStatus
+            // toolStripStatusLabelRead
             // 
-            this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
-            this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(44, 17);
-            this.toolStripStatusLabelStatus.Text = "状态栏";
+            this.toolStripStatusLabelRead.Name = "toolStripStatusLabelRead";
+            this.toolStripStatusLabelRead.Size = new System.Drawing.Size(44, 17);
+            this.toolStripStatusLabelRead.Text = "状态栏";
             // 
             // toolStripStatusLabel4
             // 
@@ -415,11 +481,11 @@ namespace MeterTest.Source.WinForm
             this.toolStripStatusLabel4.Size = new System.Drawing.Size(851, 17);
             this.toolStripStatusLabel4.Spring = true;
             // 
-            // toolStripStatusLabelRead
+            // toolStripStatusLabelRwTab
             // 
-            this.toolStripStatusLabelRead.Name = "toolStripStatusLabelRead";
-            this.toolStripStatusLabelRead.Size = new System.Drawing.Size(130, 17);
-            this.toolStripStatusLabelRead.Text = "当前项目：- 读写表：-";
+            this.toolStripStatusLabelRwTab.Name = "toolStripStatusLabelRwTab";
+            this.toolStripStatusLabelRwTab.Size = new System.Drawing.Size(130, 17);
+            this.toolStripStatusLabelRwTab.Text = "当前项目：- 读写表：-";
             // 
             // dataGridViewRead
             // 
@@ -472,7 +538,7 @@ namespace MeterTest.Source.WinForm
             this.Name = "FormMain";
             this.Text = "MeterTest";
             this.Load += new System.EventHandler(this.FormMain_Load);
-            contextMenuStripFreeze.ResumeLayout(false);
+            contextMenuStripWrite.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.contextMenuStripRead.ResumeLayout(false);
@@ -484,6 +550,8 @@ namespace MeterTest.Source.WinForm
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPara)).EndInit();
             this.tabPageWrite.ResumeLayout(false);
             this.tabPageWrite.PerformLayout();
+            this.statusStrip2.ResumeLayout(false);
+            this.statusStrip2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWrite)).EndInit();
             this.tabPageRead.ResumeLayout(false);
             this.tabPageRead.PerformLayout();
@@ -517,7 +585,6 @@ namespace MeterTest.Source.WinForm
         private System.Windows.Forms.ToolStripMenuItem 停止ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 选择参数配置方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 通讯地址自适应ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOutput;
         private System.Windows.Forms.ToolStripMenuItem 单次读取ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 循环读取ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 停止ToolStripMenuItem1;
@@ -533,10 +600,18 @@ namespace MeterTest.Source.WinForm
         private System.Windows.Forms.DataGridView dataGridViewWrite;
         private System.Windows.Forms.TabPage tabPageRead;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRead;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRwTab;
         private System.Windows.Forms.DataGridView dataGridViewRead;
         private System.Windows.Forms.TabControl tabControlMainForm;
+        private System.Windows.Forms.ToolStripMenuItem 选择ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 取消选择ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 选择所有ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 清除所有选择;
+        private System.Windows.Forms.ToolStripMenuItem 写入ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelWrite;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelWriteTabName;
     }
 }
