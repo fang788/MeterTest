@@ -228,5 +228,18 @@ namespace MeterTest.Source.SQLite
             }
             return dataId;
         }
+        public static bool CheckDataId(string projectName, string tableName, bool isConfig, uint id)
+        {
+            DataId dataId = null;
+            using (var context = new MeterTestDbContext())
+            {
+                dataId = context.DataIds.AsNoTracking()
+                                        .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == tableName)
+                                        .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
+                                        .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
+                                        .SingleOrDefault(e => e.Id == id);
+            }
+            return dataId != null;
+        }
     }
 }

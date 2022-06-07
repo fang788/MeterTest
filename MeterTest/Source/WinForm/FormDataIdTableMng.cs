@@ -21,8 +21,8 @@ namespace MeterTest.Source.WinForm
     {
         private string projectName;
         private bool isConfig;
+        private string tableName;
         private string tip;
-        private string selectedNode;
         public FormDataIdTableMng()
         {
             InitializeComponent();
@@ -51,7 +51,7 @@ namespace MeterTest.Source.WinForm
             treeViewDataIdTable.Nodes[0].ContextMenuStrip = contextMenuStripDataIdTableAdd;
             TreeViewUpdate();
         }
-        private void DataGridViewDataIdTableDisplay(string tableName)
+        private void DataGridViewDataIdTableDisplay()
         {
             List<DataId> dataIdList = MeterTestDbContext.GetDataIdList(projectName, tableName, isConfig);
             if(dataGridViewDataIdTable.Columns.Count == 0)
@@ -103,7 +103,9 @@ namespace MeterTest.Source.WinForm
                     treeNode.ContextMenuStrip = contextMenuStripDataIdTableDel;
                     treeViewDataIdTable.Nodes[0].Nodes.Add(treeNode);
                 }
-                DataGridViewDataIdTableDisplay(dataIdTables[0].Name);
+                tableName = dataIdTables[0].Name;
+                DataGridViewDataIdTableDisplay();
+                treeViewDataIdTable.SelectedNode = treeViewDataIdTable.Nodes[0].Nodes[0];
             }
         }
 
@@ -115,12 +117,12 @@ namespace MeterTest.Source.WinForm
                 using(var context = new MeterTestDbContext())
                 {
                     DataIdTable dataIdTable = context.DataIdTables.Where(e => e.ProjectName == projectName)
-                                                                  .Where(e => e.IsConfig == isConfig)
-                                                                  .Single(e => e.Name == treeViewDataIdTable.SelectedNode.Text);
-                    List<DataId> dataIds = context.DataIds.Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == treeViewDataIdTable.SelectedNode.Text)
-                                                          .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
-                                                          .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
-                                                          .ToList();
+                                                                .Where(e => e.IsConfig == isConfig)
+                                                                .Single(e => e.Name == tableName);
+                    List<DataId> dataIds = context.DataIds.Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == tableName)
+                                                        .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
+                                                        .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
+                                                        .ToList();
                     context.Remove(dataIdTable);
                     if(dataIds == null)
                     {
@@ -131,7 +133,8 @@ namespace MeterTest.Source.WinForm
                 if((treeViewDataIdTable.Nodes[0].Nodes != null)
                 && (treeViewDataIdTable.Nodes[0].Nodes.Count > 0))
                 {
-                    DataGridViewDataIdTableDisplay(treeViewDataIdTable.Nodes[0].Nodes[0].Text);
+                    tableName = treeViewDataIdTable.Nodes[0].Nodes[0].Text;
+                    DataGridViewDataIdTableDisplay();
                     treeViewDataIdTable.SelectedNode = treeViewDataIdTable.Nodes[0].Nodes[0];
                 }
                 TreeViewUpdate();
@@ -185,7 +188,8 @@ namespace MeterTest.Source.WinForm
                     context.DataIds.AddRange(dataIdTable.DataIdList);
                     context.SaveChanges();
                 }
-                DataGridViewDataIdTableDisplay(dataIdTable.Name);
+                tableName = dataIdTable.Name;
+                DataGridViewDataIdTableDisplay();
                 TreeViewUpdate();
             }
         }
@@ -253,10 +257,146 @@ namespace MeterTest.Source.WinForm
         {
             if ((treeViewDataIdTable.Nodes[0].Nodes != null)
             && (treeViewDataIdTable.Nodes[0].Nodes.Contains(treeViewDataIdTable.SelectedNode))
-            && (selectedNode != treeViewDataIdTable.SelectedNode.Text))
+            && (treeViewDataIdTable.SelectedNode.Text != tableName))
             {
-                selectedNode = treeViewDataIdTable.SelectedNode.Text;
-                DataGridViewDataIdTableDisplay(selectedNode);
+                tableName = treeViewDataIdTable.SelectedNode.Text;
+                DataGridViewDataIdTableDisplay();
+            }
+        }
+
+        private void textBoxDataId_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(((e.KeyChar < (char)'0') || (e.KeyChar > (char)'9')) 
+            && ((e.KeyChar < (char)'A') || (e.KeyChar > (char)'F'))
+            && ((e.KeyChar < (char)'a') || (e.KeyChar > (char)'f'))
+            && (e.KeyChar != (char)Keys.Back)
+            && (e.KeyChar != (char)Keys.Delete))
+            {
+                e.Handled = true; 
+            }
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            string dataIdSearch = textBoxDataId.Text;
+            if(dataIdSearch.Trim() != "")
+            {
+                foreach (DataGridViewRow item in dataGridViewDataIdTable.Rows)
+                {
+                    if((item.Cells[1].Value != null) && (item.Cells[1].Value.ToString().ToLower().Equals(dataIdSearch.ToLower())))
+                    {
+                        dataGridViewDataIdTable.CurrentCell = item.Cells[1];
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void buttonChg_Click(object sender, EventArgs e)
+        {
+            if(dataGridViewDataIdTable.SelectedRows.Count > 0)
+            {
+                using(var context = new MeterTestDbContext())
+                {
+                    uint id = Convert.ToUInt32(dataGridViewDataIdTable.SelectedRows[0].Cells[1].Value.ToString(), 16);
+                    DataId dataId = context.DataIds.Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == tableName)
+                                                        .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
+                                                        .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
+                                                        .Single(e => e.Id == id);
+                    FormDataIdAddAndChg form = new FormDataIdAddAndChg(dataId);
+                    form.StartPosition = FormStartPosition.CenterParent;
+                    form.Text = "在项目：" + projectName + " 读写表：" + tableName + " 中修改单个数据标识";
+                    if(form.ShowDialog() == DialogResult.OK)
+                    {
+                        context.SaveChanges();
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[1].Value = dataId.Id.ToString("X8");
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[2].Value = dataId.Format;// == null? null : (dataIdArray[i].Format.ToString());
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[3].Value = dataId.DataBytes;
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[4].Value = dataId.Unit;
+                        if(dataId.DataArray != null)
+                        {
+                            dataGridViewDataIdTable.SelectedRows[0].Cells[5].Value = dataId.GetDataString(dataId.DataArray);
+                        }
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[6].Value = dataId.IsReadable;
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[7].Value = dataId.IsWritable;
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[8].Value = dataId.Name;
+                        dataGridViewDataIdTable.SelectedRows[0].Cells[9].Value = dataId.GroupName;
+                    }
+                }
+            }
+        }
+
+        private void buttonDel_Click(object sender, EventArgs e)
+        {
+            if(dataGridViewDataIdTable.SelectedRows.Count > 0)
+            {
+                String tip = "是否删除: ";
+                foreach (DataGridViewRow item in dataGridViewDataIdTable.SelectedRows)
+                {
+                    tip += (item.Cells[1].Value + " ");
+                }
+                if(MessageBox.Show(tip, "MeterTest", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    using(var context = new MeterTestDbContext())
+                    {
+                        List<DataId> dataIds = new List<DataId>();
+                        foreach (DataGridViewRow item in dataGridViewDataIdTable.SelectedRows)
+                        {
+                            uint id = Convert.ToUInt32(item.Cells[1].Value.ToString(), 16);
+                            DataId dataId = context.DataIds.Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == tableName)
+                                                                .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
+                                                                .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
+                                                                .Single(e => e.Id == id);
+                            dataIds.Add(dataId);
+                            dataGridViewDataIdTable.Rows.Remove(item);
+                        }
+                        context.RemoveRange(dataIds);
+                        context.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            FormDataIdAddAndChg form = new FormDataIdAddAndChg();
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.Text = "在项目：" + projectName + " 读写表：" + tableName + " 中添加单个数据标识";
+            if(form.ShowDialog() == DialogResult.OK)
+            {
+                DataId dataId = form.AddAndChgDataId;
+                if(MeterTestDbContext.CheckDataId(projectName, tableName, isConfig, dataId.Id) == false)
+                {
+                    using(var context = new MeterTestDbContext())
+                    {
+                        DataIdTable dataIdTable = context.DataIdTables.Where(e => e.ProjectName == projectName)
+                                                                    .Where(e => e.IsConfig == isConfig)
+                                                                    .Single(e => e.Name == tableName);
+                        context.Entry(dataId).Property("ForeignKey_DataIdTableName").CurrentValue = tableName;
+                        context.Entry(dataId).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = isConfig;
+                        context.Entry(dataId).Property("ForeignKey_DataIdTableProjectName").CurrentValue = projectName;
+                        context.DataIds.Add(dataId);
+                        context.SaveChanges();
+                    }
+                    int index = dataGridViewDataIdTable.Rows.Add();
+                    dataGridViewDataIdTable.Rows[index].Cells[0].Value = dataGridViewDataIdTable.Rows.Count;
+                    dataGridViewDataIdTable.Rows[index].Cells[1].Value = dataId.Id.ToString("X8");
+                    dataGridViewDataIdTable.Rows[index].Cells[2].Value = dataId.Format;// == null? null : (dataIdArray[i].Format.ToString());
+                    dataGridViewDataIdTable.Rows[index].Cells[3].Value = dataId.DataBytes;
+                    dataGridViewDataIdTable.Rows[index].Cells[4].Value = dataId.Unit;
+                    if(dataId.DataArray != null)
+                    {
+                        dataGridViewDataIdTable.Rows[index].Cells[5].Value = dataId.GetDataString(dataId.DataArray);
+                    }
+                    dataGridViewDataIdTable.Rows[index].Cells[6].Value = dataId.IsReadable;
+                    dataGridViewDataIdTable.Rows[index].Cells[7].Value = dataId.IsWritable;
+                    dataGridViewDataIdTable.Rows[index].Cells[8].Value = dataId.Name;
+                    dataGridViewDataIdTable.Rows[index].Cells[9].Value = dataId.GroupName;
+                }
+                else
+                {
+                    MessageBox.Show("项目：" + projectName + " 读写表：" + tableName + "中已添加添加数据标识：" + dataId.Id.ToString("X8"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
