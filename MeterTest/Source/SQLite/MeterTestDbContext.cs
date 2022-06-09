@@ -11,7 +11,7 @@ namespace MeterTest.Source.SQLite
 {
     public class MeterTestDbContext : DbContext
     {
-        private readonly string connectionString = "Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb\\MeterTestDb.db";
+        private readonly string connectionString = "Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\MeterTest\\MeterTestDb.db";
         public DbSet<MeterTestConfig> MeterTestConfigs{get; set;}
         public DbSet<Dlt645Server> Dlt645Servers{get; set;}
         public DbSet<Project> Projects { get; set; }
@@ -21,9 +21,9 @@ namespace MeterTest.Source.SQLite
             => options.UseSqlite(connectionString);
         public MeterTestDbContext() : base()
         {
-            if(!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb"))
+            if(!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\MeterTest"))
             {
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb");
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\MeterTest");
             }
             this.Database.Migrate();;
         }
