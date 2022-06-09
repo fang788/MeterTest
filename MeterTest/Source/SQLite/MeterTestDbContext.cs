@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using MeterTest.Source.Dlt645;
@@ -9,13 +11,22 @@ namespace MeterTest.Source.SQLite
 {
     public class MeterTestDbContext : DbContext
     {
+        private readonly string connectionString = "Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb\\MeterTestDb.db";
         public DbSet<MeterTestConfig> MeterTestConfigs{get; set;}
         public DbSet<Dlt645Server> Dlt645Servers{get; set;}
         public DbSet<Project> Projects { get; set; }
         public DbSet<DataIdTable> DataIdTables { get; set; }
         public DbSet<DataId> DataIds { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=MeterTestDb.db");
+            => options.UseSqlite(connectionString);
+        public MeterTestDbContext() : base()
+        {
+            if(!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb"))
+            {
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\fb");
+            }
+            this.Database.Migrate();;
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MeterTestConfig>(entity =>
