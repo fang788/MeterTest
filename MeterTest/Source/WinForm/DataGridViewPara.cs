@@ -20,7 +20,7 @@ namespace MeterTest.Source.WinForm
             dataGridView.Columns.Add("Id", "标识");
             dataGridView.Columns.Add("Name", "名称");
             dataGridView.Columns.Add("Format", "格式");
-            dataGridView.Columns.Add("DataBytes", "长度");
+            dataGridView.Columns.Add("DataBytes", "数据长度");
             dataGridView.Columns.Add("Unit", "单位");
             dataGridView.Columns.Add("data", "数据");
             //为dgv增加复选框列

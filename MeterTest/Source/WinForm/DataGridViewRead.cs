@@ -32,7 +32,7 @@ namespace MeterTest.Source.WinForm
             dataGridView.Columns.Add("Name", "数据项名称");
             dataGridView.Columns["Name"].Width = (int)(dataGridView.Columns["Name"].Width * 2.5);
             dataGridView.Columns.Add("Format", "数据格式");
-            dataGridView.Columns.Add("DataBytes", "数据长度（字节）");
+            dataGridView.Columns.Add("DataBytes", "数据长度");
             dataGridView.Columns.Add("Unit", "单位");
             dataGridView.Columns.Add("Rst", "结果");
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

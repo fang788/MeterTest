@@ -33,7 +33,7 @@ namespace MeterTest.Source.WinForm
             dataGridView.Columns.Add("Id", "数据标识");
             dataGridView.Columns.Add("Name", "数据项名称");
             dataGridView.Columns.Add("Format", "数据格式");
-            dataGridView.Columns.Add("DataBytes", "数据长度（字节）");
+            dataGridView.Columns.Add("DataBytes", "数据长度");
             dataGridView.Columns.Add("Unit", "单位");
             dataGridView.Columns.Add("WriteData", "写入数据");
             dataGridView.Columns.Add("Rst", "结果");

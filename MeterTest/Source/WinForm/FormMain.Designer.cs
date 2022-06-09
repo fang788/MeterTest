@@ -31,12 +31,13 @@ namespace MeterTest.Source.WinForm
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip contextMenuStripWrite;
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.选择ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.取消选择ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.选择所有ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.清除所有选择 = new System.Windows.Forms.ToolStripMenuItem();
             this.写入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.选择写入表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选项ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,6 @@ namespace MeterTest.Source.WinForm
             this.toolStripStatusLabelReadTabName = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewRead = new System.Windows.Forms.DataGridView();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
-            this.选择写入表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             contextMenuStripWrite = new System.Windows.Forms.ContextMenuStrip(this.components);
             contextMenuStripWrite.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -108,7 +108,7 @@ namespace MeterTest.Source.WinForm
             this.写入ToolStripMenuItem,
             this.选择写入表ToolStripMenuItem});
             contextMenuStripWrite.Name = "contextMenuStripFreeze";
-            contextMenuStripWrite.Size = new System.Drawing.Size(181, 158);
+            contextMenuStripWrite.Size = new System.Drawing.Size(149, 136);
             contextMenuStripWrite.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripWrite_Opening);
             // 
             // 选择ToolStripMenuItem1
@@ -145,6 +145,12 @@ namespace MeterTest.Source.WinForm
             this.写入ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.写入ToolStripMenuItem.Text = "写入";
             this.写入ToolStripMenuItem.Click += new System.EventHandler(this.写入ToolStripMenuItem_Click);
+            // 
+            // 选择写入表ToolStripMenuItem
+            // 
+            this.选择写入表ToolStripMenuItem.Name = "选择写入表ToolStripMenuItem";
+            this.选择写入表ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.选择写入表ToolStripMenuItem.Text = "选择写入表";
             // 
             // menuStrip1
             // 
@@ -217,63 +223,63 @@ namespace MeterTest.Source.WinForm
             // 选择ToolStripMenuItem
             // 
             this.选择ToolStripMenuItem.Name = "选择ToolStripMenuItem";
-            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.选择ToolStripMenuItem.Text = "选择";
             this.选择ToolStripMenuItem.Click += new System.EventHandler(this.选择ToolStripMenuItem_Click);
             // 
             // 取消选择ToolStripMenuItem
             // 
             this.取消选择ToolStripMenuItem.Name = "取消选择ToolStripMenuItem";
-            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.取消选择ToolStripMenuItem.Text = "取消选择";
             this.取消选择ToolStripMenuItem.Click += new System.EventHandler(this.取消选择ToolStripMenuItem_Click);
             // 
             // 选择所有ToolStripMenuItem
             // 
             this.选择所有ToolStripMenuItem.Name = "选择所有ToolStripMenuItem";
-            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择所有ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.选择所有ToolStripMenuItem.Text = "选择所有";
             this.选择所有ToolStripMenuItem.Click += new System.EventHandler(this.选择所有ToolStripMenuItem_Click);
             // 
             // 取消所有选择ToolStripMenuItem
             // 
             this.取消所有选择ToolStripMenuItem.Name = "取消所有选择ToolStripMenuItem";
-            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.取消所有选择ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.取消所有选择ToolStripMenuItem.Text = "取消所有选择";
             this.取消所有选择ToolStripMenuItem.Click += new System.EventHandler(this.取消所有选择ToolStripMenuItem_Click);
             // 
             // 清除所有数据ToolStripMenuItem
             // 
             this.清除所有数据ToolStripMenuItem.Name = "清除所有数据ToolStripMenuItem";
-            this.清除所有数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.清除所有数据ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.清除所有数据ToolStripMenuItem.Text = "清除所有数据";
             this.清除所有数据ToolStripMenuItem.Click += new System.EventHandler(this.清除所有数据ToolStripMenuItem_Click);
             // 
             // 单次读取ToolStripMenuItem
             // 
             this.单次读取ToolStripMenuItem.Name = "单次读取ToolStripMenuItem";
-            this.单次读取ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.单次读取ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.单次读取ToolStripMenuItem.Text = "读取";
             this.单次读取ToolStripMenuItem.Click += new System.EventHandler(this.单次读取ToolStripMenuItem_Click);
             // 
             // 循环读取ToolStripMenuItem
             // 
             this.循环读取ToolStripMenuItem.Name = "循环读取ToolStripMenuItem";
-            this.循环读取ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.循环读取ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.循环读取ToolStripMenuItem.Text = "循环读取";
             this.循环读取ToolStripMenuItem.Click += new System.EventHandler(this.循环读取ToolStripMenuItem_Click);
             // 
             // 停止ToolStripMenuItem1
             // 
             this.停止ToolStripMenuItem1.Name = "停止ToolStripMenuItem1";
-            this.停止ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.停止ToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
             this.停止ToolStripMenuItem1.Text = "停止";
             this.停止ToolStripMenuItem1.Click += new System.EventHandler(this.停止ToolStripMenuItem1_Click);
             // 
             // 选择读取表ToolStripMenuItem
             // 
             this.选择读取表ToolStripMenuItem.Name = "选择读取表ToolStripMenuItem";
-            this.选择读取表ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选择读取表ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.选择读取表ToolStripMenuItem.Text = "选择读取表";
             // 
             // contextMenuStripParaConfig
@@ -499,14 +505,14 @@ namespace MeterTest.Source.WinForm
             this.dataGridViewRead.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridViewRead.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRead.ContextMenuStrip = this.contextMenuStripRead;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewRead.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRead.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewRead.Location = new System.Drawing.Point(5, 6);
             this.dataGridViewRead.Name = "dataGridViewRead";
             this.dataGridViewRead.RowHeadersWidth = 51;
@@ -529,12 +535,6 @@ namespace MeterTest.Source.WinForm
             this.tabControlMainForm.SelectedIndex = 0;
             this.tabControlMainForm.Size = new System.Drawing.Size(1052, 487);
             this.tabControlMainForm.TabIndex = 1;
-            // 
-            // 选择写入表ToolStripMenuItem
-            // 
-            this.选择写入表ToolStripMenuItem.Name = "选择写入表ToolStripMenuItem";
-            this.选择写入表ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.选择写入表ToolStripMenuItem.Text = "选择写入表";
             // 
             // FormMain
             // 
