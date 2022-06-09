@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite.DataIdConfig;
+using MeterTest.Source.WinForm;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeterTest.Source.SQLite
@@ -25,7 +26,55 @@ namespace MeterTest.Source.SQLite
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\MeterTest");
             }
-            this.Database.Migrate();;
+            if(!this.Database.CanConnect())
+            {
+                this.Database.Migrate();
+                Project project = new Project();
+                project.Name = "示例项目";
+                project.Ticks = DateTime.Now.Ticks;
+                
+                DataIdTable dataIdTableRw = new DataIdTable();
+                dataIdTableRw.Name = "V1.0.0";
+                dataIdTableRw.ProjectName = project.Name;
+                dataIdTableRw.DataIdList = FormDataIdTableMng.GetDataIdList(System.Windows.Forms.Application.StartupPath + "\\doc\\demo_读写表.xlsx");
+                dataIdTableRw.IsConfig = false;
+                dataIdTableRw.Ticks = DateTime.Now.Ticks;
+                project.DataIdTables.Add(dataIdTableRw);
+
+                DataIdTable dataIdTablePara = new DataIdTable();
+                dataIdTablePara.Name = "V1.0.0";
+                dataIdTablePara.ProjectName = project.Name;
+                dataIdTablePara.Ticks = DateTime.Now.Ticks;
+                dataIdTablePara.DataIdList = FormDataIdTableMng.GetDataIdList(System.Windows.Forms.Application.StartupPath + "\\doc\\demo_参数配置表.xlsx");
+                dataIdTablePara.IsConfig = true;
+                project.DataIdTables.Add(dataIdTablePara);
+                MeterTestConfig meterTestConfig = new MeterTestConfig();
+                meterTestConfig.SelectParaProjectName  = project.Name;
+                meterTestConfig.SelectReadProjectName  = project.Name;
+                meterTestConfig.SelectWriteProjectName = project.Name;
+
+                meterTestConfig.SelectParaTableName = dataIdTablePara.Name;
+                meterTestConfig.SelectReadTableName = dataIdTableRw.Name;
+                meterTestConfig.SelectWriteTableName = dataIdTableRw.Name;
+                this.MeterTestConfigs.Add(meterTestConfig);
+                this.Projects.Add(project);
+                this.DataIdTables.AddRange(project.DataIdTables);
+                foreach (var item in dataIdTableRw.DataIdList)
+                {
+                    this.Entry(item).Property("ForeignKey_DataIdTableName").CurrentValue = dataIdTableRw.Name;
+                    this.Entry(item).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = dataIdTableRw.IsConfig;
+                    this.Entry(item).Property("ForeignKey_DataIdTableProjectName").CurrentValue = project.Name;
+                }
+                foreach (var item in dataIdTablePara.DataIdList)
+                {
+                    this.Entry(item).Property("ForeignKey_DataIdTableName").CurrentValue = dataIdTablePara.Name;
+                    this.Entry(item).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = dataIdTablePara.IsConfig;
+                    this.Entry(item).Property("ForeignKey_DataIdTableProjectName").CurrentValue = project.Name;
+                }
+                this.DataIds.AddRange(dataIdTableRw.DataIdList);
+                this.DataIds.AddRange(dataIdTablePara.DataIdList);
+                this.SaveChanges();
+            }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

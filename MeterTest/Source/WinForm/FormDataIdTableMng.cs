@@ -193,7 +193,7 @@ namespace MeterTest.Source.WinForm
                 TreeViewUpdate();
             }
         }
-        private List<DataId> GetDataIdList(string excelFilePath)
+        public static List<DataId> GetDataIdList(string excelFilePath)
         {
             List<DataId> list = new List<DataId>();
             IWorkbook workbook = null;
