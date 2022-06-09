@@ -119,8 +119,7 @@ namespace MeterTest.Source.WinForm
         {
             FormAddName form = new FormAddName("请输入项目名称", "项目名称：", "项目");
             form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
-            if(form.SelectRwProjectName != null)
+            if(form.ShowDialog() == DialogResult.OK)
             {
                 Project project = null;
                 using(var context = new MeterTestDbContext())
@@ -140,21 +139,16 @@ namespace MeterTest.Source.WinForm
                         return;
                     }
                 }
-                Project[] projects = MeterTestDbContext.GetProjectArray();
-                treeViewProject.Nodes[0].Nodes.Clear();
-                foreach (var item in projects)
-                {
-                    TreeNode treeNode = new TreeNode(item.Name);
-                    treeNode.ContextMenuStrip = contextMenuStripDelProject;
-                    treeViewProject.Nodes[0].Nodes.Add(treeNode);
-                }
                 textBoxProjectName.Text = project.Name;
                 textBoxProjectChgTime.Text = new DateTime(project.Ticks).ToString("yyyy-MM-dd hh:mm:ss");
                 checkBoxIsUse.Visible = project.IsUse;
                 textBoxParaTableCnt.Text = "0";
                 textBoxRwTableCnt.Text = "0";
-                checkBoxIsUse.Checked = project.IsUse;
-                treeViewProject.SelectedNode = treeViewProject.Nodes[0].Nodes[project.Name];
+                checkBoxIsUse.Checked = project.IsUse;                
+                TreeNode treeNode = new TreeNode(project.Name);
+                treeNode.ContextMenuStrip = contextMenuStripDelProject;
+                treeViewProject.Nodes[0].Nodes.Add(treeNode);
+                treeViewProject.SelectedNode = treeNode;
             }
         }
 
@@ -186,45 +180,35 @@ namespace MeterTest.Source.WinForm
                     context.Projects.Remove(project);
                     context.SaveChanges();
                 }
-                Project[] projects = MeterTestDbContext.GetProjectArray();
-                treeViewProject.Nodes[0].Nodes.Clear();
-                if((projects != null) && (projects.Length > 0))
+                treeViewProject.Nodes[0].Nodes.Remove(treeViewProject.SelectedNode);
+                // Project[] projects = MeterTestDbContext.GetProjectArray();
+                if(treeViewProject.Nodes[0].Nodes.Count == 0)
                 {
-                    foreach (var item in projects)
-                    {
-                        TreeNode treeNode = new TreeNode(item.Name);
-                        treeNode.ContextMenuStrip = contextMenuStripDelProject;
-                        treeViewProject.Nodes[0].Nodes.Add(treeNode);
-                    }
-                    textBoxProjectName.Text = projects[0].Name;
-                    textBoxProjectChgTime.Text = new DateTime(projects[0].Ticks).ToString("yyyy-MM-dd hh:mm:ss");
-                    checkBoxIsUse.Checked = projects[0].IsUse;
-                    List<DataIdTable> paraDataIdTables = MeterTestDbContext.GetParaConfigTables(projects[0].Name);
-                    if(paraDataIdTables != null)
-                    {
-                        textBoxParaTableCnt.Text = paraDataIdTables.Count.ToString();
-                    }
-                    else
-                    {
-                        textBoxParaTableCnt.Text = "0";
-                    }
-                    List<DataIdTable> RwDataIdTables = MeterTestDbContext.GetRwDataIdTables(projects[0].Name);
-                    if(RwDataIdTables != null)
-                    {
-                        textBoxRwTableCnt.Text = RwDataIdTables.Count.ToString();
-                    }
-                    else
-                    {
-                        textBoxRwTableCnt.Text = "0";
-                    }
+                    treeViewProject.SelectedNode = treeViewProject.Nodes[0];
+                    textBoxProjectName.Text = "";
+                    textBoxProjectChgTime.Text = "";
+                    checkBoxIsUse.Visible = false;
+                    textBoxParaTableCnt.Text = "";
+                    textBoxRwTableCnt.Text = "";
+                    checkBoxIsUse.Checked = false;
+                }
+                else
+                {
+                    treeViewProject.SelectedNode = treeViewProject.Nodes[0].Nodes[0];
+                    Project project = MeterTestDbContext.GetProject(treeViewProject.SelectedNode.Text);
+                    textBoxProjectName.Text = project.Name;
+                    textBoxProjectChgTime.Text = new DateTime(project.Ticks).ToString("yyyy-MM-dd hh:mm:ss");
+                    checkBoxIsUse.Visible = project.IsUse;
+                    textBoxParaTableCnt.Text = MeterTestDbContext.GetDataIdTableList(project.Name, true).Count.ToString();
+                    textBoxRwTableCnt.Text = MeterTestDbContext.GetDataIdTableList(project.Name, false).Count.ToString();
+                    checkBoxIsUse.Checked = project.IsUse;    
                 }
             }
         }
 
         private void buttonRwTableMng_Click(object sender, EventArgs e)
         {
-            if((treeViewProject.Nodes[0].Nodes != null) 
-            && (treeViewProject.Nodes[0].Nodes.Contains(treeViewProject.SelectedNode)))
+            if(MeterTestDbContext.GetProject(textBoxProjectName.Text) != null)
             {
                 FormDataIdTableMng form = new FormDataIdTableMng(textBoxProjectName.Text, false);
                 form.StartPosition = FormStartPosition.CenterParent;
@@ -243,8 +227,7 @@ namespace MeterTest.Source.WinForm
 
         private void buttonParaTableMng_Click(object sender, EventArgs e)
         {
-            if((treeViewProject.Nodes[0].Nodes != null) 
-            && (treeViewProject.Nodes[0].Nodes.Contains(treeViewProject.SelectedNode)))
+            if (MeterTestDbContext.GetProject(textBoxProjectName.Text) != null)
             {
                 FormDataIdTableMng form = new FormDataIdTableMng(textBoxProjectName.Text, true);
                 form.StartPosition = FormStartPosition.CenterParent;
@@ -270,7 +253,7 @@ namespace MeterTest.Source.WinForm
                 Project project = MeterTestDbContext.GetProject(treeViewProject.SelectedNode.Text);
                 if(project == null)
                 {
-                    MessageBox.Show("程序错误，请联系方兵！");
+                    MessageBox.Show("程序错误，请联系软件开发人员");
                     return;
                 }
                 textBoxProjectName.Text = project.Name;
@@ -300,9 +283,12 @@ namespace MeterTest.Source.WinForm
         {
             using(var context = new MeterTestDbContext())
             {
-                Project project = context.Projects.Single(e => e.Name == textBoxProjectName.Text);
-                project.IsUse = checkBoxIsUse.Checked;
-                context.SaveChanges();
+                Project project = context.Projects.SingleOrDefault(e => e.Name == textBoxProjectName.Text);
+                if(project != null)
+                {
+                    project.IsUse = checkBoxIsUse.Checked;
+                    context.SaveChanges();
+                }
             }
         }
 

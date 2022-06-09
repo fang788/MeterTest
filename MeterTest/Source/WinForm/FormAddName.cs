@@ -41,6 +41,7 @@ namespace MeterTest.Source.WinForm
             {
                 this.SelectRwProjectName = textBoxName.Text.Trim();
             }
+            DialogResult = DialogResult.OK;
             this.Close();
         }
     }
