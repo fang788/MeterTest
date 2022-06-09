@@ -64,7 +64,7 @@ namespace MeterTest.Source.WinForm
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelParaConfig = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelParaConfigTable = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelParaConfigTableName = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewPara = new System.Windows.Forms.DataGridView();
             this.tabPageWrite = new System.Windows.Forms.TabPage();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
@@ -76,7 +76,7 @@ namespace MeterTest.Source.WinForm
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelRead = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelRwTab = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelReadTabName = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewRead = new System.Windows.Forms.DataGridView();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.选择写入表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -345,7 +345,7 @@ namespace MeterTest.Source.WinForm
             this.statusStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelParaConfig,
             this.toolStripStatusLabel2,
-            this.toolStripStatusLabelParaConfigTable});
+            this.toolStripStatusLabelParaConfigTableName});
             this.statusStrip3.Location = new System.Drawing.Point(0, 435);
             this.statusStrip3.Name = "statusStrip3";
             this.statusStrip3.Size = new System.Drawing.Size(1044, 22);
@@ -364,12 +364,12 @@ namespace MeterTest.Source.WinForm
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(881, 17);
             this.toolStripStatusLabel2.Spring = true;
             // 
-            // toolStripStatusLabelParaConfigTable
+            // toolStripStatusLabelParaConfigTableName
             // 
-            this.toolStripStatusLabelParaConfigTable.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolStripStatusLabelParaConfigTable.Name = "toolStripStatusLabelParaConfigTable";
-            this.toolStripStatusLabelParaConfigTable.Size = new System.Drawing.Size(68, 17);
-            this.toolStripStatusLabelParaConfigTable.Text = "当前方案：";
+            this.toolStripStatusLabelParaConfigTableName.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolStripStatusLabelParaConfigTableName.Name = "toolStripStatusLabelParaConfigTableName";
+            this.toolStripStatusLabelParaConfigTableName.Size = new System.Drawing.Size(68, 17);
+            this.toolStripStatusLabelParaConfigTableName.Text = "当前方案：";
             // 
             // dataGridViewPara
             // 
@@ -465,7 +465,7 @@ namespace MeterTest.Source.WinForm
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelRead,
             this.toolStripStatusLabel4,
-            this.toolStripStatusLabelRwTab});
+            this.toolStripStatusLabelReadTabName});
             this.statusStrip1.Location = new System.Drawing.Point(2, 432);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1040, 22);
@@ -484,11 +484,11 @@ namespace MeterTest.Source.WinForm
             this.toolStripStatusLabel4.Size = new System.Drawing.Size(851, 17);
             this.toolStripStatusLabel4.Spring = true;
             // 
-            // toolStripStatusLabelRwTab
+            // toolStripStatusLabelReadTabName
             // 
-            this.toolStripStatusLabelRwTab.Name = "toolStripStatusLabelRwTab";
-            this.toolStripStatusLabelRwTab.Size = new System.Drawing.Size(130, 17);
-            this.toolStripStatusLabelRwTab.Text = "当前项目：- 读写表：-";
+            this.toolStripStatusLabelReadTabName.Name = "toolStripStatusLabelReadTabName";
+            this.toolStripStatusLabelReadTabName.Size = new System.Drawing.Size(130, 17);
+            this.toolStripStatusLabelReadTabName.Text = "当前项目：- 读写表：-";
             // 
             // dataGridViewRead
             // 
@@ -602,7 +602,7 @@ namespace MeterTest.Source.WinForm
         private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelParaConfig;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelParaConfigTable;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelParaConfigTableName;
         private System.Windows.Forms.DataGridView dataGridViewPara;
         private System.Windows.Forms.TabPage tabPageWrite;
         private System.Windows.Forms.StatusStrip statusStrip2;
@@ -611,7 +611,7 @@ namespace MeterTest.Source.WinForm
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRead;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRwTab;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelReadTabName;
         private System.Windows.Forms.DataGridView dataGridViewRead;
         private System.Windows.Forms.TabControl tabControlMainForm;
         private System.Windows.Forms.ToolStripMenuItem 选择ToolStripMenuItem1;

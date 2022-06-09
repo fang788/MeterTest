@@ -34,8 +34,9 @@ namespace MeterTest.Source.WinForm
             DataGridViewRead.FormLoad(dataGridViewRead);
             DataGridViewWrite.FormLoad(dataGridViewWrite);
             DataGridViewPara.FormLoad(dataGridViewPara);
-            toolStripStatusLabelParaConfigTable.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
-            toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
+            toolStripStatusLabelParaConfigTableName.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
+            toolStripStatusLabelReadTabName.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
+            toolStripStatusLabelWriteTabName.Text = "当前项目: "+ meterTestConfig.SelectWriteProjectName + "  已选择读取表：" + meterTestConfig.SelectWriteTableName;
             synchronizationContext = SynchronizationContext.Current;
         }
 
@@ -329,7 +330,7 @@ namespace MeterTest.Source.WinForm
                 meterTestConfig.SelectParaTableName   = menu.Text;
                 context.SaveChanges();
                 DataGridViewPara.DisplayProject(dataGridViewPara, meterTestConfig.SelectParaProjectName, meterTestConfig.SelectParaTableName);
-                toolStripStatusLabelParaConfigTable.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
+                toolStripStatusLabelParaConfigTableName.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
             }
         }
 
@@ -520,7 +521,7 @@ namespace MeterTest.Source.WinForm
                 meterTestConfig.SelectReadTableName   = menu.Text;
                 context.SaveChanges();
                 DataGridViewRead.DisplayProject(dataGridViewRead, meterTestConfig.SelectReadProjectName, meterTestConfig.SelectReadTableName);
-                toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
+                toolStripStatusLabelReadTabName.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
             }
         }
         
