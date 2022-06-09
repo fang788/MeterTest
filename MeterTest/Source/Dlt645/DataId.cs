@@ -415,7 +415,7 @@ namespace MeterTest.Source.Dlt645
                         {
                             int offset = 0;
                             uint dataId = (uint)((((((dataBytes[19 + offset] * 256) + dataBytes[20 + offset]) * 256) + dataBytes[21 + offset]) * 256) + dataBytes[22 + offset]);
-                            DataId dataIdTmp = MeterTestDbContext.GetDataId(meterTestConfig.SelectRwProjectName, meterTestConfig.SelectRwTableName, false, dataId);
+                            DataId dataIdTmp = MeterTestDbContext.GetDataId(meterTestConfig.SelectReadProjectName, meterTestConfig.SelectReadTableName, false, dataId);
                             dataIdTmp.DataArray = new byte[dataIdTmp.DataBytes];
                             for (int j = 0; j < dataIdTmp.DataBytes; j++)
                             {

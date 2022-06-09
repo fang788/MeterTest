@@ -146,13 +146,13 @@ namespace MeterTest.Source.WinForm
             FormAddName form = new FormAddName("请输入" + tip + "名称", "表名称：", "项目");
             form.StartPosition = FormStartPosition.CenterParent;
             form.ShowDialog();
-            if(form.SelectRwProjectName == null)
+            if(form.SelectReadProjectName == null)
             {
                 return;
             }
-            if(MeterTestDbContext.DataIdTableContains(projectName, form.SelectRwProjectName, isConfig))
+            if(MeterTestDbContext.DataIdTableContains(projectName, form.SelectReadProjectName, isConfig))
             {
-                MessageBox.Show("项目《" + projectName + "》已存在表：" + form.SelectRwProjectName + ", 请勿重复添加",
+                MessageBox.Show("项目《" + projectName + "》已存在表：" + form.SelectReadProjectName + ", 请勿重复添加",
                                 "MeterTest",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
@@ -165,7 +165,7 @@ namespace MeterTest.Source.WinForm
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 DataIdTable dataIdTable = new DataIdTable();
-                dataIdTable.Name = form.SelectRwProjectName;
+                dataIdTable.Name = form.SelectReadProjectName;
                 dataIdTable.Ticks = DateTime.Now.Ticks;
                 dataIdTable.ProjectName = projectName;
                 dataIdTable.IsConfig = isConfig;

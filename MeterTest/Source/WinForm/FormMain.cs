@@ -35,7 +35,7 @@ namespace MeterTest.Source.WinForm
             DataGridViewWrite.FormLoad(dataGridViewWrite);
             DataGridViewPara.FormLoad(dataGridViewPara);
             toolStripStatusLabelParaConfigTable.Text = "当前项目: "+ meterTestConfig.SelectParaProjectName + "  已选择参数配置表：" + meterTestConfig.SelectParaTableName;
-            toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
+            toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
             synchronizationContext = SynchronizationContext.Current;
         }
 
@@ -346,7 +346,7 @@ namespace MeterTest.Source.WinForm
                 DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridViewRead.Rows[i].Cells[0];
                 if ((bool)cell.EditingCellFormattedValue == true)
                 {
-                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName, MeterTestDbContext.GetMeterTestConfig().SelectRwTableName, false, Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
+                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName, MeterTestDbContext.GetMeterTestConfig().SelectReadTableName, false, Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
                     dataIds.Add(dataId);
                 }
             }
@@ -516,11 +516,11 @@ namespace MeterTest.Source.WinForm
             using(var context = new MeterTestDbContext())
             {
                 MeterTestConfig meterTestConfig = context.MeterTestConfigs.First();
-                meterTestConfig.SelectRwProjectName = menu.OwnerItem.Text;
-                meterTestConfig.SelectRwTableName   = menu.Text;
+                meterTestConfig.SelectReadProjectName = menu.OwnerItem.Text;
+                meterTestConfig.SelectReadTableName   = menu.Text;
                 context.SaveChanges();
-                DataGridViewRead.DisplayProject(dataGridViewRead, meterTestConfig.SelectRwProjectName, meterTestConfig.SelectRwTableName);
-                toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectRwProjectName + "  已选择读写表：" + meterTestConfig.SelectRwTableName;
+                DataGridViewRead.DisplayProject(dataGridViewRead, meterTestConfig.SelectReadProjectName, meterTestConfig.SelectReadTableName);
+                toolStripStatusLabelRwTab.Text = "当前项目: "+ meterTestConfig.SelectReadProjectName + "  已选择读取表：" + meterTestConfig.SelectReadTableName;
             }
         }
         
@@ -575,8 +575,8 @@ namespace MeterTest.Source.WinForm
             if (e.RowIndex >= 0)
             {
                 DataGridView dataGridView = (DataGridView)sender;
-                DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName,
-                                                            MeterTestDbContext.GetMeterTestConfig().SelectRwTableName,
+                DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName,
+                                                            MeterTestDbContext.GetMeterTestConfig().SelectReadTableName,
                                                             false,
                                                             Convert.ToUInt32(dataGridView.SelectedRows[0].Cells[2].Value.ToString(), 16));
                 FormWrite form = FormWrite.GetFormWrite(dataId);
@@ -624,7 +624,7 @@ namespace MeterTest.Source.WinForm
                 DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridView.Rows[i].Cells[0];
                 if ((bool)cell.EditingCellFormattedValue == true)
                 {
-                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectRwProjectName, MeterTestDbContext.GetMeterTestConfig().SelectRwTableName, false, Convert.ToUInt32(dataGridView.Rows[i].Cells[2].Value.ToString(), 16));
+                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName, MeterTestDbContext.GetMeterTestConfig().SelectReadTableName, false, Convert.ToUInt32(dataGridView.Rows[i].Cells[2].Value.ToString(), 16));
                     if(dataGridView.Rows[i].Cells[7].Value == null)
                     {
                         MessageBox.Show("数据标识：" + dataId.Id.ToString("X8") + "\r未输入数据", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -677,6 +677,39 @@ namespace MeterTest.Source.WinForm
                     }
                     optLock = false;
                 });
+            }
+        }
+        private void SelectWriteDataIdTableMenu_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menu = (ToolStripMenuItem)sender;
+            List<DataId> dataIds = MeterTestDbContext.GetDataIdList(menu.OwnerItem.Text, menu.Text, true);
+            using(var context = new MeterTestDbContext())
+            {
+                MeterTestConfig meterTestConfig = context.MeterTestConfigs.First();
+                meterTestConfig.SelectWriteProjectName = menu.OwnerItem.Text;
+                meterTestConfig.SelectWriteTableName   = menu.Text;
+                context.SaveChanges();
+                DataGridViewWrite.DisplayProject(dataGridViewWrite, meterTestConfig.SelectWriteProjectName, meterTestConfig.SelectWriteTableName);
+                toolStripStatusLabelWriteTabName.Text = "当前项目: "+ meterTestConfig.SelectWriteProjectName + "  已选择写入表：" + meterTestConfig.SelectWriteTableName;
+            }
+        }
+        private void contextMenuStripWrite_Opening(object sender, CancelEventArgs e)
+        {
+            Project[] projects = MeterTestDbContext.GetProjectArray();
+            ContextMenuStrip contextMenuStripWrite = sender as ContextMenuStrip;
+            ToolStripMenuItem menuSelect = (ToolStripMenuItem)contextMenuStripWrite.Items[contextMenuStripWrite.Items.IndexOf(选择写入表ToolStripMenuItem)];
+            menuSelect.DropDownItems.Clear();
+            foreach (var item in projects)
+            {
+                ToolStripMenuItem menuProject = new ToolStripMenuItem(item.Name);
+                List<DataIdTable> dataIdTables = MeterTestDbContext.GetDataIdTableList(item.Name, false);
+                foreach (var dataIdTable in dataIdTables)
+                {
+                    ToolStripMenuItem menuDataIdTable = new ToolStripMenuItem(dataIdTable.Name);
+                    menuDataIdTable.Click += new System.EventHandler(this.SelectWriteDataIdTableMenu_Click);
+                    menuProject.DropDownItems.Add(menuDataIdTable);
+                }
+                menuSelect.DropDownItems.Add(menuProject);
             }
         }
     }

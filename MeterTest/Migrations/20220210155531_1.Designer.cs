@@ -156,11 +156,11 @@ namespace MeterTest.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SelectRwProjectName")
+                    b.Property<string>("SelectReadProjectName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SelectRwTableName")
+                    b.Property<string>("SelectReadTableName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

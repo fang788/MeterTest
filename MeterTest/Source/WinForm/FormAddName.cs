@@ -15,7 +15,7 @@ namespace MeterTest.Source.WinForm
         private string text;
         private string tip;
         private string type;
-        public string SelectRwProjectName;
+        public string SelectReadProjectName;
         public FormAddName()
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace MeterTest.Source.WinForm
         {
             if(textBoxName.Text.Trim().Length > 0)
             {
-                this.SelectRwProjectName = textBoxName.Text.Trim();
+                this.SelectReadProjectName = textBoxName.Text.Trim();
             }
             DialogResult = DialogResult.OK;
             this.Close();

@@ -32,8 +32,10 @@ namespace MeterTest.Source.SQLite
             modelBuilder.Entity<MeterTestConfig>(entity =>
             {
                 entity.HasKey(e => e.Name);
-                entity.Property(e => e.SelectRwProjectName).IsRequired(); 
-                entity.Property(e => e.SelectRwTableName).IsRequired();   
+                entity.Property(e => e.SelectReadProjectName).IsRequired(); 
+                entity.Property(e => e.SelectReadTableName).IsRequired();  
+                entity.Property(e => e.SelectWriteProjectName).IsRequired();   
+                entity.Property(e => e.SelectWriteTableName).IsRequired();    
                 entity.Property(e => e.SelectParaProjectName).IsRequired();   
                 entity.Property(e => e.SelectParaTableName).IsRequired();      
                 entity.Property(e => e.PortName).IsRequired();

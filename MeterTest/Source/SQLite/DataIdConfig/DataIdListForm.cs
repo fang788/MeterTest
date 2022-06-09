@@ -55,8 +55,8 @@ namespace MeterTest.Source.SQLite
         // {
         //     using (var context = new MeterTestDbContext())
         //     {
-        //         // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectRwProjectName.First()).ReadWriteDataIdList.ToArray();
-        //         Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectRwTableName);
+        //         // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectReadProjectName.First()).ReadWriteDataIdList.ToArray();
+        //         Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectReadTableName);
         //         if(project == null)
         //         {
         //             return;
@@ -92,8 +92,8 @@ namespace MeterTest.Source.SQLite
             }
             using (var context = new MeterTestDbContext())
             {
-                // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectRwProjectName.First()).ReadWriteDataIdList.ToArray();
-                // Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectRwTableName);
+                // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectReadProjectName.First()).ReadWriteDataIdList.ToArray();
+                // Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectReadTableName);
                 // if(project == null)
                 // {
                 //     return;
@@ -135,8 +135,8 @@ namespace MeterTest.Source.SQLite
             List<DataId> list = new List<DataId>();
             using (var context = new MeterTestDbContext())
             {
-                // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectRwProjectName.First()).ReadWriteDataIdList.ToArray();
-                // Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectRwTableName);
+                // DataId[] dataIdArray = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectReadProjectName.First()).ReadWriteDataIdList.ToArray();
+                // Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectReadTableName);
                 // if(project == null)
                 // {
                 //     return;
@@ -224,8 +224,8 @@ namespace MeterTest.Source.SQLite
         //     int index = dataGridViewDataId.CurrentCell.RowIndex;
         //     using (var context = new MeterTestDbContext())
         //     {
-        //         // DataId dataIdSelect = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectRwProjectName.First()).ReadWriteDataIdList.ToArray()[index];
-        //         Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectRwTableName);
+        //         // DataId dataIdSelect = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectReadProjectName.First()).ReadWriteDataIdList.ToArray()[index];
+        //         Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectReadTableName);
         //         if(project == null)
         //         {
         //             return;

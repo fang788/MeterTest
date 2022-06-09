@@ -124,10 +124,10 @@ namespace MeterTest.Source.WinForm
                 Project project = null;
                 using(var context = new MeterTestDbContext())
                 {
-                    if(context.Projects.SingleOrDefault(e => e.Name == form.SelectRwProjectName) == null)
+                    if(context.Projects.SingleOrDefault(e => e.Name == form.SelectReadProjectName) == null)
                     {
                         project = new Project();
-                        project.Name = form.SelectRwProjectName;
+                        project.Name = form.SelectReadProjectName;
                         project.Ticks = DateTime.Now.Ticks;
                         project.IsUse = true;
                         context.Projects.Add(project);
@@ -135,7 +135,7 @@ namespace MeterTest.Source.WinForm
                     }
                     else
                     {
-                        MessageBox.Show("已存在项目：" + form.SelectRwProjectName + "，请勿重复添加！", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("已存在项目：" + form.SelectReadProjectName + "，请勿重复添加！", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }

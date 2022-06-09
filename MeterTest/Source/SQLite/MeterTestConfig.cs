@@ -9,8 +9,10 @@ namespace MeterTest.Source.SQLite
     {
         public int Id;
         public string Name = "MeterTestConfig";
-        public string   SelectRwProjectName = "123";
-        public string   SelectRwTableName = "1";
+        public string   SelectReadProjectName = "123";
+        public string   SelectReadTableName = "1";
+        public string   SelectWriteProjectName = "123";
+        public string   SelectWriteTableName = "1";
         public string   SelectParaProjectName = "123";
         public string   SelectParaTableName = "1";
         public string   PortName  = "COM1";
@@ -33,7 +35,7 @@ namespace MeterTest.Source.SQLite
         {
             Id = id;
             PortName = serialPortName;
-            SelectRwTableName = selectRWDataIdListProjectName;
+            SelectReadTableName = selectRWDataIdListProjectName;
             SelectParaTableName = selectParaDataIdListProjectName;
         }
     }

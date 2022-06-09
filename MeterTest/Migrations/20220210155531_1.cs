@@ -37,8 +37,8 @@ namespace MeterTest.Migrations
                     ReadTimeout = table.Column<int>(type: "INTEGER", nullable: false),
                     SelectParaProjectName = table.Column<string>(type: "TEXT", nullable: false),
                     SelectParaTableName = table.Column<string>(type: "TEXT", nullable: false),
-                    SelectRwProjectName = table.Column<string>(type: "TEXT", nullable: false),
-                    SelectRwTableName = table.Column<string>(type: "TEXT", nullable: false),
+                    SelectReadProjectName = table.Column<string>(type: "TEXT", nullable: false),
+                    SelectReadTableName = table.Column<string>(type: "TEXT", nullable: false),
                     StopBits = table.Column<int>(type: "INTEGER", nullable: false),
                     TableBodySerialPortName = table.Column<string>(type: "TEXT", nullable: false)
                 },

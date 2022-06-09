@@ -61,7 +61,6 @@ namespace MeterTest.Source.WinForm
                     dataGridView.Rows[index].Cells[5].Value = dataIds[i].DataBytes;
                     dataGridView.Rows[index].Cells[6].Value = dataIds[i].Unit;
                     count++;
-                    // dataGridView.Rows[index].Cells[6].DoubleClick += new System.EventHandler(this.dataGridViewWrite_DoubleClick);
                 }
             }
         }
@@ -74,7 +73,7 @@ namespace MeterTest.Source.WinForm
             {
                 config = new MeterTestConfig();
             }
-            DisplayProject(dataGridView, config.SelectRwProjectName, config.SelectRwTableName);
+            DisplayProject(dataGridView, config.SelectWriteProjectName, config.SelectWriteTableName);
         }
     }
 }

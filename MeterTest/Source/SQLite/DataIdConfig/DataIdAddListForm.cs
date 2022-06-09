@@ -139,8 +139,8 @@ namespace MeterTest.Source.SQLite
         //         DataId[] dataIdArray = list.ToList().ToArray<DataId>();
         //         using (var context = new MeterTestDbContext())
         //         {
-        //             // List<DataId> dataIdList = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectRwProjectName.First()).ReadWriteDataIdList.ToList();
-        //             Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectRwTableName);
+        //             // List<DataId> dataIdList = context.Project.Include(e => e.ReadWriteDataIdList).Single(e => e.Name == context.SelectReadProjectName.First()).ReadWriteDataIdList.ToList();
+        //             Project project = context.Project.Include(e => e.ReadWriteDataIdList).SingleOrDefault(e => e.Name == FormMain.GetMeterTestConfig().SelectReadTableName);
         //             if(project == null)
         //             {
         //                 return;

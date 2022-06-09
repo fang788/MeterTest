@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeterTest.Migrations
 {
     [DbContext(typeof(MeterTestDbContext))]
-    [Migration("20220515125907_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220609074516_Two")]
+    partial class Two
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -147,6 +147,14 @@ namespace MeterTest.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SelectReadTableName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SelectWriteProjectName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SelectWriteTableName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

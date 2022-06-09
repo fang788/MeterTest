@@ -64,7 +64,7 @@ namespace MeterTest.Source.WinForm
         {
             ColumnInit(dataGridView);
             MeterTestConfig config = MeterTestDbContext.GetMeterTestConfig();
-            DisplayProject(dataGridView, config.SelectRwProjectName,config.SelectRwTableName);
+            DisplayProject(dataGridView, config.SelectReadProjectName,config.SelectReadTableName);
         }
     }
 }
