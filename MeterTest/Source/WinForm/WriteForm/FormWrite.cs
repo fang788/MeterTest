@@ -8,21 +8,54 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
+using MeterTest.Source.WinForm.WriteForm;
 
 namespace MeterTest.Source.WinForm
 {
-    public partial class FormWrite : Form
+    public partial class FormWrite : Form, WriteForm.IWriteForm
     {
-        public DataId WriteDataId;
-        public String WriteString;
+        private DataId _dataId;
+        private String _writeString;
+        public DataId WriteDataId 
+        { 
+            get 
+            {
+                return _dataId;
+            } 
+            set 
+            {
+                _dataId = value;
+            }
+        }
+        public string WriteString
+        { 
+            get 
+            {
+                return _writeString;
+            } 
+            set 
+            {
+                _writeString = value;
+            }
+        }
+
         protected FormWrite()
         {
             InitializeComponent();
         }
 
-        public static FormWrite GetFormWrite(DataId dataId)
+        public static Form GetFormWrite(DataId dataId)
         {
-            return new FormWrite(dataId);
+            Form rst = null;
+            if(dataId.Id == 0x04000101)
+            {
+                rst = new FormDate(dataId);
+            }
+            else
+            {
+                rst = new FormWrite(dataId);
+            }
+            return rst;
         }
 
         private FormWrite(DataId dataId)

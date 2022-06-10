@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeterTest.Source.Dlt645;
 using MeterTest.Source.SQLite;
+using MeterTest.Source.WinForm.WriteForm;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeterTest.Source.WinForm 
@@ -46,7 +47,7 @@ namespace MeterTest.Source.WinForm
 
         private void 关于MeterTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string Tip = String.Format("版本：{0}\n提交：{1}\n日期：{2}\ndotnet：{3}", Version, Submit, SubmitData, DotnetVersion);
+            string Tip = String.Format("版本：{0}\n提交: {1}\n日期: {2}\ndotnet: {3}", Version, Submit, SubmitData, DotnetVersion);
             MessageBox.Show(Tip, "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -581,12 +582,12 @@ namespace MeterTest.Source.WinForm
                                                             MeterTestDbContext.GetMeterTestConfig().SelectReadTableName,
                                                             false,
                                                             Convert.ToUInt32(dataGridView.SelectedRows[0].Cells[2].Value.ToString(), 16));
-                FormWrite form = FormWrite.GetFormWrite(dataId);
+                Form form = FormWrite.GetFormWrite(dataId);
                 form.StartPosition = FormStartPosition.CenterParent;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    dataGridView.SelectedRows[0].Cells[7].Value = form.WriteString;
-                    dataGridView.SelectedRows[0].Cells[9].Value = dataId.GetDataString(dataId.GetByteArray(form.WriteString));
+                    dataGridView.SelectedRows[0].Cells[7].Value = ((IWriteForm)form).WriteString;
+                    dataGridView.SelectedRows[0].Cells[9].Value = dataId.GetDataString(dataId.GetByteArray(((IWriteForm)form).WriteString));
                 }
             }
         }
