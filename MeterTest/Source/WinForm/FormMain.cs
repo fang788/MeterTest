@@ -15,6 +15,10 @@ namespace MeterTest.Source.WinForm
 {
     public partial class FormMain : Form
     {
+        public readonly string Version = "1.0.0";
+        public readonly string Submit = "334b9b3f88e76216ec701a1f58fcfd399185426b";
+        public readonly string SubmitData = "2022-06-10";
+        public readonly string DotnetVersion = "5.0.17";
         private FormLogger formLogger;
         private Dlt645Client client;
         private SynchronizationContext synchronizationContext = null;
@@ -24,7 +28,7 @@ namespace MeterTest.Source.WinForm
         public FormMain()
         {
             InitializeComponent();
-            this.Text = "MeterTest   " + FormVersion.Version;
+            this.Text = "MeterTest   " + Version;
         }
         private void FormMain_Load(object sender, EventArgs e)
         {
@@ -42,11 +46,8 @@ namespace MeterTest.Source.WinForm
 
         private void 关于MeterTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormVersion form = new FormVersion();
-
-            this.AddOwnedForm(form);
-            form.StartPosition = FormStartPosition.CenterParent;
-            form.ShowDialog();
+            string Tip = String.Format("版本：{0}\n提交：{1}\n日期：{2}\ndotnet：{3}", Version, Submit, SubmitData, DotnetVersion);
+            MessageBox.Show(Tip, "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void 选项ToolStripMenuItem_Click(object sender, EventArgs e)
