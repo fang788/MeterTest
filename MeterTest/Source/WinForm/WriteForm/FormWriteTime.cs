@@ -11,7 +11,7 @@ using MeterTest.Source.Dlt645;
 
 namespace MeterTest.Source.WinForm.WriteForm
 {
-    public partial class FormDate : Form, IWriteForm
+    public partial class FormWriteTime : Form, IWriteForm
     {
         private DataId _dataId;
         private String _writeString;
@@ -37,15 +37,21 @@ namespace MeterTest.Source.WinForm.WriteForm
                 _writeString = value;
             }
         }
-        protected FormDate()
+        private FormWriteTime()
         {
             InitializeComponent();
         }
-        public FormDate(DataId dataId)
+        public FormWriteTime(DataId dataId)
         {
             InitializeComponent();
-            WriteDataId = dataId;
             this.Text = dataId.Name;
+            WriteDataId = dataId;
+        }
+
+        private void FormWriteTime_Load(object sender, EventArgs e)
+        {
+            textBoxComputeTime.Text = DateTime.Now.ToString("hh:mm:ss");
+            radioButton1.Checked = true;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -57,24 +63,23 @@ namespace MeterTest.Source.WinForm.WriteForm
         {
             if(radioButton1.Checked)
             {
-                _writeString = "AAAAAAAA";
+                _writeString = "AAAAAA";
             }
             else if(radioButton2.Checked)
             {
-                _writeString = dateTimePickerSelf.Value.ToString("yyMMdd") + ((int)dateTimePickerSelf.Value.DayOfWeek).ToString("X2");
+                _writeString = dateTimePickerSelf.Value.ToString("hhmmss");
             }
             else
             {
-                _writeString = textBoxInput.Text.PadRight(8, '0');
+                _writeString = textBoxInput.Text.PadRight(6, '0');
             }
             DialogResult = DialogResult.OK;
             this.Close();
         }
 
-        private void FormDate_Load(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
-            textBoxComputeTime.Text = DateTime.Now.ToString("yy-MM-dd") + " " + ((int)DateTime.Now.DayOfWeek).ToString("X2");
-            radioButton1.Checked = true;
+            textBoxComputeTime.Text = DateTime.Now.ToString("hh:mm:ss");
         }
     }
 }

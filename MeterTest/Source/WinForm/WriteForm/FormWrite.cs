@@ -51,6 +51,10 @@ namespace MeterTest.Source.WinForm
             {
                 rst = new FormDate(dataId);
             }
+            else if(dataId.Id == 0x04000102)
+            {
+                rst = new FormWriteTime(dataId);
+            }
             else
             {
                 rst = new FormWrite(dataId);
