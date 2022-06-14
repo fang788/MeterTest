@@ -561,5 +561,40 @@ namespace MeterTest.Source.WinForm
                 }
             }
         }
+
+        private void treeViewDataIdTable_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if(e.Label == null)
+            {
+                return;
+            }
+            using (var context = new MeterTestDbContext())
+            {
+                DataIdTable dataIdTable = context.DataIdTables.Single(e1 => e1.Name == e.Node.Text);
+                dataIdTable.DataIdList = context.DataIds.Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableName")  == dataIdTable.Name)
+                                                        .Where(e => EF.Property<bool>(e, "ForeignKey_DataIdTableIsConfig")  == isConfig)
+                                                        .Where(e => EF.Property<string>(e, "ForeignKey_DataIdTableProjectName")  == projectName)
+                                                        .ToList();
+                context.DataIdTables.Remove(dataIdTable);
+                if(dataIdTable.DataIdList != null)
+                {
+                    context.DataIds.RemoveRange(dataIdTable.DataIdList);
+                }
+                context.SaveChanges();
+                dataIdTable.Name = e.Label;
+                context.DataIdTables.Add(dataIdTable);
+                if(dataIdTable.DataIdList != null)
+                {
+                    foreach (var item in dataIdTable.DataIdList)
+                    {
+                        context.Entry(item).Property("ForeignKey_DataIdTableName").CurrentValue = dataIdTable.Name;
+                        context.Entry(item).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = isConfig;
+                        context.Entry(item).Property("ForeignKey_DataIdTableProjectName").CurrentValue = projectName;
+                    }
+                    context.DataIds.AddRange(dataIdTable.DataIdList);
+                }
+                context.SaveChanges();
+            }
+        }
     }
 }

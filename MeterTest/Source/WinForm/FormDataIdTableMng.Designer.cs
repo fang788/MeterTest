@@ -93,6 +93,7 @@ namespace MeterTest.Source.WinForm
             this.treeViewDataIdTable.Name = "treeViewDataIdTable";
             this.treeViewDataIdTable.Size = new System.Drawing.Size(122, 377);
             this.treeViewDataIdTable.TabIndex = 21;
+            this.treeViewDataIdTable.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewDataIdTable_AfterLabelEdit);
             this.treeViewDataIdTable.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewDataIdTable_NodeMouseClick);
             this.treeViewDataIdTable.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewDataIdTable_NodeMouseDoubleClick);
             // 
@@ -109,7 +110,7 @@ namespace MeterTest.Source.WinForm
             this.dataGridViewDataIdTable.RowHeadersWidth = 62;
             this.dataGridViewDataIdTable.RowTemplate.Height = 25;
             this.dataGridViewDataIdTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewDataIdTable.Size = new System.Drawing.Size(659, 332);
+            this.dataGridViewDataIdTable.Size = new System.Drawing.Size(660, 332);
             this.dataGridViewDataIdTable.TabIndex = 21;
             // 
             // textBoxDataId
