@@ -115,7 +115,7 @@ namespace MeterTest.Source.WinForm
                 e.Handled = true; 
             }
         }
-        private void 添加ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 新建ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormAddName form = new FormAddName("请输入项目名称", "项目名称：", "项目");
             form.StartPosition = FormStartPosition.CenterParent;

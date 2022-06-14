@@ -95,12 +95,6 @@ namespace MeterTest.Source.WinForm
                 item.Cells[0].Value = true;
                 ((DataGridViewCheckBoxCell)item.Cells[0]).EditingCellFormattedValue = true;
             }
-            //int count = dataGridViewRead.SelectedRows.Count;
-            // for (int i = 0; i < dataGridViewRead.SelectedRows.Count; i++)
-            // {
-            //     dataGridView.SelectedRows[i].Cells[0].Value = true;
-            //     ((DataGridViewCheckBoxCell)dataGridView.SelectedRows[i].Cells[0]).EditingCellFormattedValue = true;
-            // }
         }
 
         private void 取消选择ToolStripMenuItem_Click(object sender, EventArgs e)

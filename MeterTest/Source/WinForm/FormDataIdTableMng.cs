@@ -37,18 +37,23 @@ namespace MeterTest.Source.WinForm
 
         private void FormDataIdTableMng_Load(object sender, EventArgs e)
         {
-            tip = "项目：" + projectName + "，";
+            tip = "项目：" + projectName + ", ";
+            ToolStripMenuItem menu = new ToolStripMenuItem();
             if(isConfig)
             {
                 tip += "参数配置表";
+                menu.Text = "参数配置表";
             }
             else
             {
                 tip += "读写表";
+                menu.Text = "读写表";
             }
+            menu.Click += new System.EventHandler(this.新建ToolStripMenuItem_Click);
+            ((ToolStripMenuItem)contextMenuStripDataIdTable.Items[0]).DropDownItems.Add(menu);
             this.Text = tip;
             treeViewDataIdTable.Nodes.Add(projectName);
-            treeViewDataIdTable.Nodes[0].ContextMenuStrip = contextMenuStripDataIdTableAdd;
+            treeViewDataIdTable.Nodes[0].ContextMenuStrip = contextMenuStripDataIdTable;
             TreeViewUpdate();
         }
         private void DataGridViewDataIdTableDisplay()
@@ -100,7 +105,7 @@ namespace MeterTest.Source.WinForm
                 foreach (var item in dataIdTables)
                 {
                     TreeNode treeNode = new TreeNode(item.Name);
-                    treeNode.ContextMenuStrip = contextMenuStripDataIdTableDel;
+                    treeNode.ContextMenuStrip = contextMenuStripDataIdTable;
                     treeViewDataIdTable.Nodes[0].Nodes.Add(treeNode);
                 }
                 tableName = dataIdTables[0].Name;
@@ -111,6 +116,10 @@ namespace MeterTest.Source.WinForm
 
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(MessageBox.Show(String.Format("确定要删除{0}吗？", treeViewDataIdTable.SelectedNode.Text), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
             if ((treeViewDataIdTable.Nodes[0].Nodes != null)
             && (treeViewDataIdTable.Nodes[0].Nodes.Contains(treeViewDataIdTable.SelectedNode)))
             {
@@ -141,7 +150,7 @@ namespace MeterTest.Source.WinForm
             }
         }
 
-        private void 添加ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 新建ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormAddName form = new FormAddName("请输入" + tip + "名称", "表名称：", "项目");
             form.StartPosition = FormStartPosition.CenterParent;
@@ -158,40 +167,24 @@ namespace MeterTest.Source.WinForm
                                 MessageBoxIcon.Error);
                 return;
             }
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Multiselect = false;
-            fileDialog.Title = "请选择excel文件";
-            fileDialog.Filter = "excel文件(*.xlsx,*.xls)|*.xlsx;*.xls"; ;
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            DataIdTable dataIdTable = new DataIdTable();
+            dataIdTable.Name = form.SelectReadProjectName;
+            dataIdTable.Ticks = DateTime.Now.Ticks;
+            dataIdTable.ProjectName = projectName;
+            dataIdTable.IsConfig = isConfig;
+            using(var context = new MeterTestDbContext())
             {
-                DataIdTable dataIdTable = new DataIdTable();
-                dataIdTable.Name = form.SelectReadProjectName;
-                dataIdTable.Ticks = DateTime.Now.Ticks;
-                dataIdTable.ProjectName = projectName;
-                dataIdTable.IsConfig = isConfig;
-                dataIdTable.DataIdList = GetDataIdList(fileDialog.FileName);
-                using(var context = new MeterTestDbContext())
-                {
-                    Project project = context.Projects.Single(e => e.Name == projectName);
-                    if(project.DataIdTables == null)
-                    {
-                        project.DataIdTables = new List<DataIdTable>();
-                    }
-                    project.DataIdTables.Add(dataIdTable);
-                    context.DataIdTables.Add(dataIdTable);
-                    foreach (var item in dataIdTable.DataIdList)
-                    {
-                        context.Entry(item).Property("ForeignKey_DataIdTableName").CurrentValue = dataIdTable.Name;
-                        context.Entry(item).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = isConfig;
-                        context.Entry(item).Property("ForeignKey_DataIdTableProjectName").CurrentValue = projectName;
-                    }
-                    context.DataIds.AddRange(dataIdTable.DataIdList);
-                    context.SaveChanges();
-                }
-                tableName = dataIdTable.Name;
-                DataGridViewDataIdTableDisplay();
-                TreeViewUpdate();
+                Project project = context.Projects.Single(e => e.Name == projectName);
+                project.DataIdTables.Add(dataIdTable);
+                context.DataIdTables.Add(dataIdTable);
+                context.SaveChanges();
             }
+            tableName = dataIdTable.Name;
+            TreeNode treeNode = new TreeNode(tableName);
+            treeNode.ContextMenuStrip = contextMenuStripDataIdTable;
+            treeViewDataIdTable.Nodes[0].Nodes.Add(treeNode);
+            treeViewDataIdTable.SelectedNode = treeNode;
+            DataGridViewDataIdTableDisplay();
         }
         public static List<DataId> GetDataIdList(string excelFilePath)
         {
@@ -252,7 +245,68 @@ namespace MeterTest.Source.WinForm
             }
             return list;
         }
-
+        public static bool SaveDataIdList(String excelFilePath, List<DataId> list)
+        {
+            bool result = false;
+            IWorkbook workbook = null;
+            Stream stream = null;
+            try
+            {
+                // fileStream = File.Open(excelFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                // fileStream.Position = 0;
+                stream = File.Create(excelFilePath);
+                if (Path.GetExtension(excelFilePath).Equals(".xlsx"))
+                {
+                    workbook = new XSSFWorkbook();
+                }
+                else
+                {
+                    workbook = new HSSFWorkbook();
+                }
+                ISheet sheet = workbook.CreateSheet("数据标识");
+                IRow row = sheet.CreateRow(0);
+                row.CreateCell(0).SetCellValue("数据标识");
+                row.CreateCell(1).SetCellValue("数据项名称");
+                row.CreateCell(2).SetCellValue("数据格式");
+                row.CreateCell(3).SetCellValue("数据长度（字节）");
+                row.CreateCell(4).SetCellValue("单位");
+                row.CreateCell(5).SetCellValue("数据");
+                row.CreateCell(6).SetCellValue("读");
+                row.CreateCell(7).SetCellValue("写");
+                row.CreateCell(8).SetCellValue("分组");
+                for (int i = 0; i < list.Count; i++)
+                {
+                    row = sheet.CreateRow(i + 1);
+                    row.CreateCell(0).SetCellValue(list[i].Id.ToString("X8"));
+                    row.CreateCell(1).SetCellValue(list[i].Name);
+                    row.CreateCell(2).SetCellValue(list[i].Format);
+                    row.CreateCell(3).SetCellValue(list[i].DataBytes);
+                    row.CreateCell(4).SetCellValue(list[i].Unit);
+                    row.CreateCell(5).SetCellValue(list[i].DataArray == null? "" : list[i].DataArray.ToString());
+                    row.CreateCell(6).SetCellValue(list[i].IsReadable? "是" : "否");
+                    row.CreateCell(7).SetCellValue(list[i].IsWritable? "是" : "否");
+                    row.CreateCell(8).SetCellValue(list[i].GroupName);
+                }
+                workbook.Write(stream);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            finally
+            {
+                if(workbook != null)
+                {
+                    workbook.Close();
+                }
+                if(stream != null)
+                {
+                    stream.Close();
+                }
+            }
+            return result;
+        }
+        
         private void treeViewDataIdTable_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if ((treeViewDataIdTable.Nodes[0].Nodes != null)
@@ -396,6 +450,114 @@ namespace MeterTest.Source.WinForm
                 else
                 {
                     MessageBox.Show("项目：" + projectName + " 读写表：" + tableName + "中已添加添加数据标识：" + dataId.Id.ToString("X8"), "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void treeViewDataIdTable_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if(treeViewDataIdTable.Nodes[0].Nodes.Contains(e.Node))
+            {
+                contextMenuStripDataIdTable.Items[0].Enabled = true;
+                contextMenuStripDataIdTable.Items[1].Enabled = true;
+                contextMenuStripDataIdTable.Items[2].Enabled = true;
+                contextMenuStripDataIdTable.Items[3].Enabled = false;
+                contextMenuStripDataIdTable.Items[4].Enabled = true;
+                contextMenuStripDataIdTable.Items[5].Enabled = true;
+            }
+            else
+            {
+                contextMenuStripDataIdTable.Items[0].Enabled = true;
+                contextMenuStripDataIdTable.Items[1].Enabled = false;
+                contextMenuStripDataIdTable.Items[2].Enabled = true;
+                contextMenuStripDataIdTable.Items[3].Enabled = true;
+                contextMenuStripDataIdTable.Items[4].Enabled = false;
+                contextMenuStripDataIdTable.Items[5].Enabled = false;
+            }
+        }
+
+        private void 重命名ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeViewDataIdTable.SelectedNode.BeginEdit();
+        }
+
+        private void 复制ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(treeViewDataIdTable.SelectedNode.Text);
+        }
+
+        private void 导入ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAddName form = new FormAddName("请输入" + tip + "名称", "表名称：", "项目");
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog();
+            if(form.SelectReadProjectName == null)
+            {
+                return;
+            }
+            if(MeterTestDbContext.DataIdTableContains(projectName, form.SelectReadProjectName, isConfig))
+            {
+                MessageBox.Show("项目《" + projectName + "》已存在表：" + form.SelectReadProjectName + ", 请勿重复添加",
+                                "MeterTest",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Title = "请选择excel文件";
+            fileDialog.Filter = "excel文件(*.xlsx,*.xls)|*.xlsx;*.xls";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                DataIdTable dataIdTable = new DataIdTable();
+                dataIdTable.Name = form.SelectReadProjectName;
+                dataIdTable.Ticks = DateTime.Now.Ticks;
+                dataIdTable.ProjectName = projectName;
+                dataIdTable.IsConfig = isConfig;
+                dataIdTable.DataIdList = GetDataIdList(fileDialog.FileName);
+                using(var context = new MeterTestDbContext())
+                {
+                    Project project = context.Projects.Single(e => e.Name == projectName);
+                    if(project.DataIdTables == null)
+                    {
+                        project.DataIdTables = new List<DataIdTable>();
+                    }
+                    project.DataIdTables.Add(dataIdTable);
+                    context.DataIdTables.Add(dataIdTable);
+                    foreach (var item in dataIdTable.DataIdList)
+                    {
+                        context.Entry(item).Property("ForeignKey_DataIdTableName").CurrentValue = dataIdTable.Name;
+                        context.Entry(item).Property("ForeignKey_DataIdTableIsConfig").CurrentValue = isConfig;
+                        context.Entry(item).Property("ForeignKey_DataIdTableProjectName").CurrentValue = projectName;
+                    }
+                    context.DataIds.AddRange(dataIdTable.DataIdList);
+                    context.SaveChanges();
+                }
+                tableName = dataIdTable.Name;
+                TreeNode treeNode = new TreeNode(tableName);
+                treeNode.ContextMenuStrip = contextMenuStripDataIdTable;
+                treeViewDataIdTable.Nodes[0].Nodes.Add(treeNode);
+                treeViewDataIdTable.SelectedNode = treeNode;
+                DataGridViewDataIdTableDisplay();
+            }
+        }
+
+        private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = null;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+        
+            saveFileDialog1.Filter = "excel文件 (*.xlsx)|*.xlsx|excel 2007文件 (*.xls)|*.xls";
+            // saveFileDialog1.FilterIndex = 2 ;
+            saveFileDialog1.RestoreDirectory = true ;
+            saveFileDialog1.Title = "导出数据标识表";
+            saveFileDialog1.FileName = projectName + "_" + treeViewDataIdTable.SelectedNode.Text;
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if((fileName = saveFileDialog1.FileName) != null)
+                {
+                    List<DataId> dataIds = MeterTestDbContext.GetDataIdList(projectName, treeViewDataIdTable.SelectedNode.Text, isConfig);
+                    SaveDataIdList(fileName, dataIds);
                 }
             }
         }
