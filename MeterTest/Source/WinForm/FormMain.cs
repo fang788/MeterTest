@@ -572,8 +572,8 @@ namespace MeterTest.Source.WinForm
             if (e.RowIndex >= 0)
             {
                 DataGridView dataGridView = (DataGridView)sender;
-                DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName,
-                                                            MeterTestDbContext.GetMeterTestConfig().SelectReadTableName,
+                DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectWriteProjectName,
+                                                            MeterTestDbContext.GetMeterTestConfig().SelectWriteTableName,
                                                             false,
                                                             Convert.ToUInt32(dataGridView.SelectedRows[0].Cells[2].Value.ToString(), 16));
                 Form form = FormWrite.GetFormWrite(dataId);
