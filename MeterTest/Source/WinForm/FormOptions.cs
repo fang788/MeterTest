@@ -39,7 +39,7 @@ namespace MeterTest.Source.WinForm
                 Dlt645Server service = context.Dlt645Servers.FirstOrDefault();
                 service.MeterAddress = new MeterAddress(textBoxServerAddress.Text);
                 service.Authority = Convert.ToByte(comboBoxAuthority.Text, 16);
-                service.Password = Convert.ToInt32(textBoxPassword.Text);
+                service.Password = Convert.ToInt32(textBoxPassword.Text, 16);
                 service.OperatorCode = Convert.ToInt32(textBoxOperatorCode.Text, 16);
                 
                 context.SaveChanges();
