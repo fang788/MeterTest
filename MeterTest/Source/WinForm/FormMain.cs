@@ -621,7 +621,7 @@ namespace MeterTest.Source.WinForm
                 DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridView.Rows[i].Cells[0];
                 if ((bool)cell.EditingCellFormattedValue == true)
                 {
-                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName, MeterTestDbContext.GetMeterTestConfig().SelectReadTableName, false, Convert.ToUInt32(dataGridView.Rows[i].Cells[2].Value.ToString(), 16));
+                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectWriteProjectName, MeterTestDbContext.GetMeterTestConfig().SelectWriteTableName, false, Convert.ToUInt32(dataGridView.Rows[i].Cells[2].Value.ToString(), 16));
                     if(dataGridView.Rows[i].Cells[7].Value == null)
                     {
                         MessageBox.Show("数据标识：" + dataId.Id.ToString("X8") + "\r未输入数据", "MeterTest", MessageBoxButtons.OK, MessageBoxIcon.Error);
