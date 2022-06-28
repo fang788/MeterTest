@@ -369,6 +369,11 @@ namespace MeterTest.Source.WinForm
                             msg[1] = false.ToString();
                             msg[2] = exception.Message;
                         }
+                        catch (ClientException exception)
+                        {
+                            msg[1] = false.ToString();
+                            msg[2] = exception.Message;
+                        }
                         catch (Exception exception)
                         {
                             msg[1] = false.ToString();
@@ -433,6 +438,11 @@ namespace MeterTest.Source.WinForm
                                 msg[2] = dataIds[i].GetDataString(byteArray);
                             }
                             catch (TimeoutException exception)
+                            {
+                                msg[1] = false.ToString();
+                                msg[2] = exception.Message;
+                            }
+                            catch (ClientException exception)
                             {
                                 msg[1] = false.ToString();
                                 msg[2] = exception.Message;
@@ -649,6 +659,11 @@ namespace MeterTest.Source.WinForm
                             msg[1] = true.ToString();
                         }
                         catch (TimeoutException exception)
+                        {
+                            msg[1] = false.ToString();
+                            msg[2] = exception.Message;
+                        }
+                        catch (ClientException exception)
                         {
                             msg[1] = false.ToString();
                             msg[2] = exception.Message;
