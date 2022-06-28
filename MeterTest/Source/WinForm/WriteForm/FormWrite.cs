@@ -72,6 +72,10 @@ namespace MeterTest.Source.WinForm
             {
                 textBoxDataIdData.MaxLength = dataId.DataBytes;
             }
+            else if(WriteDataId.Format == "float")
+            {
+                textBoxDataIdData.MaxLength = 8;
+            }
             else
             {
                 textBoxDataIdData.MaxLength = dataId.DataBytes * 2;
@@ -91,6 +95,10 @@ namespace MeterTest.Source.WinForm
                 {
                     rst = data;
                 }
+            }
+            else if(WriteDataId.Format == "float")
+            {
+                rst = data;
             }
             else
             {

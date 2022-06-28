@@ -503,6 +503,11 @@ namespace MeterTest.Source.Dlt645
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":").Insert(14, ":");
                     }
+                    else if(this.Format == "float")
+                    {
+                        // rst = ((float)(dataBytes[0] | (dataBytes[1] << 8) | (dataBytes[2] << 16) | (dataBytes[3] << 24))).ToString("F4");
+                        rst = System.BitConverter.ToSingle(dataBytes, 0).ToString("F4");
+                    }
                 }
                 else
                 {
@@ -575,6 +580,17 @@ namespace MeterTest.Source.Dlt645
                             }
                         }
                     }
+                    if(this.Format == "float")
+                    {
+                        byteArray = BitConverter.GetBytes(Convert.ToSingle(s));
+                        // for (int i = 0; i < byteArray.Length / 2; i++)
+                        // {
+                        //     byte tmp = byteArray[i];
+                        //     byteArray[i] = byteArray[byteArray.Length - 1 - i];
+                        //     byteArray[byteArray.Length - 1 - i] = tmp;
+                        // }
+                        Array.Reverse(byteArray);
+                    }
                 }
                 else
                 {
@@ -586,12 +602,13 @@ namespace MeterTest.Source.Dlt645
             {
                 MessageBox.Show(e.Message);
             }
-            for (int i = 0; i < byteArray.Length / 2; i++)
-            {
-                byte tmp = byteArray[i];
-                byteArray[i] = byteArray[byteArray.Length - 1 - i];
-                byteArray[byteArray.Length - 1 - i] = tmp;
-            }
+            // for (int i = 0; i < byteArray.Length / 2; i++)
+            // {
+            //     byte tmp = byteArray[i];
+            //     byteArray[i] = byteArray[byteArray.Length - 1 - i];
+            //     byteArray[byteArray.Length - 1 - i] = tmp;
+            // }
+            Array.Reverse(byteArray);
             return byteArray;
         }
         public bool DataCompare(byte[] dataArray)
