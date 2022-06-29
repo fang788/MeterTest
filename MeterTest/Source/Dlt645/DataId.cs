@@ -89,7 +89,34 @@ namespace MeterTest.Source.Dlt645
         }
         public byte[] DataArray /* 数据长度(字节) */
         {
-            get { return m_DataArray; }
+            get 
+            { 
+                if((this.Format == "YYMMDDWW") 
+                || (this.Format == "hhmmss")
+                || (this.Format == "YYMMDDhhmm")
+                || (this.Format == "YYMMDDhhmmss"))
+                {
+                    string tmp = null;
+                    for (int i = 0; i < m_DataArray.Length; i++)
+                    {
+                        tmp = m_DataArray[i].ToString("X2");
+                    }
+                    if(tmp.Trim('A').Equals(""))
+                    {
+                        tmp = DateTime.Now.ToString(this.Format.Trim('W').Replace('Y', 'y').Replace('h', 'H').Replace('D', 'd'));
+                        if(this.Format.Contains("WW"))
+                        {
+                            tmp += ((int)(DateTime.Now.DayOfWeek)).ToString("X2");
+                        }
+                        for (int i = 0; i < m_DataArray.Length; i++)
+                        {
+                            m_DataArray[i] = Convert.ToByte(tmp.Substring(i * 2, 2), 16);
+                        }
+                        Array.Reverse(m_DataArray);
+                    }
+                }
+                return m_DataArray; 
+            }
             set { m_DataArray = value; }
         }
 
@@ -549,19 +576,9 @@ namespace MeterTest.Source.Dlt645
                     || (this.Format == "YYMMDDhhmmss"))
                     {
                         byteArray = new byte[(s.Length + 1) / 2];
-                        if(s.Contains('A'))
+                        for (int i = 0; i < (s.Length + 1) / 2; i++)
                         {
-                            for (int i = 0; i < (s.Length + 1) / 2; i++)
-                            {
-                                byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < (s.Length + 1) / 2; i++)
-                            {
-                                byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
-                            }
+                            byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
                         }
                     }
                     if(this.Format == "ASC")
@@ -583,12 +600,6 @@ namespace MeterTest.Source.Dlt645
                     if(this.Format == "float")
                     {
                         byteArray = BitConverter.GetBytes(Convert.ToSingle(s));
-                        // for (int i = 0; i < byteArray.Length / 2; i++)
-                        // {
-                        //     byte tmp = byteArray[i];
-                        //     byteArray[i] = byteArray[byteArray.Length - 1 - i];
-                        //     byteArray[byteArray.Length - 1 - i] = tmp;
-                        // }
                         Array.Reverse(byteArray);
                     }
                 }
@@ -602,13 +613,10 @@ namespace MeterTest.Source.Dlt645
             {
                 MessageBox.Show(e.Message);
             }
-            // for (int i = 0; i < byteArray.Length / 2; i++)
-            // {
-            //     byte tmp = byteArray[i];
-            //     byteArray[i] = byteArray[byteArray.Length - 1 - i];
-            //     byteArray[byteArray.Length - 1 - i] = tmp;
-            // }
-            Array.Reverse(byteArray);
+            if(byteArray != null)
+            {
+                Array.Reverse(byteArray);
+            }            
             return byteArray;
         }
         public bool DataCompare(byte[] dataArray)
