@@ -37,6 +37,10 @@ namespace MeterTest.Source.Dlt645
                     Thread.Sleep(100);
                     frame = ReadResponse();
                     RxLogger(frame, dateTime);
+                    for (int i = 0; i < frame[9]; i++)
+                    {
+                        frame[10 + i] -= 0x33;
+                    }
                     responseMsg.Initialize(frame);
                 }
                 ValidateResponse(request, responseMsg);
@@ -162,10 +166,6 @@ namespace MeterTest.Source.Dlt645
                         if((Dlt645Message.CalCheckSum(frame, 0, 10 + frame[9]) == frame[frame[9] + 10])
                         && (frame[frame[9] + 11] == 0x16))
                         {
-                            for (int i = 0; i < frame[9]; i++)
-                            {
-                                frame[10 + i] -= 0x33;
-                            }
                             break;
                         }                            
                     }
