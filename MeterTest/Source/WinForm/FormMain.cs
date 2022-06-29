@@ -78,6 +78,11 @@ namespace MeterTest.Source.WinForm
                 formLogger.StartPosition = FormStartPosition.CenterParent;
                 formLogger.Show();
             }
+            if(formLogger.WindowState == FormWindowState.Minimized)
+            {
+                formLogger.WindowState = FormWindowState.Normal;
+            }
+            formLogger.Activate();
         }
         private void 选择ToolStripMenuItem_Click(object sender, EventArgs e)
         {
