@@ -162,6 +162,33 @@ namespace MeterTest.Source.WinForm
         {
             MeterTestConfig meterTestConfig = MeterTestDbContext.GetMeterTestConfig();
             List<DataId> dataIds = MeterTestDbContext.GetDataIdList(meterTestConfig.SelectParaProjectName, meterTestConfig.SelectParaTableName, true);
+            foreach (var dataId in dataIds)
+            {
+                if((dataId.Format == "YYMMDDWW") 
+                || (dataId.Format == "hhmmss")
+                || (dataId.Format == "YYMMDDhhmm")
+                || (dataId.Format == "YYMMDDhhmmss"))
+                {
+                    string tmp = null;
+                    for (int i = 0; i < dataId.DataArray.Length; i++)
+                    {
+                        tmp = dataId.DataArray[i].ToString("X2");
+                    }
+                    if(tmp.Trim('A').Equals(""))
+                    {
+                        tmp = DateTime.Now.ToString(dataId.Format.Trim('W').Replace('Y', 'y').Replace('h', 'H').Replace('D', 'd'));
+                        if(dataId.Format.Contains("WW"))
+                        {
+                            tmp += ((int)(DateTime.Now.DayOfWeek)).ToString("X2");
+                        }
+                        for (int i = 0; i < dataId.DataArray.Length; i++)
+                        {
+                            dataId.DataArray[i] = Convert.ToByte(tmp.Substring(i * 2, 2), 16);
+                        }
+                        Array.Reverse(dataId.DataArray);
+                    }
+                }
+            }
             if((meterTestConfig == null) || (meterTestConfig.SelectParaTableName == null) || (dataIds == null))
             {
                 toolStripStatusLabelParaConfig.Text = "错误：参数配置表为空";
@@ -639,6 +666,33 @@ namespace MeterTest.Source.WinForm
                     }
                     dataId.DataArray = dataId.GetByteArray(dataGridView.Rows[i].Cells[7].Value.ToString());
                     dataIds.Add(dataId);
+                }
+            }
+            foreach (var dataId in dataIds)
+            {
+                if((dataId.Format == "YYMMDDWW") 
+                || (dataId.Format == "hhmmss")
+                || (dataId.Format == "YYMMDDhhmm")
+                || (dataId.Format == "YYMMDDhhmmss"))
+                {
+                    string tmp = null;
+                    for (int i = 0; i < dataId.DataArray.Length; i++)
+                    {
+                        tmp = dataId.DataArray[i].ToString("X2");
+                    }
+                    if(tmp.Trim('A').Equals(""))
+                    {
+                        tmp = DateTime.Now.ToString(dataId.Format.Trim('W').Replace('Y', 'y').Replace('h', 'H').Replace('D', 'd'));
+                        if(dataId.Format.Contains("WW"))
+                        {
+                            tmp += ((int)(DateTime.Now.DayOfWeek)).ToString("X2");
+                        }
+                        for (int i = 0; i < dataId.DataArray.Length; i++)
+                        {
+                            dataId.DataArray[i] = Convert.ToByte(tmp.Substring(i * 2, 2), 16);
+                        }
+                        Array.Reverse(dataId.DataArray);
+                    }
                 }
             }
             if(dataIds.Count > 0)

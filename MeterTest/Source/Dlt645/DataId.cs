@@ -91,30 +91,6 @@ namespace MeterTest.Source.Dlt645
         {
             get 
             { 
-                if((this.Format == "YYMMDDWW") 
-                || (this.Format == "hhmmss")
-                || (this.Format == "YYMMDDhhmm")
-                || (this.Format == "YYMMDDhhmmss"))
-                {
-                    string tmp = null;
-                    for (int i = 0; i < m_DataArray.Length; i++)
-                    {
-                        tmp = m_DataArray[i].ToString("X2");
-                    }
-                    if(tmp.Trim('A').Equals(""))
-                    {
-                        tmp = DateTime.Now.ToString(this.Format.Trim('W').Replace('Y', 'y').Replace('h', 'H').Replace('D', 'd'));
-                        if(this.Format.Contains("WW"))
-                        {
-                            tmp += ((int)(DateTime.Now.DayOfWeek)).ToString("X2");
-                        }
-                        for (int i = 0; i < m_DataArray.Length; i++)
-                        {
-                            m_DataArray[i] = Convert.ToByte(tmp.Substring(i * 2, 2), 16);
-                        }
-                        Array.Reverse(m_DataArray);
-                    }
-                }
                 return m_DataArray; 
             }
             set { m_DataArray = value; }
