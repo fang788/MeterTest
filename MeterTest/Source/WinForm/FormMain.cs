@@ -248,6 +248,7 @@ namespace MeterTest.Source.WinForm
                     {
                         break;
                     }
+                    Thread.Sleep(500);
                 }
                 optLock = false;
             });
@@ -315,6 +316,7 @@ namespace MeterTest.Source.WinForm
                     {
                         break;
                     }
+                    Thread.Sleep(500);
                 }
                 optLock = false;
             });
