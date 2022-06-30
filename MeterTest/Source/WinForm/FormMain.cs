@@ -445,7 +445,7 @@ namespace MeterTest.Source.WinForm
                 DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)dataGridViewRead.Rows[i].Cells[0];
                 if ((bool)cell.EditingCellFormattedValue == true)
                 {
-                    DataId dataId = new DataId(Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
+                    DataId dataId = MeterTestDbContext.GetDataId(MeterTestDbContext.GetMeterTestConfig().SelectReadProjectName, MeterTestDbContext.GetMeterTestConfig().SelectReadTableName, false, Convert.ToUInt32(dataGridViewRead.Rows[i].Cells[2].Value.ToString(), 16));
                     dataIds.Add(dataId);
                 }
             }
