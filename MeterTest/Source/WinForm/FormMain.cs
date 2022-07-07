@@ -16,9 +16,9 @@ namespace MeterTest.Source.WinForm
 {
     public partial class FormMain : Form
     {
-        public readonly string Version = "1.0.0";
+        public readonly string Version = "1.0.1";
         public readonly string Submit = "334b9b3f88e76216ec701a1f58fcfd399185426b";
-        public readonly string SubmitData = "2022-06-10";
+        public readonly string SubmitData = "2022-07-07";
         public readonly string DotnetVersion = "5.0.17";
         private FormLogger formLogger;
         private Dlt645Client client;
