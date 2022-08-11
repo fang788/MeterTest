@@ -15,6 +15,7 @@ namespace MeterTest.Source.WinForm.WriteForm
     {
         private DataId _dataId;
         private String _writeString;
+        private String _writeTip;
         public DataId WriteDataId 
         { 
             get 
@@ -37,6 +38,19 @@ namespace MeterTest.Source.WinForm.WriteForm
                 _writeString = value;
             }
         }
+
+        public string WriteTip 
+        { 
+            get 
+            { 
+                return _writeTip; 
+            }
+            set
+            { 
+                _writeTip = value; 
+            }
+        }
+
         private FormWriteTime()
         {
             InitializeComponent();
@@ -64,14 +78,17 @@ namespace MeterTest.Source.WinForm.WriteForm
             if(radioButton1.Checked)
             {
                 _writeString = "AAAAAA";
+                _writeTip    = "计算机时间";
             }
             else if(radioButton2.Checked)
             {
                 _writeString = dateTimePickerSelf.Value.ToString("hhmmss");
+                _writeTip    = dateTimePickerSelf.Value.ToString("hh:mm:ss");
             }
             else
             {
                 _writeString = textBoxInput.Text.PadRight(6, '0');
+                _writeTip    = _writeTip    = _writeString.Insert(2, ":").Insert(5, ":");
             }
             DialogResult = DialogResult.OK;
             this.Close();

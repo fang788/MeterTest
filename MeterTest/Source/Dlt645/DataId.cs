@@ -484,11 +484,11 @@ namespace MeterTest.Source.Dlt645
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ").Insert(11, ":");
                     }
-                    else if(this.Format == "YYMMDDWW")
+                    else if((this.Format == "YYMMDDWW") || (this.Format == "yyMMddWW"))
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, "-").Insert(5, "-").Insert(8, " ");
                     }
-                    else if(this.Format == "hhmmss")
+                    else if((this.Format == "hhmmss") || (this.Format == "HHmmss"))
                     {
                         rst = GetDataBytesString(dataBytes, false).Insert(2, ":").Insert(5, ":");
                     }
@@ -545,9 +545,18 @@ namespace MeterTest.Source.Dlt645
                             byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 16);
                         }
                     }
-                    
-                    if((this.Format == "YYMMDDWW") 
-                    || (this.Format == "hhmmss")
+
+                    if (this.Format == "BCD")
+                    {
+                        byteArray = new byte[(s.Length + 1) / 2];
+                        for (int i = 0; i < (s.Length + 1) / 2; i++)
+                        {
+                            byteArray[i] = Convert.ToByte(s.Substring(i * 2, 2), 10);
+                        }
+                    }
+
+                    if ((this.Format.ToUpper() == "YYMMDDWW") 
+                    || (this.Format.ToLower() == "hhmmss")
                     || (this.Format == "YYMMDDhhmm")
                     || (this.Format == "YYMMDDhhmmss"))
                     {

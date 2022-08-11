@@ -7,5 +7,6 @@ namespace MeterTest.Source.WinForm.WriteForm
     {
         DataId WriteDataId { get; set; }
         String WriteString{ get; set; }
+        String WriteTip{get; set; }
     }
 }

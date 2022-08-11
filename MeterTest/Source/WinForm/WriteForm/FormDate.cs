@@ -15,6 +15,7 @@ namespace MeterTest.Source.WinForm.WriteForm
     {
         private DataId _dataId;
         private String _writeString;
+        private String _writeTip;
         public DataId WriteDataId 
         { 
             get 
@@ -37,6 +38,19 @@ namespace MeterTest.Source.WinForm.WriteForm
                 _writeString = value;
             }
         }
+
+        public string WriteTip 
+        { 
+            get 
+            { 
+                return _writeTip; 
+            }
+            set
+            { 
+                _writeTip = value; 
+            }
+        }
+
         protected FormDate()
         {
             InitializeComponent();
@@ -58,14 +72,17 @@ namespace MeterTest.Source.WinForm.WriteForm
             if(radioButton1.Checked)
             {
                 _writeString = "AAAAAAAA";
+                _writeTip    = "计算机日期";
             }
             else if(radioButton2.Checked)
             {
                 _writeString = dateTimePickerSelf.Value.ToString("yyMMdd") + ((int)dateTimePickerSelf.Value.DayOfWeek).ToString("X2");
+                _writeTip    = dateTimePickerSelf.Value.ToString("yy-MM-dd ") + ((int)dateTimePickerSelf.Value.DayOfWeek).ToString("X2");
             }
             else
             {
                 _writeString = textBoxInput.Text.PadRight(8, '0');
+                _writeTip    = _writeString.Insert(2, "-").Insert(5, "-").Insert(8, " ");
             }
             DialogResult = DialogResult.OK;
             this.Close();

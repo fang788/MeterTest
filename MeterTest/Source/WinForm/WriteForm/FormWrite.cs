@@ -16,6 +16,7 @@ namespace MeterTest.Source.WinForm
     {
         private DataId _dataId;
         private String _writeString;
+        private String _writeTip;
         public DataId WriteDataId 
         { 
             get 
@@ -36,6 +37,18 @@ namespace MeterTest.Source.WinForm
             set 
             {
                 _writeString = value;
+            }
+        }
+
+        public string WriteTip 
+        { 
+            get 
+            { 
+                return _writeTip; 
+            }
+            set
+            { 
+                _writeTip = value; 
             }
         }
 
@@ -117,6 +130,7 @@ namespace MeterTest.Source.WinForm
         {
             DialogResult = DialogResult.OK;
             WriteString = getWriteDataArray(textBoxDataIdData.Text);
+            WriteTip    = WriteDataId.GetDataString(WriteDataId.GetByteArray(WriteString));
             this.Close();
         }
 

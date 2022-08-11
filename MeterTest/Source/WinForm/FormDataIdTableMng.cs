@@ -252,8 +252,6 @@ namespace MeterTest.Source.WinForm
             Stream stream = null;
             try
             {
-                // fileStream = File.Open(excelFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                // fileStream.Position = 0;
                 stream = File.Create(excelFilePath);
                 if (Path.GetExtension(excelFilePath).Equals(".xlsx"))
                 {

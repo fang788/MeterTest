@@ -625,7 +625,7 @@ namespace MeterTest.Source.WinForm
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     dataGridView.SelectedRows[0].Cells[7].Value = ((IWriteForm)form).WriteString;
-                    dataGridView.SelectedRows[0].Cells[9].Value = dataId.GetDataString(dataId.GetByteArray(((IWriteForm)form).WriteString));
+                    dataGridView.SelectedRows[0].Cells[9].Value = ((IWriteForm)form).WriteTip;
                 }
             }
         }
@@ -677,8 +677,8 @@ namespace MeterTest.Source.WinForm
             }
             foreach (var dataId in dataIds)
             {
-                if((dataId.Format == "YYMMDDWW") 
-                || (dataId.Format == "hhmmss")
+                if((dataId.Format.ToUpper() == "YYMMDDWW") 
+                || (dataId.Format.ToLower() == "hhmmss")
                 || (dataId.Format == "YYMMDDhhmm")
                 || (dataId.Format == "YYMMDDhhmmss"))
                 {
