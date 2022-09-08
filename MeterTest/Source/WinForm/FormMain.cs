@@ -519,7 +519,7 @@ namespace MeterTest.Source.WinForm
                 {
                     dataGridViewRead.CurrentCell = dataGridViewRead.Rows[j].Cells[7];
                     dataGridViewRead.Rows[j].Cells[7].Value = logs[2];
-                    if(logs[2] == true.ToString())
+                    if(logs[1] == true.ToString())
                     {
                         toolStripStatusLabelRead.Text = "已读取数据标识：" + logs[0];
                     }
