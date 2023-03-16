@@ -14,6 +14,7 @@ namespace MeterTest.Source.Dlt645
         private readonly IDlt645CommLog logger;
         private object syncLock = new object();
         public const int ResponseFrameStartLength = 10;
+        private int ReadTimeout;
 
         public Dlt645Transport(SerialPort port, IDlt645CommLog log)
         {
@@ -34,7 +35,7 @@ namespace MeterTest.Source.Dlt645
                     byte[] frame = BuildMessageFrame(request);
                     TxLogger(frame, dateTime);
                     port.Write(frame, 0, frame.Length);
-                    Thread.Sleep(100);
+                    // Thread.Sleep(200);
                     frame = ReadResponse();
                     RxLogger(frame, dateTime);
                     for (int i = 0; i < frame[9]; i++)
@@ -152,6 +153,7 @@ namespace MeterTest.Source.Dlt645
         {
             byte[] frame = new byte[512];
             int delayCnt = 200;
+            ReadTimeout = port.ReadTimeout;
             while (delayCnt > 0)
             {
                 ReadBytes(frame, 0, 1);
@@ -169,12 +171,16 @@ namespace MeterTest.Source.Dlt645
                             break;
                         }                            
                     }
+                    else
+                    {
+                        throw new Exception("校验和错误");
+                    }
                 }
                 delayCnt--;
             }
             if(delayCnt <= 0)
             {
-                throw new TimeoutException();
+                throw new Exception("读取超时");
             }
             MemoryStream stream = new MemoryStream(frame[9] + 12);
             stream.Write(frame, 0, frame[9] + 12);
@@ -185,14 +191,27 @@ namespace MeterTest.Source.Dlt645
             int readCnt = 0;
             try
             {
+                while (ReadTimeout > 0)
+                {
+                    if(port.BytesToRead >= length)
+                    {
+                        break;
+                    }
+                    ReadTimeout -= 100;
+                    Thread.Sleep(100);
+                }
+                if(ReadTimeout <= 0)
+                {
+                    throw new TimeoutException();
+                }
                 while (readCnt < length)
                 {
                     readCnt += port.Read(array, offset + readCnt, length);
                 }
             }
-            catch(ArgumentException e)
+            catch(Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
                 throw;
             }
         }
